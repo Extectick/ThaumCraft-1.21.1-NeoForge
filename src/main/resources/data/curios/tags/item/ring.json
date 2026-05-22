@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:runic_ring_lesser",
+    "thaumcraft:runic_ring",
+    "thaumcraft:runic_ring_charged",
+    "thaumcraft:runic_ring_regen",
+    "thaumcraft:bauble_ring",
+    "thaumcraft:bauble_ring_iron",
+    "thaumcraft:vis_discount_ring_air",
+    "thaumcraft:vis_discount_ring_fire",
+    "thaumcraft:vis_discount_ring_water",
+    "thaumcraft:vis_discount_ring_earth",
+    "thaumcraft:vis_discount_ring_order",
+    "thaumcraft:vis_discount_ring_entropy"
+  ]
+}
