@@ -13,11 +13,15 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.blocks.ArcaneWorktableBlock;
+import thaumcraft.common.blocks.EssentiaTubeBlock;
+import thaumcraft.common.blocks.EssentiaTubeBlock.TubeMode;
 import thaumcraft.common.blocks.SimpleJarBlock;
 import thaumcraft.common.blocks.SimpleMirrorBlock;
 import thaumcraft.common.blocks.SimplePlantBlock;
 import thaumcraft.common.blocks.SimpleTableBlock;
 import thaumcraft.common.blocks.SimpleTubeBlock;
+import thaumcraft.common.blocks.WardedJarBlock;
 
 public final class TCBlocks {
     public static final DeferredRegister.Blocks REGISTRY = DeferredRegister.createBlocks(Thaumcraft.MODID);
@@ -62,7 +66,8 @@ public final class TCBlocks {
     public static final DeferredBlock<SimpleTableBlock> TABLE = table("table");
     public static final DeferredBlock<SimpleTableBlock> RESEARCH_TABLE = table("research_table");
     public static final DeferredBlock<SimpleTableBlock> DECONSTRUCTION_TABLE = table("deconstruction_table");
-    public static final DeferredBlock<SimpleTableBlock> ARCANE_WORKTABLE = table("arcane_worktable");
+    public static final DeferredBlock<ArcaneWorktableBlock> ARCANE_WORKTABLE = REGISTRY.register("arcane_worktable",
+            () -> new ArcaneWorktableBlock(tableProperties()));
     public static final DeferredBlock<Block> ALCHEMICAL_FURNACE = stoneDevice("alchemical_furnace");
     public static final DeferredBlock<Block> ARCANE_PEDESTAL = stoneDevice("arcane_pedestal");
     public static final DeferredBlock<Block> WAND_RECHARGE_PEDESTAL = stoneDevice("wand_recharge_pedestal");
@@ -87,15 +92,20 @@ public final class TCBlocks {
     public static final DeferredBlock<Block> MNEMONIC_MATRIX = metalDevice("mnemonic_matrix");
     public static final DeferredBlock<Block> LAMP_OF_FERTILITY = metalDevice("lamp_of_fertility");
     public static final DeferredBlock<Block> VIS_RELAY = metalDevice("vis_relay");
-    public static final DeferredBlock<SimpleTubeBlock> ESSENTIA_TUBE = tube("essentia_tube");
-    public static final DeferredBlock<SimpleTubeBlock> ESSENTIA_VALVE = tube("essentia_valve");
+    public static final DeferredBlock<EssentiaTubeBlock> ESSENTIA_TUBE = REGISTRY.register("essentia_tube",
+            () -> new EssentiaTubeBlock(tubeProperties()));
+    public static final DeferredBlock<EssentiaTubeBlock> ESSENTIA_VALVE = tube("essentia_valve", TubeMode.VALVE);
     public static final DeferredBlock<SimpleTubeBlock> ALCHEMICAL_CENTRIFUGE = tube("alchemical_centrifuge");
-    public static final DeferredBlock<SimpleTubeBlock> FILTERED_ESSENTIA_TUBE = tube("filtered_essentia_tube");
-    public static final DeferredBlock<SimpleTubeBlock> ESSENTIA_BUFFER = tube("essentia_buffer");
-    public static final DeferredBlock<SimpleTubeBlock> RESTRICTED_ESSENTIA_TUBE = tube("restricted_essentia_tube");
-    public static final DeferredBlock<SimpleTubeBlock> DIRECTIONAL_ESSENTIA_TUBE = tube("directional_essentia_tube");
+    public static final DeferredBlock<EssentiaTubeBlock> FILTERED_ESSENTIA_TUBE = tube("filtered_essentia_tube",
+            TubeMode.FILTERED);
+    public static final DeferredBlock<EssentiaTubeBlock> ESSENTIA_BUFFER = tube("essentia_buffer", TubeMode.BUFFER);
+    public static final DeferredBlock<EssentiaTubeBlock> RESTRICTED_ESSENTIA_TUBE = tube("restricted_essentia_tube",
+            TubeMode.RESTRICTED);
+    public static final DeferredBlock<EssentiaTubeBlock> DIRECTIONAL_ESSENTIA_TUBE = tube("directional_essentia_tube",
+            TubeMode.DIRECTIONAL);
     public static final DeferredBlock<SimpleTubeBlock> ESSENTIA_CRYSTALLIZER = tube("essentia_crystallizer");
-    public static final DeferredBlock<SimpleJarBlock> WARDED_JAR = jar("warded_jar");
+    public static final DeferredBlock<WardedJarBlock> WARDED_JAR = REGISTRY.register("warded_jar",
+            () -> new WardedJarBlock(jarProperties()));
     public static final DeferredBlock<SimpleJarBlock> BRAIN_IN_A_JAR = jar("brain_in_a_jar");
     public static final DeferredBlock<SimpleJarBlock> NODE_IN_A_JAR = jar("node_in_a_jar");
     public static final DeferredBlock<SimpleJarBlock> VOID_JAR = jar("void_jar");
@@ -258,9 +268,13 @@ public final class TCBlocks {
     }
 
     private static DeferredBlock<SimpleTableBlock> table(String name) {
-        return REGISTRY.register(name, () -> new SimpleTableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+        return REGISTRY.register(name, () -> new SimpleTableBlock(tableProperties()));
+    }
+
+    private static BlockBehaviour.Properties tableProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                 .strength(2.5F, 3.0F)
-                .noOcclusion()));
+                .noOcclusion();
     }
 
     private static DeferredBlock<Block> stoneDevice(String name) {
@@ -278,15 +292,27 @@ public final class TCBlocks {
     }
 
     private static DeferredBlock<SimpleTubeBlock> tube(String name) {
-        return REGISTRY.register(name, () -> new SimpleTubeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+        return REGISTRY.register(name, () -> new SimpleTubeBlock(tubeProperties()));
+    }
+
+    private static DeferredBlock<EssentiaTubeBlock> tube(String name, TubeMode mode) {
+        return REGISTRY.register(name, () -> new EssentiaTubeBlock(tubeProperties(), mode));
+    }
+
+    private static BlockBehaviour.Properties tubeProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                 .strength(0.6F, 1.0F)
-                .noOcclusion()));
+                .noOcclusion();
     }
 
     private static DeferredBlock<SimpleJarBlock> jar(String name) {
-        return REGISTRY.register(name, () -> new SimpleJarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+        return REGISTRY.register(name, () -> new SimpleJarBlock(jarProperties()));
+    }
+
+    private static BlockBehaviour.Properties jarProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                 .strength(0.5F, 1.0F)
-                .noOcclusion()));
+                .noOcclusion();
     }
 
     private static DeferredBlock<SimpleMirrorBlock> mirror(String name) {

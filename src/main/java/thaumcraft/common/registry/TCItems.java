@@ -2,14 +2,18 @@ package thaumcraft.common.registry;
 
 import java.util.List;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.food.FoodProperties;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.PrimalVisStorage;
+import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.curios.TCSlots;
+import thaumcraft.common.items.EssentiaPhialItem;
 import thaumcraft.common.items.curios.FocusPouchCurioItem;
 import thaumcraft.common.items.curios.HoverGirdleItem;
 import thaumcraft.common.items.curios.RunicCurioItem;
@@ -168,7 +172,7 @@ public final class TCItems {
     public static final DeferredItem<Item> ETHEREAL_ESSENCE = simple("ethereal_essence");
     public static final DeferredItem<Item> CRYSTALLIZED_ESSENCE = simple("crystallized_essence");
     public static final DeferredItem<Item> GLASS_PHIAL = simple("glass_phial");
-    public static final DeferredItem<Item> ESSENTIA_PHIAL = simple("essentia_phial");
+    public static final DeferredItem<Item> ESSENTIA_PHIAL = REGISTRY.registerItem("essentia_phial", EssentiaPhialItem::new);
     public static final DeferredItem<Item> MANA_BEAN = simple("mana_bean", food(1, 0.5F, true));
     public static final DeferredItem<Item> RUNIC_RING_LESSER = REGISTRY.registerItem("runic_ring_lesser",
             properties -> new RunicCurioItem(TCSlots.RING, 1, properties));
@@ -212,6 +216,32 @@ public final class TCItems {
     public static final DeferredItem<Item> VIS_DISCOUNT_RING_ENTROPY = REGISTRY.registerItem("vis_discount_ring_entropy",
             properties -> new VisDiscountCurioItem(Aspect.ENTROPY, 1, properties));
     public static final DeferredItem<Item> FOCUS_POUCH = REGISTRY.registerItem("focus_pouch", FocusPouchCurioItem::new);
+    public static final DeferredItem<ItemFocusBasic> FOCUS_FIRE = focus("focus_fire",
+            new PrimalVisStorage(0, 10, 0, 0, 0, 0), 0xE55004, 0, true);
+    public static final DeferredItem<ItemFocusBasic> FOCUS_FROST = focus("focus_frost",
+            new PrimalVisStorage(0, 2, 5, 0, 0, 2), 0x4F69CC, 200, false);
+    public static final DeferredItem<ItemFocusBasic> FOCUS_SHOCK = focus("focus_shock",
+            new PrimalVisStorage(25, 0, 0, 0, 0, 0), 0x9FADBF, 250, false);
+    public static final DeferredItem<ItemFocusBasic> FOCUS_EXCAVATION = focus("focus_excavation",
+            new PrimalVisStorage(0, 0, 0, 15, 0, 0), 0x9A7B4F, 0, true);
+    public static final DeferredItem<ItemFocusBasic> FOCUS_PORTABLE_HOLE = focus("focus_portable_hole",
+            new PrimalVisStorage(10, 0, 0, 0, 0, 10), 0x444466, 0, false,
+            "focus_portable_hole_depth", null, ItemFocusBasic.WandFocusAnimation.CHARGE);
+    public static final DeferredItem<ItemFocusBasic> FOCUS_WARDING = focus("focus_warding",
+            new PrimalVisStorage(0, 0, 10, 25, 25, 0), 0x6B6BD6, 0, false,
+            "focus_warding_depth", "focus_warding_orn", ItemFocusBasic.WandFocusAnimation.CHARGE);
+    public static final DeferredItem<ItemFocusBasic> FOCUS_PRIMAL = focus("focus_primal",
+            new PrimalVisStorage(50, 50, 50, 50, 50, 50), 0xFFFFFF, 500, false,
+            "focus_primal_depth", null, ItemFocusBasic.WandFocusAnimation.CHARGE);
+    public static final DeferredItem<ItemFocusBasic> FOCUS_PECH = focus("focus_pech",
+            new PrimalVisStorage(0, 0, 10, 10, 0, 10), 0x665038, 500, false,
+            "focus_pech_depth", null, ItemFocusBasic.WandFocusAnimation.CHARGE);
+    public static final DeferredItem<ItemFocusBasic> FOCUS_HELLBAT = focus("focus_hellbat",
+            new PrimalVisStorage(100, 200, 0, 0, 0, 100), 0xB02010, 1000, false,
+            null, "focus_hellbat_orn", ItemFocusBasic.WandFocusAnimation.WAVE);
+    public static final DeferredItem<ItemFocusBasic> FOCUS_TRADE = focus("focus_trade",
+            new PrimalVisStorage(0, 0, 0, 5, 5, 5), 0xC8A050, 0, false,
+            null, "focus_trade_orn", ItemFocusBasic.WandFocusAnimation.CHARGE);
 
     public static final List<DeferredItem<? extends Item>> SIMPLE_ITEMS = List.of(
             CINNABAR_ORE,
@@ -364,12 +394,41 @@ public final class TCItems {
             ESSENTIA_PHIAL,
             MANA_BEAN);
 
+    public static final List<DeferredItem<? extends Item>> FOCUS_ITEMS = List.of(
+            FOCUS_FIRE,
+            FOCUS_FROST,
+            FOCUS_SHOCK,
+            FOCUS_EXCAVATION,
+            FOCUS_PORTABLE_HOLE,
+            FOCUS_WARDING,
+            FOCUS_PRIMAL,
+            FOCUS_PECH,
+            FOCUS_HELLBAT,
+            FOCUS_TRADE);
+
     private static DeferredItem<Item> simple(String name) {
         return REGISTRY.registerSimpleItem(name, new Item.Properties());
     }
 
     private static DeferredItem<Item> simple(String name, Item.Properties properties) {
         return REGISTRY.registerSimpleItem(name, properties);
+    }
+
+    private static DeferredItem<ItemFocusBasic> focus(String name, PrimalVisStorage visCost, int color,
+            int activationCooldown, boolean costPerTick) {
+        return REGISTRY.registerItem(name,
+                properties -> new ItemFocusBasic(visCost, color, activationCooldown, costPerTick, properties));
+    }
+
+    private static DeferredItem<ItemFocusBasic> focus(String name, PrimalVisStorage visCost, int color,
+            int activationCooldown, boolean costPerTick, String depthLayer, String ornament,
+            ItemFocusBasic.WandFocusAnimation animation) {
+        return REGISTRY.registerItem(name, properties -> new ItemFocusBasic(visCost, color, activationCooldown,
+                costPerTick, itemTexture(depthLayer), itemTexture(ornament), animation, properties));
+    }
+
+    private static ResourceLocation itemTexture(String name) {
+        return name == null ? null : Thaumcraft.id("textures/item/" + name + ".png");
     }
 
     private static Item.Properties food(int nutrition, float saturationModifier) {

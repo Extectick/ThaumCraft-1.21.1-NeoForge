@@ -9,12 +9,24 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import thaumcraft.Thaumcraft;
+import thaumcraft.client.hud.FocusSelectorOverlay;
+import thaumcraft.client.hud.WandVisHudOverlay;
+import thaumcraft.client.input.TCKeyMappings;
+import thaumcraft.client.renderers.item.TCItemRenderers;
+import thaumcraft.client.screens.ArcaneWorktableScreen;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.registry.TCMenuTypes;
 
 @Mod(value = Thaumcraft.MODID, dist = Dist.CLIENT)
 public class ThaumcraftClient {
@@ -39,8 +51,13 @@ public class ThaumcraftClient {
     public ThaumcraftClient(IEventBus modEventBus, ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         modEventBus.addListener(this::clientSetup);
+        modEventBus.addListener(this::registerGuiLayers);
+        modEventBus.addListener(this::registerKeyMappings);
+        modEventBus.addListener(this::registerMenuScreens);
+        modEventBus.addListener(this::registerClientExtensions);
         modEventBus.addListener(this::registerBlockColors);
         modEventBus.addListener(this::registerItemColors);
+        NeoForge.EVENT_BUS.addListener(TCKeyMappings::onClientTick);
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
@@ -68,6 +85,25 @@ public class ThaumcraftClient {
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.MAGIC_MIRROR.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.ESSENTIA_MIRROR.get(), RenderType.translucent());
         });
+    }
+
+    private void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(TCMenuTypes.ARCANE_WORKTABLE.get(), ArcaneWorktableScreen::new);
+    }
+
+    private void registerGuiLayers(RegisterGuiLayersEvent event) {
+        event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("wand_vis"), (guiGraphics, deltaTracker) ->
+                WandVisHudOverlay.render(guiGraphics));
+        event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("focus_selector"), (guiGraphics, deltaTracker) ->
+                FocusSelectorOverlay.render(guiGraphics));
+    }
+
+    private void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        TCKeyMappings.register(event);
+    }
+
+    private void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        TCItemRenderers.register(event);
     }
 
     private void registerBlockColors(RegisterColorHandlersEvent.Block event) {

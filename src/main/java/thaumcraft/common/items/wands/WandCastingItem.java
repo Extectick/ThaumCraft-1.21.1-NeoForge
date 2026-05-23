@@ -1,22 +1,121 @@
 package thaumcraft.common.items.wands;
 
+import java.util.List;
+import java.util.Locale;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.wands.ItemFocusBasic;
+import thaumcraft.common.items.curios.FocusPouchCurioItem;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCSoundEvents;
 
 public class WandCastingItem extends Item {
     public WandCastingItem(Properties properties) {
-        super(properties);
+        super(properties.stacksTo(1));
+    }
+
+    public int getVis(ItemStack stack, Aspect aspect) {
+        return WandVisHelper.getVis(stack, aspect);
+    }
+
+    public void setVis(ItemStack stack, Aspect aspect, int amount) {
+        WandVisHelper.setVis(stack, aspect, amount);
+    }
+
+    public int addVis(ItemStack stack, Aspect aspect, int amount) {
+        return WandVisHelper.addVis(stack, aspect, amount);
+    }
+
+    public boolean consumeVis(ItemStack stack, Aspect aspect, int amount) {
+        return WandVisHelper.consumeVis(stack, aspect, amount);
+    }
+
+    public int getMaxVis(ItemStack stack) {
+        return WandVisHelper.WOOD_IRON_MAX_VIS;
+    }
+
+    public boolean hasEnoughVis(ItemStack stack, Aspect aspect, int amount) {
+        return WandVisHelper.hasEnoughVis(stack, aspect, amount);
+    }
+
+    public ItemStack getFocusItem(ItemStack stack) {
+        return WandFocusHelper.getFocusItem(stack);
+    }
+
+    public ItemFocusBasic getFocus(ItemStack stack) {
+        return WandFocusHelper.getFocus(stack);
+    }
+
+    public void setFocus(ItemStack stack, ItemStack focus) {
+        WandFocusHelper.setFocus(stack, focus);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents,
+            TooltipFlag tooltipFlag) {
+        int maxVis = this.getMaxVis(stack);
+        tooltipComponents.add(Component.translatable("item.thaumcraft.wand.capacity", formatVis(maxVis))
+                .withStyle(ChatFormatting.GOLD));
+
+        for (Aspect aspect : Aspect.getPrimalAspects()) {
+            tooltipComponents.add(Component.translatable("item.thaumcraft.wand.vis." + aspect.getTag(),
+                    formatVis(this.getVis(stack, aspect)), formatVis(maxVis)).withStyle(ChatFormatting.GRAY));
+        }
+
+        ItemStack focus = this.getFocusItem(stack);
+        if (!focus.isEmpty()) {
+            tooltipComponents.add(Component.translatable("item.thaumcraft.wand.focus", focus.getHoverName())
+                    .withStyle(ChatFormatting.GREEN, ChatFormatting.ITALIC));
+        }
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack wand = player.getItemInHand(hand);
+        InteractionHand otherHand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+        ItemStack other = player.getItemInHand(otherHand);
+
+        if (WandFocusHelper.isFocus(other) && !WandFocusHelper.hasFocus(wand)) {
+            if (!level.isClientSide) {
+                WandFocusHelper.setFocus(wand, other);
+                if (!player.getAbilities().instabuild) {
+                    other.shrink(1);
+                }
+                player.displayClientMessage(Component.translatable("item.thaumcraft.wand.focus.set",
+                        WandFocusHelper.getFocusItem(wand).getHoverName()), true);
+            }
+            return InteractionResultHolder.sidedSuccess(wand, level.isClientSide);
+        }
+
+        if (player.isShiftKeyDown() && WandFocusHelper.hasFocus(wand)) {
+            if (!level.isClientSide) {
+                ItemStack focus = WandFocusHelper.removeFocus(wand);
+                if (!FocusPouchCurioItem.addFocusToEquipped(player, focus) && !player.getInventory().add(focus)) {
+                    player.drop(focus, false);
+                }
+                player.displayClientMessage(Component.translatable("item.thaumcraft.wand.focus.removed"), true);
+            }
+            return InteractionResultHolder.sidedSuccess(wand, level.isClientSide);
+        }
+
+        return InteractionResultHolder.pass(wand);
     }
 
     @Override
@@ -43,5 +142,12 @@ public class WandCastingItem extends Item {
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    private static String formatVis(int amount) {
+        if (amount % 100 == 0) {
+            return Integer.toString(amount / 100);
+        }
+        return String.format(Locale.ROOT, "%.2f", amount / 100.0D).replaceAll("0+$", "").replaceAll("\\.$", "");
     }
 }

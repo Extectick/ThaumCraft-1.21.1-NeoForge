@@ -39,6 +39,7 @@ public final class TCCreativeTabs {
                 output.accept(TCItems.VIS_DISCOUNT_RING_ORDER.get());
                 output.accept(TCItems.VIS_DISCOUNT_RING_ENTROPY.get());
                 output.accept(TCItems.FOCUS_POUCH.get());
+                TCItems.FOCUS_ITEMS.forEach(item -> output.accept(item.get()));
             })
             .build());
 

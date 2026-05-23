@@ -17,6 +17,10 @@ public final class ThaumcraftConfig {
             .comment("How many game ticks pass after runic shielding is reduced to zero before it starts recharging.")
             .defineInRange("runicShielding.rechargeDelayTicks", 80, 0, 20 * 60 * 10);
 
+    public static final ModConfigSpec.BooleanValue WAND_DIAL_BOTTOM = BUILDER
+            .comment("Matches Thaumcraft 4's wand_dial_bottom option. False renders the wand vis dial in the top-left corner.")
+            .define("client.wandDialBottom", false);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private ThaumcraftConfig() {

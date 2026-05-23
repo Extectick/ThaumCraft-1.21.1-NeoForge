@@ -1,0 +1,28 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    "SSS",
+    "SMS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stone"
+    },
+    "M": {
+      "item": "thaumcraft:salis_mundus"
+    }
+  },
+  "vis": {
+    "air": 100,
+    "fire": 100,
+    "water": 100,
+    "earth": 100,
+    "order": 100,
+    "entropy": 100
+  },
+  "result": {
+    "id": "thaumcraft:arcane_stone",
+    "count": 8
+  }
+}
