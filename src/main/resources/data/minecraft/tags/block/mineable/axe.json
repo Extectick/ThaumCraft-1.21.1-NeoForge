@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:greatwood_log",
+    "thaumcraft:silverwood_log",
+    "thaumcraft:arcane_wood",
+    "thaumcraft:greatwood_planks",
+    "thaumcraft:silverwood_planks",
+    "thaumcraft:greatwood_stairs",
+    "thaumcraft:silverwood_stairs",
+    "thaumcraft:greatwood_slab",
+    "thaumcraft:silverwood_slab",
+    "thaumcraft:table",
+    "thaumcraft:research_table",
+    "thaumcraft:deconstruction_table",
+    "thaumcraft:arcane_worktable"
+  ]
+}

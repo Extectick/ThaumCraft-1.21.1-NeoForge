@@ -1,0 +1,16 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "particle": "thaumcraft:block/jar_side",
+    "top": "thaumcraft:block/jar_top",
+    "side": "thaumcraft:block/jar_side",
+    "bottom": "thaumcraft:block/jar_bottom",
+    "content": "thaumcraft:block/jarbrine"
+  },
+  "elements": [
+    { "from": [4, 1, 4], "to": [12, 10, 12], "faces": { "down": { "texture": "#content", "uv": [0, 0, 8, 8] }, "up": { "texture": "#content", "uv": [0, 0, 8, 8] }, "north": { "texture": "#content", "uv": [0, 0, 8, 9] }, "south": { "texture": "#content", "uv": [0, 0, 8, 9] }, "west": { "texture": "#content", "uv": [0, 0, 8, 9] }, "east": { "texture": "#content", "uv": [0, 0, 8, 9] } } },
+    { "from": [3, 0, 3], "to": [13, 12, 13], "faces": { "down": { "texture": "#bottom" }, "up": { "texture": "#top" }, "north": { "texture": "#side" }, "south": { "texture": "#side" }, "west": { "texture": "#side" }, "east": { "texture": "#side" } } },
+    { "from": [5, 12, 5], "to": [11, 14, 11], "faces": { "down": { "texture": "#bottom" }, "up": { "texture": "#top" }, "north": { "texture": "#side" }, "south": { "texture": "#side" }, "west": { "texture": "#side" }, "east": { "texture": "#side" } } }
+  ]
+}

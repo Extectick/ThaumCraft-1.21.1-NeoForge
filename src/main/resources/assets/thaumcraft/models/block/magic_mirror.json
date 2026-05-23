@@ -1,0 +1,66 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "particle": "thaumcraft:block/mirrorframe",
+    "frame": "thaumcraft:block/mirrorframe",
+    "pane": "thaumcraft:block/mirrorpane"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 15],
+      "to": [16, 16, 16],
+      "faces": {
+        "north": { "texture": "#frame" },
+        "south": { "texture": "#frame" }
+      }
+    },
+    {
+      "from": [0, 0, 15],
+      "to": [4, 16, 16],
+      "faces": {
+        "west": { "uv": [0, 0, 1, 16], "texture": "#frame" },
+        "east": { "uv": [3, 0, 4, 16], "texture": "#frame" },
+        "up": { "uv": [0, 0, 4, 1], "texture": "#frame" },
+        "down": { "uv": [0, 15, 4, 16], "texture": "#frame" }
+      }
+    },
+    {
+      "from": [12, 0, 15],
+      "to": [16, 16, 16],
+      "faces": {
+        "west": { "uv": [12, 0, 13, 16], "texture": "#frame" },
+        "east": { "uv": [15, 0, 16, 16], "texture": "#frame" },
+        "up": { "uv": [12, 0, 16, 1], "texture": "#frame" },
+        "down": { "uv": [12, 15, 16, 16], "texture": "#frame" }
+      }
+    },
+    {
+      "from": [0, 12, 15],
+      "to": [16, 16, 16],
+      "faces": {
+        "up": { "uv": [0, 0, 16, 1], "texture": "#frame" },
+        "down": { "uv": [0, 12, 16, 13], "texture": "#frame" },
+        "west": { "uv": [0, 12, 1, 16], "texture": "#frame" },
+        "east": { "uv": [15, 12, 16, 16], "texture": "#frame" }
+      }
+    },
+    {
+      "from": [0, 0, 15],
+      "to": [16, 4, 16],
+      "faces": {
+        "up": { "uv": [0, 3, 16, 4], "texture": "#frame" },
+        "down": { "uv": [0, 15, 16, 16], "texture": "#frame" },
+        "west": { "uv": [0, 0, 1, 4], "texture": "#frame" },
+        "east": { "uv": [15, 0, 16, 4], "texture": "#frame" }
+      }
+    },
+    {
+      "from": [3, 3, 14.94],
+      "to": [13, 13, 14.95],
+      "faces": {
+        "north": { "uv": [3, 3, 13, 13], "texture": "#pane" }
+      }
+    }
+  ]
+}

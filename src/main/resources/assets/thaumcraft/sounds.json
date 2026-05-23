@@ -1,0 +1,10 @@
+{
+  "wand": {
+    "category": "master",
+    "sounds": [
+      "wand1",
+      "wand2",
+      "wand3"
+    ]
+  }
+}

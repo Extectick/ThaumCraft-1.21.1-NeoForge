@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thaumcraft:item/wand_rod_wood",
+    "layer1": "thaumcraft:item/wand_cap_iron"
+  }
+}

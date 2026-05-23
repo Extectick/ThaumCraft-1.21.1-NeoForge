@@ -16,7 +16,7 @@ public final class TCCreativeTabs {
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
             .icon(() -> TCItems.THAUMONOMICON.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                output.accept(TCItems.THAUMONOMICON.get());
+                TCItems.SIMPLE_ITEMS.forEach(item -> output.accept(item.get()));
                 output.accept(TCItems.RUNIC_RING_LESSER.get());
                 output.accept(TCItems.RUNIC_RING.get());
                 output.accept(TCItems.RUNIC_RING_CHARGED.get());

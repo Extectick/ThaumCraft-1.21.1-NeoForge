@@ -1,0 +1,6 @@
+{
+  "parent": "thaumcraft:block/node_in_a_jar",
+  "display": {
+    "gui": { "rotation": [30, 225, 0], "translation": [0, 1, 0], "scale": [1.15, 1.15, 1.15] }
+  }
+}

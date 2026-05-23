@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:arcane_stone_slab",
+    "thaumcraft:greatwood_slab",
+    "thaumcraft:silverwood_slab"
+  ]
+}

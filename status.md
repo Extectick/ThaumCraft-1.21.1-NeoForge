@@ -68,10 +68,162 @@ Build a first playable Curios accessory slice on NeoForge 1.21.1, replacing the 
 - Added `item.runic.charge` to `en_us.json`.
 - `gradlew.bat build` completed successfully after runic tooltip and hardening support.
 - Client smoke reached an integrated world after the tooltip changes without the previous Curios tooltip crash.
+- Added empty registry skeletons for blocks, block entities, entity types, menu types, sound events, particle types, and data components.
+- Added the first simple item/resource registry slice by splitting old metadata variants into explicit 1.21.1 item IDs.
+- Copied old textures and generated simple item models for shards, nuggets, clusters, resources, phials, keys, scribing tools, essences, and mana beans.
+- Expanded the Thaumcraft creative tab with the new simple item/resource slice.
+- `gradlew.bat build` completed successfully after the registry/resource slice.
+- Dedicated server smoke reached `Done` after the registry/resource slice.
+- Client smoke reached an integrated world after the registry/resource slice with no missing model/texture errors in the checked log patterns.
+- Added common item tags for the first simple item/resource slice to prepare OreDictionary replacement.
+- Added client item color handlers for primal shards using the old Thaumcraft shard colors.
+- Added food properties for edible nuggets, zombie brains, and mana beans.
+- `gradlew.bat build` completed successfully after item tags, shard colors, and food properties.
+- Client smoke reached an integrated world after shard color registration.
+- Added the first simple block slice for old `BlockCustomOre` variants:
+  - cinnabar ore
+  - amber ore
+  - six infused stone variants
+- Added block items, creative-tab entries, blockstates, block models, item models, block tags, item tags, and loot tables for the ore slice.
+- Fixed shard and focus pouch texture references with explicit modern texture names.
+- Generated pre-tinted shard and infused ore textures from the old animated/tinted source assets.
+- Added smelting recipes matching the old cinnabar/amber/native cluster/balanced shard behavior that is currently represented by registered items.
+- `gradlew.bat build` completed successfully after the ore block slice.
+- Dedicated server smoke reached `Done` and loaded 1297 recipes after the ore block slice.
+- Client smoke reached an integrated world and loaded 1297 recipes after the texture and ore fixes.
+- Added the first simple decorative block slice from old `BlockCosmeticSolid` and safe `BlockCosmeticOpaque` variants:
+  - amber block and amber bricks
+  - thaumium block
+  - tallow block
+  - arcane stone and arcane stone bricks
+  - ancient stone, ancient rock, and crusted stone
+- Added block items, creative-tab entries, blockstates, block models, item models, textures, loot tables, mining/storage tags, and basic storage recipes for the decorative block slice.
+- Deferred behavior-heavy variants for dedicated migration slices: obsidian totems, paving stones, warding stone, golem fetter, ancient pedestal, and warded glass.
+- `gradlew.bat build` completed successfully after the decorative block slice.
+- Added the first magical wood slice:
+  - greatwood and silverwood logs as rotated pillar blocks
+  - greatwood and silverwood planks
+- Added textures, axis-aware blockstates, models, block items, loot tables, axe/log/plank tags, and log-to-plank recipes for the magical wood slice.
+- Deferred magical leaves and saplings until their decay, shear, color, and drop behavior can be migrated together.
+- `gradlew.bat build` completed successfully after the magical wood slice.
+- Added the first magical foliage/plant slice:
+  - greatwood and silverwood leaves using modern `LeavesBlock` decay behavior
+  - greatwood and silverwood saplings as non-growing plant placeholders
+  - shimmerleaf, cinderpearl, and vishroom as simple glowing plant placeholders
+- Added modern cutout/cutout-mipped models, blockstates, textures, block items, loot tables, leaves/saplings tags, and client color handlers for greatwood/silverwood leaves.
+- Deferred tree growth, special plant particles/collision effects, and Ethereal Bloom TileEntity behavior to later focused slices.
+- `gradlew.bat build` completed successfully after the foliage/plant slice.
+- Dedicated server smoke reached `Done` and loaded 1306 recipes after the foliage/plant slice.
+- Added the tallow candle slice:
+  - split old 16 metadata candle variants into explicit block IDs
+  - used modern `TorchBlock` placement/smoke/flame behavior as the nearest vanilla base
+  - added shared candle/stub textures, tinted block/item color handlers, blockstates, models, loot tables, candle tags, and the base white candle recipe
+- Deferred old infusion stabilizer integration until the infusion subsystem is migrated.
+- `gradlew.bat build` completed successfully after the tallow candle slice.
+- Dedicated server smoke reached `Done` and loaded 1307 recipes after the tallow candle slice.
+- Added the stairs/slabs slice for already migrated materials:
+  - arcane stone stairs/slab
+  - greatwood stairs/slab
+  - silverwood stairs/slab
+- Added vanilla stair/slab blockstates, models, block items, loot tables, tags, mining tags, and crafting recipes.
+- `gradlew.bat build` completed successfully after the stairs/slabs slice.
+- Dedicated server smoke reached `Done` and loaded 1313 recipes after the stairs/slabs slice.
+- Added the safe wooden/table placeholder slice:
+  - arcane wood block from old `blockWooden`
+  - table, research table, deconstruction table, and arcane worktable as visual table placeholders
+- Added `SimpleTableBlock` with a table-shaped collision/selection shape.
+- Added textures, blockstates, table models, item models, loot tables, axe mining tags, and a basic table recipe.
+- Deferred `BlockWoodenDevice` TileEntity variants (bellows, arcane ear, arcane pressure plate, arcane bore/base, banners) and table GUI/wand behavior to focused behavior slices.
+- `gradlew.bat build` completed successfully after the wooden/table placeholder slice.
+- Dedicated server smoke reached `Done` and loaded 1314 recipes after the wooden/table placeholder slice.
+- Added the first visual `BlockStoneDevice` placeholder slice:
+  - alchemical furnace
+  - arcane pedestal
+  - wand recharge pedestal
+  - compound recharge focus
+  - arcane spa
+- Added old textures, blockstates, models, item models, loot tables, and pickaxe mining tags for the stone-device placeholder slice.
+- Deferred Runic Matrix, infusion pillars, node stabilizers/transducer, focal manipulator, flux scrubber, and all stone-device inventories/GUI/comparator behavior to focused BlockEntity slices.
+- `gradlew.bat build` completed successfully after the stone-device placeholder slice.
+- Dedicated server smoke reached `Done` and loaded 1314 recipes after the stone-device placeholder slice.
+- Added a larger visual registry/data transfer batch:
+  - remaining visual `BlockStoneDevice` placeholders: runic matrix, infusion pillar, node stabilizer, advanced node stabilizer, node transducer, focal manipulator, flux scrubber
+  - broad `BlockMetalDevice` placeholder slice: crucible, arcane alembic, vis charge relay, advanced alchemical construct, item grate, arcane lamp, lamp of growth, alchemical construct, thaumatorium, mnemonic matrix, lamp of fertility, vis relay
+- Added old texture copies, blockstates, block models, item models, loot tables, localization, and pickaxe mining tags for the new stone/metal device placeholders.
+- Deferred all associated BlockEntity behavior, inventories, fluids, vis relay networking, lamps, thaumatorium, crucible/alembic mechanics, GUI, comparator output, and multiblock behavior to focused behavior slices.
+- `gradlew.bat build` completed successfully after the large stone/metal device placeholder batch.
+- Dedicated server smoke reached `Done` and loaded 1314 recipes after the large stone/metal device placeholder batch.
+- Added a larger transport/storage visual transfer batch:
+  - `BlockTube` variants split into explicit block IDs: essentia tube, valve, alchemical centrifuge, filtered tube, buffer, restricted tube, directional tube, and essentia crystallizer
+  - `BlockJar` variants split into explicit block IDs: warded jar, brain in a jar, node in a jar, and void jar
+  - `BlockMirror` variants split into explicit block IDs: magic mirror and essentia mirror
+- Added `SimpleTubeBlock`, `SimpleJarBlock`, and `SimpleMirrorBlock` so these placeholders have recognizable selection/collision shapes instead of full cube-only behavior.
+- Added old texture copies, custom block models, item models, blockstates, loot tables, localization, and pickaxe mining tags for the tube/jar/mirror batch.
+- Deferred essentia transport/storage, jar fill/label logic, brain/node behavior, mirror linking, and associated BlockEntity renderers to focused behavior/render slices.
+- `gradlew.bat build` completed successfully after the tube/jar/mirror placeholder batch.
+- Dedicated server smoke reached `Done` and loaded 1314 recipes after the tube/jar/mirror placeholder batch.
+- Short client smoke did not report missing model/texture errors for the checked log patterns after the tube/jar/mirror placeholder batch.
+- Fixed render model issues reported from creative inventory:
+  - lamps now use the old `BlockMetalDevice` lamp bounds (`4..12` x/z, `2..14` y) instead of full cube models
+  - `brain_in_a_jar` and `node_in_a_jar` no longer use old 64x32 TESR textures as block side textures, avoiding stretched/overlapped jar faces
+  - candle item models keep the old small-world geometry but use dedicated inventory display transforms so they are readable in slots
+  - jar, lamp, and mirror item models received explicit GUI transforms
+- `gradlew.bat build` completed successfully after the render model fixes.
+- Short client smoke after the render model fixes did not report missing model/texture errors.
+- Rechecked the candle problem against old `BlockCandle` / `BlockCandleRenderer`:
+  - replaced the previous `TorchBlock` placeholder with `SimpleCandleBlock`, so vanilla torch flame/smoke particles are no longer rendered on top of Thaumcraft candle geometry
+  - preserved old candle bounds: wax body `6..10 / 0..8 / 6..10`, wick `7.5..8.5 / 8..10 / 7.5..8.5`
+  - kept old no-collision behavior and solid-top survival requirement
+  - explicitly assigned cutout render layer for all tallow candles to stop transparent pixels in old animated PNGs from rendering as black quads
+- Assigned translucent render layers for jars and mirrors so old glass/pane textures render through the modern chunk render pipeline.
+- `gradlew.bat build` completed successfully after the candle block/render-layer port.
+- Short client smoke after the candle block/render-layer port did not report model/render-layer errors.
+- Corrected the tallow candle model UV mapping against the old `RenderBlocks` behavior:
+  - wax side faces now sample `candle.png` frame UV `6,8 -> 10,16`, matching a 0.5-block-tall cuboid in the old renderer
+  - wax top/bottom now use the tinted `candle` texture instead of the untinted `candlestub` texture
+  - wick remains on `candlestub`
+- `gradlew.bat build` completed successfully after the candle UV fix.
+- Short client smoke after the candle UV fix did not report model/texture errors.
+- Replaced the custom tallow candle renderer path with the modern vanilla candle path:
+  - tallow candle registry IDs now use `CandleBlock`, preserving IDs while inheriting vanilla 1.21.1 candle states, placement, waterlogging, lighting, particles, and multi-candle stacking
+  - generated vanilla-style blockstates/models for all 16 tallow candles using `minecraft:block/template_candle`, `template_two_candles`, `template_three_candles`, and `template_four_candles`
+  - tallow candle models now reference standard vanilla candle textures and lit textures, not the old Thaumcraft animated `candle.png`
+  - item models now use standard generated vanilla candle item textures
+- `gradlew.bat build` completed successfully after switching tallow candles to vanilla `CandleBlock`.
+- Short client smoke after the vanilla candle switch did not report blockstate/model/texture errors.
+- Fixed mirror visual adaptation against old `BlockMirror` / `TileMirrorRenderer`:
+  - `SimpleMirrorBlock` now stores all 6 `DirectionalBlock.FACING` values from clicked side, matching old metadata `% 6`, instead of horizontal-only facing
+  - selection shape now uses old 1/16-thick side bounds for floor, ceiling, and all four walls
+  - world model now uses a 1/16-thick extruded full `mirrorframe` / `mirrorframe2` texture, matching old `ItemRenderer.renderItemIn2D(..., 0.0625F)`
+  - mirror pane is a separate thin quad on top of the frame instead of a thick cuboid
+  - inventory item models now use flat old item textures `mirrorframe` / `mirrorframe2`
+- `gradlew.bat build` completed successfully after mirror model/facing fixes.
+- Short client smoke after mirror fixes did not report blockstate/model/texture errors.
+- Rechecked the first migrated non-full-block visual batch against old `ISimpleBlockRenderingHandler` bounds:
+  - arcane pedestal, wand recharge pedestal, and compound recharge focus now use explicit cuboids matching old `BlockStoneDeviceRenderer` bounds instead of full cube/simple column parents
+  - crucible now uses a cauldron-like open shell approximating old inner-side rendering and collision instead of a plain full cube
+  - item grate, mnemonic matrix, vis relay, alchemical centrifuge, and essentia crystallizer were reduced from full cubes to closer static placeholder geometry
+  - essentia tube models and `SimpleTubeBlock` selection shape were narrowed from 4-pixel pipes to the old 2-pixel tube core/arms
+  - arcane lamp, lamp of growth, and lamp of fertility were kept on old `BlockMetalDevice` lamp bounds
+- `gradlew.bat build` completed successfully after the visual shape pass.
+- Short client smoke after the visual shape pass did not report model/texture errors; Log4j reported locked client log files, likely because another client process was already running.
+- Fixed alpha rendering artifacts reported from screenshots after the visual shape pass:
+  - compound recharge focus, tubes, item grate, mnemonic matrix, vis relay, alchemical centrifuge, essentia crystallizer, and metalbase-derived placeholders now declare `minecraft:cutout` render type in their block models
+  - stone-device and metal-device placeholders now use `noOcclusion()` so non-full geometry is not treated like solid full cubes
+- `gradlew.bat build` completed successfully after the alpha/cutout fix.
+- Added the first core gameplay mechanic from the original wand progression:
+  - registered `wand_casting` as the current iron-capped wooden wand slice and `iron_wand_cap` as the explicit replacement for the old wand-cap metadata item
+  - copied old wand cap/rod textures and old `wand1/2/3.ogg` sound assets
+  - registered `thaumcraft:wand` sound and `sounds.json` matching the old sound event
+  - right-clicking a vanilla bookshelf with the wand now removes the bookshelf, spawns a no-gravity Thaumonomicon at `x + 0.5, y + 0.3, z + 0.5`, plays `thaumcraft:wand` at volume/pitch `1.0`, and emits a sparkle-like particle burst
+  - added survival recipes for iron wand caps and the basic wand using the original shaped patterns adapted to explicit 1.21.1 item IDs
+- `gradlew.bat build` completed successfully after the Thaumonomicon wand trigger slice.
 
 ## Next checks
 
 - Expand inventory into full registry id lists before moving large legacy subsystems.
+- Continue large visual placeholder batches before moving deep BlockEntity behavior.
+- Good next candidates: ethereal bloom/taint visual placeholders, remaining wooden devices, or first focused jar/tube BlockEntity behavior slice.
 - Complete behavior for the first Curios slice:
   - add client HUD/network sync for current runic charge
   - add write path for hardening augment recipes
