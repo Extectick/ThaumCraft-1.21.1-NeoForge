@@ -21,6 +21,14 @@ public final class ThaumcraftConfig {
             .comment("Matches Thaumcraft 4's wand_dial_bottom option. False renders the wand vis dial in the top-left corner.")
             .define("client.wandDialBottom", false);
 
+    public static final ModConfigSpec.IntValue NOTIFICATION_DELAY_MILLISECONDS = BUILDER
+            .comment("How long Thaumcraft HUD notifications remain visible. Matches Thaumcraft 4's notificationDelay default.")
+            .defineInRange("client.notifications.delayMilliseconds", 5000, 500, 60000);
+
+    public static final ModConfigSpec.IntValue NOTIFICATION_MAX = BUILDER
+            .comment("Maximum number of Thaumcraft HUD notifications visible at once. Matches Thaumcraft 4's notificationMax default.")
+            .defineInRange("client.notifications.max", 15, 1, 20);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private ThaumcraftConfig() {

@@ -9,6 +9,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.EssentiaStorage;
 import thaumcraft.api.aspects.PrimalVisStorage;
 import thaumcraft.common.items.wands.FocusPouchContents;
+import thaumcraft.common.research.ResearchNoteData;
 
 public final class TCDataComponents {
     public static final DeferredRegister<DataComponentType<?>> REGISTRY = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, Thaumcraft.MODID);
@@ -31,6 +32,11 @@ public final class TCDataComponents {
             () -> DataComponentType.<FocusPouchContents>builder()
                     .persistent(FocusPouchContents.CODEC)
                     .networkSynchronized(FocusPouchContents.STREAM_CODEC)
+                    .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResearchNoteData>> RESEARCH_NOTE = REGISTRY.register("research_note",
+            () -> DataComponentType.<ResearchNoteData>builder()
+                    .persistent(ResearchNoteData.CODEC)
+                    .networkSynchronized(ResearchNoteData.STREAM_CODEC)
                     .build());
 
     private TCDataComponents() {

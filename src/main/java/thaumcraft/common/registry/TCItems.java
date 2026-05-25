@@ -13,6 +13,9 @@ import thaumcraft.api.aspects.PrimalVisStorage;
 import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.curios.TCSlots;
+import thaumcraft.common.items.ScribingToolsItem;
+import thaumcraft.common.items.ResearchNotesItem;
+import thaumcraft.common.items.ThaumonomiconItem;
 import thaumcraft.common.items.EssentiaPhialItem;
 import thaumcraft.common.items.curios.FocusPouchCurioItem;
 import thaumcraft.common.items.curios.HoverGirdleItem;
@@ -120,7 +123,7 @@ public final class TCItems {
     public static final DeferredItem<BlockItem> BLACK_TALLOW_CANDLE = REGISTRY.registerSimpleBlockItem(TCBlocks.BLACK_TALLOW_CANDLE);
     public static final DeferredItem<Item> IRON_WAND_CAP = simple("iron_wand_cap");
     public static final DeferredItem<Item> WAND_CASTING = REGISTRY.registerItem("wand_casting", WandCastingItem::new);
-    public static final DeferredItem<Item> THAUMONOMICON = REGISTRY.registerSimpleItem("thaumonomicon", new Item.Properties());
+    public static final DeferredItem<Item> THAUMONOMICON = REGISTRY.registerItem("thaumonomicon", ThaumonomiconItem::new);
     public static final DeferredItem<Item> ALUMENTUM = simple("alumentum");
     public static final DeferredItem<Item> NITOR = simple("nitor");
     public static final DeferredItem<Item> THAUMIUM_INGOT = simple("thaumium_ingot");
@@ -168,7 +171,8 @@ public final class TCItems {
     public static final DeferredItem<Item> FISH_NUGGET = simple("fish_nugget", food(1, 0.3F));
     public static final DeferredItem<Item> IRON_ARCANE_KEY = simple("iron_arcane_key");
     public static final DeferredItem<Item> GOLD_ARCANE_KEY = simple("gold_arcane_key");
-    public static final DeferredItem<Item> SCRIBING_TOOLS = simple("scribing_tools");
+    public static final DeferredItem<Item> SCRIBING_TOOLS = REGISTRY.registerItem("scribing_tools", ScribingToolsItem::new);
+    public static final DeferredItem<Item> RESEARCH_NOTES = REGISTRY.registerItem("research_notes", ResearchNotesItem::new);
     public static final DeferredItem<Item> ETHEREAL_ESSENCE = simple("ethereal_essence");
     public static final DeferredItem<Item> CRYSTALLIZED_ESSENCE = simple("crystallized_essence");
     public static final DeferredItem<Item> GLASS_PHIAL = simple("glass_phial");
@@ -388,6 +392,7 @@ public final class TCItems {
             IRON_ARCANE_KEY,
             GOLD_ARCANE_KEY,
             SCRIBING_TOOLS,
+            RESEARCH_NOTES,
             ETHEREAL_ESSENCE,
             CRYSTALLIZED_ESSENCE,
             GLASS_PHIAL,

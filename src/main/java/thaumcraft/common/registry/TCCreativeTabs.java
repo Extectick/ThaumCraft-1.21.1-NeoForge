@@ -7,6 +7,9 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.items.ResearchNotesItem;
+import thaumcraft.common.items.wands.WandVisHelper;
+import thaumcraft.common.research.ResearchRegistry;
 
 public final class TCCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Thaumcraft.MODID);
@@ -17,6 +20,7 @@ public final class TCCreativeTabs {
             .icon(() -> TCItems.THAUMONOMICON.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 TCItems.SIMPLE_ITEMS.forEach(item -> output.accept(item.get()));
+                output.accept(WandVisHelper.fillAllVis(TCItems.WAND_CASTING.get().getDefaultInstance()));
                 output.accept(TCItems.RUNIC_RING_LESSER.get());
                 output.accept(TCItems.RUNIC_RING.get());
                 output.accept(TCItems.RUNIC_RING_CHARGED.get());
@@ -40,6 +44,8 @@ public final class TCCreativeTabs {
                 output.accept(TCItems.VIS_DISCOUNT_RING_ENTROPY.get());
                 output.accept(TCItems.FOCUS_POUCH.get());
                 TCItems.FOCUS_ITEMS.forEach(item -> output.accept(item.get()));
+                output.accept(ResearchNotesItem.createUnknown());
+                ResearchRegistry.entries().forEach(entry -> output.accept(ResearchNotesItem.create(entry.key())));
             })
             .build());
 

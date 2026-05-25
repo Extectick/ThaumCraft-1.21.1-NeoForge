@@ -16,6 +16,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.blocks.ArcaneWorktableBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock.TubeMode;
+import thaumcraft.common.blocks.ResearchTableBlock;
 import thaumcraft.common.blocks.SimpleJarBlock;
 import thaumcraft.common.blocks.SimpleMirrorBlock;
 import thaumcraft.common.blocks.SimplePlantBlock;
@@ -64,7 +65,8 @@ public final class TCBlocks {
     public static final DeferredBlock<SimplePlantBlock> CINDERPEARL = plant("cinderpearl", 8);
     public static final DeferredBlock<SimplePlantBlock> VISHROOM = plant("vishroom", 8);
     public static final DeferredBlock<SimpleTableBlock> TABLE = table("table");
-    public static final DeferredBlock<SimpleTableBlock> RESEARCH_TABLE = table("research_table");
+    public static final DeferredBlock<ResearchTableBlock> RESEARCH_TABLE = REGISTRY.register("research_table",
+            () -> new ResearchTableBlock(tableProperties()));
     public static final DeferredBlock<SimpleTableBlock> DECONSTRUCTION_TABLE = table("deconstruction_table");
     public static final DeferredBlock<ArcaneWorktableBlock> ARCANE_WORKTABLE = REGISTRY.register("arcane_worktable",
             () -> new ArcaneWorktableBlock(tableProperties()));

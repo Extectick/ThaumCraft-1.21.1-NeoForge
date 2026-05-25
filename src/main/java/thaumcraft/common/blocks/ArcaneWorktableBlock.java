@@ -15,12 +15,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
 import thaumcraft.common.items.wands.WandCastingItem;
 import thaumcraft.common.lib.crafting.ArcaneWorktableRecipes;
@@ -28,6 +33,13 @@ import thaumcraft.common.registry.TCSoundEvents;
 
 public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBlock {
     public static final MapCodec<ArcaneWorktableBlock> CODEC = simpleCodec(ArcaneWorktableBlock::new);
+    private static final VoxelShape TOP = Block.box(0.0, 8.0, 0.0, 16.0, 16.0, 16.0);
+    private static final VoxelShape BASE = Block.box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0);
+    private static final VoxelShape LEG_NW = Block.box(1.0, 4.0, 1.0, 5.0, 8.0, 5.0);
+    private static final VoxelShape LEG_NE = Block.box(11.0, 4.0, 1.0, 15.0, 8.0, 5.0);
+    private static final VoxelShape LEG_SW = Block.box(1.0, 4.0, 11.0, 5.0, 8.0, 15.0);
+    private static final VoxelShape LEG_SE = Block.box(11.0, 4.0, 11.0, 15.0, 8.0, 15.0);
+    private static final VoxelShape SHAPE = Shapes.or(TOP, BASE, LEG_NW, LEG_NE, LEG_SW, LEG_SE);
 
     public ArcaneWorktableBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -50,6 +62,11 @@ public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBloc
     }
 
     @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
+    }
+
+    @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hitResult) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -69,7 +86,7 @@ public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBloc
             return level.isClientSide ? ItemInteractionResult.SUCCESS : extractLastGridItem(worktable, player);
         }
 
-        return level.isClientSide ? ItemInteractionResult.SUCCESS : insertGridItem(stack, worktable, player);
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override
@@ -86,6 +103,7 @@ public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBloc
 
         if (!player.isShiftKeyDown()) {
             player.openMenu(worktable);
+            level.playSound(null, pos, TCSoundEvents.CREAK.get(), SoundSource.BLOCKS, 0.25F, 1.0F);
             return InteractionResult.CONSUME;
         }
 
@@ -95,6 +113,7 @@ public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBloc
                 player.drop(wand, false);
             }
             worktable.setChanged();
+            level.playSound(null, pos, TCSoundEvents.HHOFF.get(), SoundSource.BLOCKS, 0.35F, 1.0F);
             return InteractionResult.CONSUME;
         }
 
@@ -112,10 +131,13 @@ public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBloc
             ItemStack wand, Player player) {
         if (ArcaneWorktableRecipes.tryCraft(level, worktable, wand, player)) {
             level.playSound(null, pos, TCSoundEvents.WAND.get(), SoundSource.BLOCKS, 0.8F, 1.0F);
+            level.playSound(null, pos, TCSoundEvents.CRAFTSTART.get(), SoundSource.BLOCKS, 0.45F, 1.0F);
             return ItemInteractionResult.CONSUME;
         }
 
         player.displayClientMessage(Component.translatable("container.thaumcraft.arcane_worktable.no_recipe"), true);
+        level.playSound(null, pos, TCSoundEvents.WANDFAIL.get(), SoundSource.BLOCKS, 0.6F, 1.0F);
+        level.playSound(null, pos, TCSoundEvents.CRAFTFAIL.get(), SoundSource.BLOCKS, 0.45F, 1.0F);
         return ItemInteractionResult.CONSUME;
     }
 
@@ -123,30 +145,18 @@ public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBloc
             Player player, InteractionHand hand) {
         ItemStack storedWand = worktable.getWand();
         if (storedWand.isEmpty()) {
+            if (player.getAbilities().instabuild) {
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            }
             worktable.setWand(heldStack.split(1));
+            player.level().playSound(null, player.blockPosition(), TCSoundEvents.HHON.get(), SoundSource.BLOCKS, 0.35F, 1.0F);
         } else if (heldStack.isEmpty()) {
             player.setItemInHand(hand, storedWand);
             worktable.setWand(ItemStack.EMPTY);
+            player.level().playSound(null, player.blockPosition(), TCSoundEvents.HHOFF.get(), SoundSource.BLOCKS, 0.35F, 1.0F);
         } else {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
-        return ItemInteractionResult.CONSUME;
-    }
-
-    private static ItemInteractionResult insertGridItem(ItemStack heldStack, ArcaneWorktableBlockEntity worktable,
-            Player player) {
-        if (heldStack.isEmpty()) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        }
-
-        for (int slot = 0; slot < ArcaneWorktableBlockEntity.GRID_SIZE; slot++) {
-            if (worktable.getItem(slot).isEmpty()) {
-                worktable.setItem(slot, heldStack.split(1));
-                return ItemInteractionResult.CONSUME;
-            }
-        }
-
-        player.displayClientMessage(Component.translatable("container.thaumcraft.arcane_worktable.full"), true);
         return ItemInteractionResult.CONSUME;
     }
 
@@ -158,6 +168,7 @@ public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBloc
                     player.drop(stack, false);
                 }
                 worktable.setChanged();
+                player.level().playSound(null, player.blockPosition(), TCSoundEvents.HHOFF.get(), SoundSource.BLOCKS, 0.25F, 1.0F);
                 return ItemInteractionResult.CONSUME;
             }
         }

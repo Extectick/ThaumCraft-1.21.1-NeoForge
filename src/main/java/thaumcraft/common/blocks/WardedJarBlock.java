@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -21,6 +22,7 @@ import thaumcraft.api.aspects.EssentiaStorage;
 import thaumcraft.common.blockentities.WardedJarBlockEntity;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.registry.TCSoundEvents;
 
 public class WardedJarBlock extends SimpleJarBlock implements EntityBlock {
     public static final MapCodec<WardedJarBlock> CODEC = simpleCodec(WardedJarBlock::new);
@@ -70,6 +72,7 @@ public class WardedJarBlock extends SimpleJarBlock implements EntityBlock {
         EssentiaStorage stored = jar.getEssentia();
         if (stored.amount() < PHIAL_AMOUNT) {
             player.displayClientMessage(Component.translatable("block.thaumcraft.warded_jar.not_enough_essentia"), true);
+            player.level().playSound(null, player.blockPosition(), TCSoundEvents.WANDFAIL.get(), SoundSource.BLOCKS, 0.25F, 1.2F);
             return ItemInteractionResult.CONSUME;
         }
 
@@ -77,6 +80,7 @@ public class WardedJarBlock extends SimpleJarBlock implements EntityBlock {
         ItemStack filled = new ItemStack(TCItems.ESSENTIA_PHIAL.get());
         filled.set(TCDataComponents.ESSENTIA, new EssentiaStorage(stored.aspect(), PHIAL_AMOUNT));
         consumeHeldAndGiveRemainder(player, hand, glassPhial, filled);
+        player.level().playSound(null, player.blockPosition(), TCSoundEvents.JAR.get(), SoundSource.BLOCKS, 0.45F, 1.0F);
         return ItemInteractionResult.CONSUME;
     }
 
@@ -85,17 +89,20 @@ public class WardedJarBlock extends SimpleJarBlock implements EntityBlock {
         EssentiaStorage phialEssentia = essentiaPhial.getOrDefault(TCDataComponents.ESSENTIA, EssentiaStorage.EMPTY);
         if (phialEssentia.isEmpty()) {
             player.displayClientMessage(Component.translatable("item.thaumcraft.essentia_phial.empty"), true);
+            player.level().playSound(null, player.blockPosition(), TCSoundEvents.WANDFAIL.get(), SoundSource.BLOCKS, 0.25F, 1.2F);
             return ItemInteractionResult.CONSUME;
         }
 
         int accepted = jar.fillEssentia(phialEssentia.aspect(), phialEssentia.amount(), true);
         if (accepted < phialEssentia.amount()) {
             player.displayClientMessage(Component.translatable("block.thaumcraft.warded_jar.cannot_accept"), true);
+            player.level().playSound(null, player.blockPosition(), TCSoundEvents.SPILL.get(), SoundSource.BLOCKS, 0.35F, 1.0F);
             return ItemInteractionResult.CONSUME;
         }
 
         jar.fillEssentia(phialEssentia.aspect(), phialEssentia.amount(), false);
         consumeHeldAndGiveRemainder(player, hand, essentiaPhial, new ItemStack(TCItems.GLASS_PHIAL.get()));
+        player.level().playSound(null, player.blockPosition(), TCSoundEvents.JAR.get(), SoundSource.BLOCKS, 0.45F, 0.9F);
         return ItemInteractionResult.CONSUME;
     }
 

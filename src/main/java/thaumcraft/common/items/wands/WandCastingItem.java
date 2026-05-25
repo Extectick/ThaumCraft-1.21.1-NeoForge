@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -20,9 +24,13 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
+import thaumcraft.common.blocks.SimpleTableBlock;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.common.items.curios.FocusPouchCurioItem;
+import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCSoundEvents;
 
@@ -68,15 +76,23 @@ public class WandCastingItem extends Item {
     }
 
     @Override
+    public ItemStack getDefaultInstance() {
+        return WandVisHelper.fillAllVis(new ItemStack(this));
+    }
+
+    @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents,
             TooltipFlag tooltipFlag) {
         int maxVis = this.getMaxVis(stack);
         tooltipComponents.add(Component.translatable("item.thaumcraft.wand.capacity", formatVis(maxVis))
                 .withStyle(ChatFormatting.GOLD));
 
-        for (Aspect aspect : Aspect.getPrimalAspects()) {
-            tooltipComponents.add(Component.translatable("item.thaumcraft.wand.vis." + aspect.getTag(),
-                    formatVis(this.getVis(stack, aspect)), formatVis(maxVis)).withStyle(ChatFormatting.GRAY));
+        if (Screen.hasShiftDown()) {
+            for (Aspect aspect : Aspect.getPrimalAspects()) {
+                tooltipComponents.add(detailedVisLine(stack, aspect, maxVis));
+            }
+        } else {
+            tooltipComponents.add(compactVisLine(stack));
         }
 
         ItemStack focus = this.getFocusItem(stack);
@@ -100,6 +116,7 @@ public class WandCastingItem extends Item {
                 }
                 player.displayClientMessage(Component.translatable("item.thaumcraft.wand.focus.set",
                         WandFocusHelper.getFocusItem(wand).getHoverName()), true);
+                level.playSound(null, player.blockPosition(), TCSoundEvents.HHON.get(), SoundSource.PLAYERS, 0.35F, 1.0F);
             }
             return InteractionResultHolder.sidedSuccess(wand, level.isClientSide);
         }
@@ -111,6 +128,7 @@ public class WandCastingItem extends Item {
                     player.drop(focus, false);
                 }
                 player.displayClientMessage(Component.translatable("item.thaumcraft.wand.focus.removed"), true);
+                level.playSound(null, player.blockPosition(), TCSoundEvents.HHOFF.get(), SoundSource.PLAYERS, 0.35F, 1.0F);
             }
             return InteractionResultHolder.sidedSuccess(wand, level.isClientSide);
         }
@@ -122,7 +140,31 @@ public class WandCastingItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        if (!level.getBlockState(pos).is(Blocks.BOOKSHELF)) {
+        ItemStack wand = context.getItemInHand();
+        BlockState state = level.getBlockState(pos);
+
+        if (state.is(TCBlocks.TABLE.get())) {
+            if (!level.isClientSide) {
+                BlockState worktableState = TCBlocks.ARCANE_WORKTABLE.get().defaultBlockState()
+                        .setValue(SimpleTableBlock.FACING, state.getValue(SimpleTableBlock.FACING));
+                level.setBlock(pos, worktableState, 3);
+
+                Player player = context.getPlayer();
+                if (player == null || !player.getAbilities().instabuild) {
+                    if (level.getBlockEntity(pos) instanceof ArcaneWorktableBlockEntity worktable) {
+                        worktable.setWand(wand.copyWithCount(1));
+                        worktable.setChanged();
+                    }
+                    wand.shrink(1);
+                }
+
+                level.playSound(null, pos, TCSoundEvents.WAND.get(), SoundSource.BLOCKS, 0.8F, 1.0F);
+                level.playSound(null, pos, TCSoundEvents.CRAFTSTART.get(), SoundSource.BLOCKS, 0.35F, 1.0F);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
+        if (!state.is(Blocks.BOOKSHELF)) {
             return InteractionResult.PASS;
         }
 
@@ -149,5 +191,30 @@ public class WandCastingItem extends Item {
             return Integer.toString(amount / 100);
         }
         return String.format(Locale.ROOT, "%.2f", amount / 100.0D).replaceAll("0+$", "").replaceAll("\\.$", "");
+    }
+
+    private MutableComponent compactVisLine(ItemStack stack) {
+        MutableComponent line = Component.empty();
+        boolean first = true;
+        for (Aspect aspect : Aspect.getPrimalAspects()) {
+            if (!first) {
+                line.append(Component.literal(" | ").withStyle(ChatFormatting.GRAY));
+            }
+            line.append(Component.literal(formatVis(this.getVis(stack, aspect))).setStyle(aspectStyle(aspect)));
+            first = false;
+        }
+        return line;
+    }
+
+    private MutableComponent detailedVisLine(ItemStack stack, Aspect aspect, int maxVis) {
+        int amount = this.getVis(stack, aspect);
+        int percent = maxVis <= 0 ? 0 : Math.round(amount * 100.0F / maxVis);
+        return Component.translatable("tc.aspect." + aspect.getTag()).setStyle(aspectStyle(aspect))
+                .append(Component.literal(" x " + formatVis(amount) + ", ").withStyle(ChatFormatting.WHITE))
+                .append(Component.literal("(" + percent + "% vis cost)").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+    }
+
+    private static Style aspectStyle(Aspect aspect) {
+        return Style.EMPTY.withColor(TextColor.fromRgb(aspect.getColor()));
     }
 }

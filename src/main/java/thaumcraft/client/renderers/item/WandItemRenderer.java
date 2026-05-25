@@ -28,7 +28,6 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
     private static final ResourceLocation CAP_IRON = Thaumcraft.id("textures/item/wand_cap_iron_model.png");
     private static final ResourceLocation FOCUS = Thaumcraft.id("textures/models/wand.png");
 
-    private static final float MODEL_SCALE = 1.0F / 16.0F;
     private static final int FULL_BRIGHT = 0x00F000F0;
 
     private final ModelPart rod;
@@ -39,31 +38,24 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
     public WandItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
         super(dispatcher, modelSet);
 
-        /*
-         * Модель в локальных pixel-координатах.
-         *
-         * ВАЖНО:
-         * origin находится около точки хвата, а не в центре предмета.
-         * Это главная разница с предыдущей версией.
-         */
         this.rod = part(
-                cube(0, 8, -1.0F, -9.0F, -1.0F, 2.0F, 18.0F, 2.0F, 32.0F, 32.0F),
+                cube(0, 8, -1.0F, -1.0F, -1.0F, 2.0F, 18.0F, 2.0F, 32.0F, 32.0F),
+                0.0F, 2.0F, 0.0F
+        );
+
+        this.capTop = part(
+                cube(0, 0, -1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, 32.0F, 32.0F),
                 0.0F, 0.0F, 0.0F
         );
 
         this.capBottom = part(
-                cube(0, 0, -1.25F, -11.25F, -1.25F, 2.5F, 2.5F, 2.5F, 32.0F, 32.0F),
-                0.0F, 0.0F, 0.0F
-        );
-
-        this.capTop = part(
-                cube(0, 0, -1.25F, 8.75F, -1.25F, 2.5F, 2.5F, 2.5F, 32.0F, 32.0F),
-                0.0F, 0.0F, 0.0F
+                cube(0, 0, -1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, 32.0F, 32.0F),
+                0.0F, 20.0F, 0.0F
         );
 
         this.focus = part(
-                cube(0, 0, -3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F, 32.0F, 32.0F),
-                0.0F, 12.5F, 0.0F
+                cube(0, 0, -3.0F, -6.0F, -3.0F, 6.0F, 6.0F, 6.0F, 32.0F, 32.0F),
+                0.0F, 0.0F, 0.0F
         );
     }
 
@@ -71,8 +63,7 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
     public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack,
             MultiBufferSource buffer, int packedLight, int packedOverlay) {
         poseStack.pushPose();
-
-        applyWandTransform(displayContext, poseStack);
+        centerModelInItemSpace(poseStack);
 
         renderPart(this.rod, ROD_WOOD, poseStack, buffer, packedLight, packedOverlay, 0xFFFFFFFF);
         renderPart(this.capBottom, CAP_IRON, poseStack, buffer, packedLight, packedOverlay, 0xFFFFFFFF);
@@ -103,6 +94,8 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
         ResourceLocation depth = focusItem.getFocusDepthLayerTexture(focusStack);
         if (depth != null) {
             poseStack.pushPose();
+            poseStack.translate(0.0F, -0.09F, 0.0F);
+            poseStack.scale(0.16F, 0.16F, 0.16F);
             renderPart(this.focus, depth, poseStack, buffer, FULL_BRIGHT, packedOverlay, 0xFFFFFFFF);
             poseStack.popPose();
             alpha = 0.60F;
@@ -111,100 +104,32 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
         int color = (((int) (alpha * 255.0F)) << 24) | (focusItem.getFocusColor(focusStack) & 0x00FFFFFF);
 
         poseStack.pushPose();
+        poseStack.scale(0.50F, 0.50F, 0.50F);
         renderPart(this.focus, FOCUS, poseStack, buffer, FULL_BRIGHT, packedOverlay, color);
         poseStack.popPose();
 
         ResourceLocation ornament = focusItem.getOrnamentTexture(focusStack);
         if (ornament != null) {
             poseStack.pushPose();
-            poseStack.translate(-3.0F, 9.5F, -0.04F);
-            poseStack.scale(6.0F, 6.0F, 6.0F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
+            poseStack.translate(-0.25F, -0.10F, 0.0275F);
+            poseStack.scale(0.50F, 0.50F, 0.50F);
             renderTexturedPlane(ornament, poseStack, buffer, FULL_BRIGHT, packedOverlay, 0xFFFFFFFF);
             poseStack.popPose();
 
             poseStack.pushPose();
+            poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
-            poseStack.translate(-3.0F, 9.5F, -0.04F);
-            poseStack.scale(6.0F, 6.0F, 6.0F);
+            poseStack.translate(-0.25F, -0.10F, 0.0275F);
+            poseStack.scale(0.50F, 0.50F, 0.50F);
             renderTexturedPlane(ornament, poseStack, buffer, FULL_BRIGHT, packedOverlay, 0xFFFFFFFF);
             poseStack.popPose();
         }
     }
 
-    private static void applyWandTransform(ItemDisplayContext displayContext, PoseStack poseStack) {
-        switch (displayContext) {
-            case GUI -> {
-                poseStack.translate(0.50F, 0.50F, 0.00F);
-                poseStack.mulPose(Axis.ZP.rotationDegrees(-45.0F));
-                poseStack.mulPose(Axis.XP.rotationDegrees(25.0F));
-                poseStack.mulPose(Axis.YP.rotationDegrees(-20.0F));
-                poseStack.scale(1.25F, 1.25F, 1.25F);
-            }
-
-            case GROUND -> {
-                poseStack.translate(0.50F, 0.12F, 0.50F);
-                poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(25.0F));
-                poseStack.scale(0.80F, 0.80F, 0.80F);
-            }
-
-            case FIXED -> {
-                poseStack.translate(0.50F, 0.50F, 0.08F);
-                poseStack.mulPose(Axis.ZP.rotationDegrees(-45.0F));
-                poseStack.mulPose(Axis.XP.rotationDegrees(20.0F));
-                poseStack.scale(1.00F, 1.00F, 1.00F);
-            }
-
-            case FIRST_PERSON_RIGHT_HAND -> {
-                /*
-                 * Главная настройка для твоего текущего скрина.
-                 * Палочка должна быть крупнее и ближе к центру руки.
-                 */
-                poseStack.translate(0.56F, 0.42F, -0.34F);
-                poseStack.mulPose(Axis.XP.rotationDegrees(-58.0F));
-                poseStack.mulPose(Axis.YP.rotationDegrees(34.0F));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(-28.0F));
-                poseStack.scale(1.55F, 1.55F, 1.55F);
-            }
-
-            case FIRST_PERSON_LEFT_HAND -> {
-                poseStack.translate(0.44F, 0.42F, -0.34F);
-                poseStack.mulPose(Axis.XP.rotationDegrees(-58.0F));
-                poseStack.mulPose(Axis.YP.rotationDegrees(-34.0F));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(28.0F));
-                poseStack.scale(1.55F, 1.55F, 1.55F);
-            }
-
-            case THIRD_PERSON_RIGHT_HAND -> {
-                poseStack.translate(0.50F, 0.22F, 0.08F);
-                poseStack.mulPose(Axis.XP.rotationDegrees(-92.0F));
-                poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(42.0F));
-                poseStack.scale(0.95F, 0.95F, 0.95F);
-            }
-
-            case THIRD_PERSON_LEFT_HAND -> {
-                poseStack.translate(0.50F, 0.22F, 0.08F);
-                poseStack.mulPose(Axis.XP.rotationDegrees(-92.0F));
-                poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
-                poseStack.mulPose(Axis.ZP.rotationDegrees(-42.0F));
-                poseStack.scale(0.95F, 0.95F, 0.95F);
-            }
-
-            case HEAD -> {
-                poseStack.translate(0.50F, 0.40F, 0.50F);
-                poseStack.mulPose(Axis.ZP.rotationDegrees(-45.0F));
-                poseStack.scale(0.90F, 0.90F, 0.90F);
-            }
-
-            default -> {
-                poseStack.translate(0.50F, 0.50F, 0.50F);
-                poseStack.mulPose(Axis.ZP.rotationDegrees(-45.0F));
-                poseStack.scale(0.90F, 0.90F, 0.90F);
-            }
-        }
-
-        poseStack.scale(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE);
+    private static void centerModelInItemSpace(PoseStack poseStack) {
+        poseStack.translate(0.5F, 0.5F, 0.5F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
     }
 
     private static void renderPart(ModelPart part, ResourceLocation texture, PoseStack poseStack,

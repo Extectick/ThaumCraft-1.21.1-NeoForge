@@ -1,9 +1,11 @@
 package thaumcraft.client.hud;
 
 import com.mojang.math.Axis;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +22,11 @@ import thaumcraft.common.registry.TCItems;
 public final class WandVisHudOverlay {
     private static final ResourceLocation HUD = Thaumcraft.id("textures/gui/hud.png");
     private static final int BAR_HEIGHT = 30;
+    private static final int DIAL_SIZE = 64;
+    private static final int BAR_OFFSET = 32;
+    private static final float HUD_SCALE = 0.5F;
+    private static final float DIAL_ALPHA = 1.0F;
+    private static final float TUBE_FRAME_ALPHA = 0.82F;
 
     private WandVisHudOverlay() {
     }
@@ -37,8 +44,8 @@ public final class WandVisHudOverlay {
         }
 
         boolean dialBottom = ThaumcraftConfig.WAND_DIAL_BOTTOM.get();
-        int top = dialBottom ? guiGraphics.guiHeight() - 32 : 0;
-        renderDial(guiGraphics, wand, 16, top + 16, player.isShiftKeyDown(), dialBottom);
+        int centerY = dialBottom ? guiGraphics.guiHeight() - 16 : 16;
+        renderDial(guiGraphics, wand, 16, centerY, Screen.hasShiftDown(), dialBottom);
     }
 
     private static ItemStack getHeldWand(Player player) {
@@ -53,10 +60,16 @@ public final class WandVisHudOverlay {
 
     private static void renderDial(GuiGraphics guiGraphics, ItemStack wand, int centerX, int centerY,
             boolean showNumbers, boolean dialBottom) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
         guiGraphics.pose().pushPose();
-        guiGraphics.pose().translate(centerX - 16.0F, centerY - 16.0F, 0.0F);
-        guiGraphics.pose().scale(0.5F, 0.5F, 1.0F);
-        guiGraphics.blit(HUD, 0, 0, 0, 0, 64, 64);
+        guiGraphics.pose().translate(centerX - DIAL_SIZE * HUD_SCALE / 2.0F,
+                centerY - DIAL_SIZE * HUD_SCALE / 2.0F, 0.0F);
+        guiGraphics.pose().scale(HUD_SCALE, HUD_SCALE, 1.0F);
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, DIAL_ALPHA);
+        guiGraphics.blit(HUD, 0, 0, 0, 0, DIAL_SIZE, DIAL_SIZE);
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         guiGraphics.pose().popPose();
 
         int max = Math.max(1, WandVisHelper.getMaxVis(wand));
@@ -71,9 +84,13 @@ public final class WandVisHudOverlay {
             count++;
         }
         if (!focusStack.isEmpty()) {
-            guiGraphics.renderItem(focusStack, centerX - 8, centerY - 8);
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().translate(centerX - 8.0F, centerY - 8.0F, 0.0F);
+            guiGraphics.renderItem(focusStack, 0, 0);
+            guiGraphics.pose().popPose();
         }
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
     }
 
     private static void renderBar(GuiGraphics guiGraphics, Aspect aspect, int amount, int max, int centerX, int centerY,
@@ -89,15 +106,17 @@ public final class WandVisHudOverlay {
             guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(90.0F));
         }
         guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(angle));
-        guiGraphics.pose().translate(0.0F, -32.0F, 0.0F);
-        guiGraphics.pose().scale(0.5F, 0.5F, 1.0F);
+        guiGraphics.pose().translate(0.0F, -BAR_OFFSET, 0.0F);
+        guiGraphics.pose().scale(HUD_SCALE, HUD_SCALE, 1.0F);
 
         if (fill > 0) {
             guiGraphics.setColor(red, green, blue, 0.8F);
             guiGraphics.blit(HUD, -4, 35 - fill, 104, 0, 8, fill);
             guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, TUBE_FRAME_ALPHA);
         guiGraphics.blit(HUD, -8, -3, 72, 0, 16, 42);
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         if (focusCost > 0) {
             guiGraphics.blit(HUD, -4, -8, 136, 0, 8, 8);
         }

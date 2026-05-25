@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +24,7 @@ import thaumcraft.common.blockentities.EssentiaTubeBlockEntity;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.registry.TCSoundEvents;
 
 public class EssentiaTubeBlock extends SimpleTubeBlock implements EntityBlock {
     public static final MapCodec<EssentiaTubeBlock> CODEC = simpleCodec(EssentiaTubeBlock::new);
@@ -73,6 +75,8 @@ public class EssentiaTubeBlock extends SimpleTubeBlock implements EntityBlock {
                 player.displayClientMessage(Component.translatable(tube.isEnabled()
                         ? "block.thaumcraft.essentia_valve.open"
                         : "block.thaumcraft.essentia_valve.closed"), true);
+                level.playSound(null, pos, tube.isEnabled() ? TCSoundEvents.HHON.get() : TCSoundEvents.HHOFF.get(),
+                        SoundSource.BLOCKS, 0.35F, 1.0F);
             }
             return ItemInteractionResult.SUCCESS;
         }
@@ -84,6 +88,7 @@ public class EssentiaTubeBlock extends SimpleTubeBlock implements EntityBlock {
                     tube.setFilterAspect(phialEssentia.aspect());
                     player.displayClientMessage(Component.translatable("block.thaumcraft.filtered_essentia_tube.filter",
                             Component.translatable("tc.aspect." + phialEssentia.aspect().getTag())), true);
+                    level.playSound(null, pos, TCSoundEvents.TOOL.get(), SoundSource.BLOCKS, 0.35F, 1.0F);
                 }
                 return ItemInteractionResult.SUCCESS;
             }
@@ -94,6 +99,7 @@ public class EssentiaTubeBlock extends SimpleTubeBlock implements EntityBlock {
                 tube.clearFilterAspect();
                 player.displayClientMessage(Component.translatable("block.thaumcraft.filtered_essentia_tube.clear"),
                         true);
+                level.playSound(null, pos, TCSoundEvents.HHOFF.get(), SoundSource.BLOCKS, 0.35F, 1.0F);
             }
             return ItemInteractionResult.SUCCESS;
         }

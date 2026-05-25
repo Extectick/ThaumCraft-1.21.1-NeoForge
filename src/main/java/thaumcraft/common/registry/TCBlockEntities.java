@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
 import thaumcraft.common.blockentities.EssentiaTubeBlockEntity;
+import thaumcraft.common.blockentities.ResearchTableBlockEntity;
 import thaumcraft.common.blockentities.WardedJarBlockEntity;
 
 public final class TCBlockEntities {
@@ -14,6 +15,10 @@ public final class TCBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcaneWorktableBlockEntity>> ARCANE_WORKTABLE =
             REGISTRY.register("arcane_worktable", () -> BlockEntityType.Builder
                     .of(ArcaneWorktableBlockEntity::new, TCBlocks.ARCANE_WORKTABLE.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ResearchTableBlockEntity>> RESEARCH_TABLE =
+            REGISTRY.register("research_table", () -> BlockEntityType.Builder
+                    .of(ResearchTableBlockEntity::new, TCBlocks.RESEARCH_TABLE.get())
                     .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WardedJarBlockEntity>> WARDED_JAR =
             REGISTRY.register("warded_jar", () -> BlockEntityType.Builder

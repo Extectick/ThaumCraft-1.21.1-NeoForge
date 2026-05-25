@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +17,7 @@ import thaumcraft.common.items.wands.FocusPouchContents;
 import thaumcraft.common.items.wands.WandFocusHelper;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.registry.TCSoundEvents;
 
 public record CycleWandFocusPayload() implements CustomPacketPayload {
     public static final CycleWandFocusPayload INSTANCE = new CycleWandFocusPayload();
@@ -66,6 +68,7 @@ public record CycleWandFocusPayload() implements CustomPacketPayload {
             pouch.set(TCDataComponents.FOCUS_POUCH_CONTENTS, contents.with(nextSlot, currentFocus));
             player.displayClientMessage(Component.translatable("item.thaumcraft.wand.focus.set",
                     nextFocus.getHoverName()), true);
+            player.level().playSound(null, player.blockPosition(), TCSoundEvents.HHON.get(), SoundSource.PLAYERS, 0.35F, 1.0F);
             return;
         }
 
@@ -74,6 +77,7 @@ public record CycleWandFocusPayload() implements CustomPacketPayload {
                 WandFocusHelper.removeFocus(wand);
                 pouch.set(TCDataComponents.FOCUS_POUCH_CONTENTS, updated);
                 player.displayClientMessage(Component.translatable("item.thaumcraft.wand.focus.removed"), true);
+                player.level().playSound(null, player.blockPosition(), TCSoundEvents.HHOFF.get(), SoundSource.PLAYERS, 0.35F, 1.0F);
             });
         }
     }

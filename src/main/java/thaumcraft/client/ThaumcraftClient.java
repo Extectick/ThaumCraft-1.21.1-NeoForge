@@ -1,6 +1,7 @@
 package thaumcraft.client;
 
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.level.FoliageColor;
@@ -20,13 +21,17 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.hud.FocusSelectorOverlay;
+import thaumcraft.client.hud.ResearchNotificationOverlay;
 import thaumcraft.client.hud.WandVisHudOverlay;
 import thaumcraft.client.input.TCKeyMappings;
 import thaumcraft.client.renderers.item.TCItemRenderers;
 import thaumcraft.client.screens.ArcaneWorktableScreen;
+import thaumcraft.client.screens.ResearchTableScreen;
 import thaumcraft.common.registry.TCBlocks;
+import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMenuTypes;
+import thaumcraft.common.research.ResearchNoteData;
 
 @Mod(value = Thaumcraft.MODID, dist = Dist.CLIENT)
 public class ThaumcraftClient {
@@ -84,11 +89,17 @@ public class ThaumcraftClient {
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.VOID_JAR.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.MAGIC_MIRROR.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.ESSENTIA_MIRROR.get(), RenderType.translucent());
+            ItemProperties.register(TCItems.RESEARCH_NOTES.get(), Thaumcraft.id("discovery"),
+                    (stack, level, entity, seed) -> stack
+                            .getOrDefault(TCDataComponents.RESEARCH_NOTE, ResearchNoteData.EMPTY).complete()
+                                    ? 1.0F
+                                    : 0.0F);
         });
     }
 
     private void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(TCMenuTypes.ARCANE_WORKTABLE.get(), ArcaneWorktableScreen::new);
+        event.register(TCMenuTypes.RESEARCH_TABLE.get(), ResearchTableScreen::new);
     }
 
     private void registerGuiLayers(RegisterGuiLayersEvent event) {
@@ -96,6 +107,8 @@ public class ThaumcraftClient {
                 WandVisHudOverlay.render(guiGraphics));
         event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("focus_selector"), (guiGraphics, deltaTracker) ->
                 FocusSelectorOverlay.render(guiGraphics));
+        event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("research_notifications"), (guiGraphics, deltaTracker) ->
+                ResearchNotificationOverlay.render(guiGraphics));
     }
 
     private void registerKeyMappings(RegisterKeyMappingsEvent event) {
@@ -130,6 +143,14 @@ public class ThaumcraftClient {
     }
 
     private void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register((stack, tintIndex) -> {
+            if (tintIndex != 1) {
+                return 0xFFFFFFFF;
+            }
+            ResearchNoteData data = stack.getOrDefault(TCDataComponents.RESEARCH_NOTE, ResearchNoteData.EMPTY);
+            int color = data.isEmpty() ? ResearchNoteData.EMPTY.color() : data.color();
+            return 0xFF000000 | color;
+        }, TCItems.RESEARCH_NOTES.get());
         event.register((stack, tintIndex) -> FoliageColor.getDefaultColor(), TCItems.GREATWOOD_LEAVES.get());
         event.register((stack, tintIndex) -> SILVERWOOD_LEAF_COLOR, TCItems.SILVERWOOD_LEAVES.get());
         event.register((stack, tintIndex) -> WHITE, TCItems.WHITE_TALLOW_CANDLE.get());

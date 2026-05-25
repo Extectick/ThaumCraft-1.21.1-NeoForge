@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -19,6 +20,7 @@ import thaumcraft.common.config.ThaumcraftConfig;
 import thaumcraft.common.curios.ThaumcraftCuriosCompat;
 import thaumcraft.common.lib.RunicShielding;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.registry.TCSoundEvents;
 import top.theillusivec4.curios.api.SlotResult;
 
 public final class RunicShieldEvents {
@@ -56,6 +58,8 @@ public final class RunicShieldEvents {
         if (current < info.maxCharge() && gameTime >= nextRecharge) {
             current++;
             this.nextRechargeGameTime.put(id, gameTime + rechargeIntervalTicks(info.chargedUpgrades()));
+            player.level().playSound(null, player.blockPosition(), TCSoundEvents.RUNIC_SHIELD_CHARGE.get(),
+                    SoundSource.PLAYERS, 0.18F, 1.0F);
         }
 
         this.runicCharge.put(id, current);
@@ -86,6 +90,8 @@ public final class RunicShieldEvents {
         int remainingCharge = Math.max(0, charge - (int) Math.ceil(blocked));
         event.setNewDamage(Math.max(0.0F, damage - blocked));
         this.runicCharge.put(id, remainingCharge);
+        player.level().playSound(null, player.blockPosition(), TCSoundEvents.RUNIC_SHIELD_EFFECT.get(),
+                SoundSource.PLAYERS, 0.55F, 1.0F);
 
         if (remainingCharge <= 0) {
             this.rechargeDelay.put(id, ThaumcraftConfig.RUNIC_RECHARGE_DELAY_TICKS.get());

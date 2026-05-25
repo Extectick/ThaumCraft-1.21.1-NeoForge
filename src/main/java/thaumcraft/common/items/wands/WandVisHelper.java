@@ -64,4 +64,12 @@ public final class WandVisHelper {
     public static boolean hasEnoughVis(ItemStack stack, Aspect aspect, int amount) {
         return amount <= 0 || getVis(stack, aspect) >= amount;
     }
+
+    public static ItemStack fillAllVis(ItemStack stack) {
+        int max = getMaxVis(stack);
+        for (Aspect aspect : Aspect.getPrimalAspects()) {
+            setVis(stack, aspect, max);
+        }
+        return stack;
+    }
 }

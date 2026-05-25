@@ -11,11 +11,13 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import thaumcraft.common.config.ThaumcraftConfig;
+import thaumcraft.common.lib.events.TCCommands;
 import thaumcraft.common.lib.events.RunicShieldEvents;
 import thaumcraft.common.network.TCNetwork;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCCreativeTabs;
+import thaumcraft.common.registry.TCDataAttachments;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCEntityTypes;
 import thaumcraft.common.registry.TCItems;
@@ -44,9 +46,11 @@ public class Thaumcraft {
         TCRecipeSerializers.REGISTRY.register(modEventBus);
         TCSoundEvents.REGISTRY.register(modEventBus);
         TCParticleTypes.REGISTRY.register(modEventBus);
+        TCDataAttachments.REGISTRY.register(modEventBus);
         TCDataComponents.REGISTRY.register(modEventBus);
         TCCreativeTabs.REGISTRY.register(modEventBus);
         modEventBus.addListener(TCNetwork::registerPayloads);
+        NeoForge.EVENT_BUS.addListener(TCCommands::register);
         NeoForge.EVENT_BUS.register(new RunicShieldEvents());
 
         modContainer.registerConfig(ModConfig.Type.COMMON, ThaumcraftConfig.SPEC);

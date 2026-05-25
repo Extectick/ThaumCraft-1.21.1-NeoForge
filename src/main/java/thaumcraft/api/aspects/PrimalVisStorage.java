@@ -46,6 +46,7 @@ public record PrimalVisStorage(int air, int fire, int water, int earth, int orde
             case EARTH -> this.earth;
             case ORDER -> this.order;
             case ENTROPY -> this.entropy;
+            default -> 0;
         };
     }
 
@@ -58,6 +59,7 @@ public record PrimalVisStorage(int air, int fire, int water, int earth, int orde
             case EARTH -> new PrimalVisStorage(this.air, this.fire, this.water, clamped, this.order, this.entropy);
             case ORDER -> new PrimalVisStorage(this.air, this.fire, this.water, this.earth, clamped, this.entropy);
             case ENTROPY -> new PrimalVisStorage(this.air, this.fire, this.water, this.earth, this.order, clamped);
+            default -> this;
         };
     }
 
