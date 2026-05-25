@@ -60,6 +60,7 @@ public final class WandVisHudOverlay {
 
     private static void renderDial(GuiGraphics guiGraphics, ItemStack wand, int centerX, int centerY,
             boolean showNumbers, boolean dialBottom) {
+        RenderSystem.disableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
@@ -91,6 +92,7 @@ public final class WandVisHudOverlay {
         }
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableBlend();
+        RenderSystem.enableDepthTest();
     }
 
     private static void renderBar(GuiGraphics guiGraphics, Aspect aspect, int amount, int max, int centerX, int centerY,
@@ -110,18 +112,27 @@ public final class WandVisHudOverlay {
         guiGraphics.pose().scale(HUD_SCALE, HUD_SCALE, 1.0F);
 
         if (fill > 0) {
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
             guiGraphics.setColor(red, green, blue, 0.8F);
             guiGraphics.blit(HUD, -4, 35 - fill, 104, 0, 8, fill);
             guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, TUBE_FRAME_ALPHA);
         guiGraphics.blit(HUD, -8, -3, 72, 0, 16, 42);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         if (focusCost > 0) {
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
             guiGraphics.blit(HUD, -4, -8, 136, 0, 8, 8);
         }
         if (showNumbers) {
             renderNumber(guiGraphics, amount);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
         guiGraphics.pose().popPose();
     }

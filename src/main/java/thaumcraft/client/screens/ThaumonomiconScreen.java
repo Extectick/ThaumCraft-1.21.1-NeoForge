@@ -25,10 +25,18 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.PrimalVisStorage;
+import thaumcraft.common.crafting.ArcaneWorktableRecipe;
 import thaumcraft.common.network.ThaumonomiconCreateNotePayload;
 import thaumcraft.common.registry.TCDataAttachments;
 import thaumcraft.common.registry.TCSoundEvents;
@@ -45,6 +53,8 @@ public class ThaumonomiconScreen extends Screen {
     private static final ResourceLocation GUI = Thaumcraft.id("textures/gui/gui_research.png");
     private static final ResourceLocation BOOK = Thaumcraft.id("textures/gui/gui_researchbook.png");
     private static final ResourceLocation BOOK_OVERLAY = Thaumcraft.id("textures/gui/gui_researchbook_overlay.png");
+    private static final ResourceLocation RESEARCH_TEXT_FONT = ResourceLocation.withDefaultNamespace("uniform");
+    private static final float RECIPE_GRID_ALPHA = 1F;
     private static final int PANE_WIDTH = 256;
     private static final int PANE_HEIGHT = 230;
     private static final int BOOK_WIDTH = 256;
@@ -52,14 +62,22 @@ public class ThaumonomiconScreen extends Screen {
     private static final int BOOK_TEXTURE_SCALE = 2;
     private static final float BOOK_SCALE = 1.3F;
     private static final float PAGE_TEXT_SCALE = 1.0F;
+    private static final float PAGE_BODY_TEXT_SCALE = 0.85F;
+    private static final int PAGE_BODY_LINE_HEIGHT = 10;
     private static final int MAP_X = 16;
     private static final int MAP_Y = 17;
     private static final int MAP_WIDTH = 224;
     private static final int MAP_HEIGHT = 196;
     private static final int PAGE_SPACING = 152;
     private static final int PAGE_TEXT_WIDTH = 139;
-    private static final int PAGE_TEXT_LINES = 16;
-    private static final int PAGE_TEXT_LINES_WITH_TITLE = 12;
+    private static final int PAGE_TEXT_TOP_WITH_TITLE = 16;
+    private static final int PAGE_TEXT_TOP_WITHOUT_TITLE = -10;
+    private static final int PAGE_TEXT_BOTTOM = 190;
+    private static final int PAGE_RECIPE_TEXT_HEIGHT = 84;
+    private static final int RECIPE_HEADER_HEIGHT = 24;
+    private static final int TITLE_RULE_HEIGHT = 4;
+    private static final int RECIPE_PAGE_LEFT_OFFSET = -18;
+    private static final int RECIPE_PAGE_TOP = 16;
     private static final int NODE_STEP = 24;
     private static final int NODE_SIZE = 22;
     private static final int FRAME_SIZE = 26;
@@ -80,6 +98,8 @@ public class ThaumonomiconScreen extends Screen {
     private ResearchEntry hoveredEntry;
     private ResearchEntry openedEntry;
     private int openedPage;
+    private int mouseX;
+    private int mouseY;
 
     public ThaumonomiconScreen() {
         super(Component.translatable("item.thaumcraft.thaumonomicon"));
@@ -132,6 +152,8 @@ public class ThaumonomiconScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
         this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         this.hoveredEntry = null;
 
@@ -398,13 +420,13 @@ public class ThaumonomiconScreen extends Screen {
         int x = mouseX + 6;
         int y = mouseY - 4;
         int titleWidth = this.font.width(title);
-        int missingWidth = this.font.width(missing);
+        int missingWidth = Math.round(this.font.width(missing) * 0.5F);
         int width = Math.max(titleWidth, missingWidth);
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(0.0F, 0.0F, 400.0F);
-        guiGraphics.fillGradient(x - 3, y - 3, x + width + 3, y + 25, 0xC0100010, 0xC0100010);
+        guiGraphics.fillGradient(x - 3, y - 3, x + width + 3, y + 20, 0xC0100010, 0xC0100010);
         guiGraphics.drawString(this.font, title, x, y, 0xFFFFFFFF, true);
-        guiGraphics.drawString(this.font, missing, x, y + 13, 0xFF707070, true);
+        drawScaledString(guiGraphics, missing, x, y + 13, 0xFF707070, 0.5F, true);
         guiGraphics.pose().popPose();
     }
 
@@ -419,8 +441,12 @@ public class ThaumonomiconScreen extends Screen {
             ResearchKnowledgeData knowledge) {
         int bookLeft = bookLeft();
         int bookTop = bookTop();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         blitBook(guiGraphics, bookLeft, bookTop, 0, 0, BOOK_WIDTH, BOOK_HEIGHT, scaledBookWidth(),
                 scaledBookHeight());
+        RenderSystem.disableBlend();
 
         List<BookPageView> pages = visibleBookPages(entry, knowledge);
         if (pages.isEmpty()) {
@@ -454,8 +480,8 @@ public class ThaumonomiconScreen extends Screen {
         int width = PAGE_TEXT_WIDTH;
         if (view.drawTitle()) {
             Component title = Component.translatable(entry.nameTranslationKey());
-            blitBook(guiGraphics, baseX + 4, y - 13, 24, 184, 96, 4);
-            blitBook(guiGraphics, baseX + 4, y + 4, 24, 184, 96, 4);
+            blitBook(guiGraphics, baseX + 4, y - 12, 24, 184, 96, 4, 96, TITLE_RULE_HEIGHT);
+            blitBook(guiGraphics, baseX + 4, y + 5, 24, 184, 96, 4, 96, TITLE_RULE_HEIGHT);
             drawCenteredFittedString(guiGraphics, title, baseX + 52, y - 6, 130, 0xFF302130, PAGE_TEXT_SCALE);
             y += 26;
         }
@@ -466,31 +492,34 @@ public class ThaumonomiconScreen extends Screen {
             case ASPECTS -> renderAspectResearchPage(guiGraphics, page, x + 7, y - 8);
             case TEXT_AND_RECIPE -> {
                 renderTextResearchPage(guiGraphics, view, x, y - 10, width);
-                renderRecipeReferencePage(guiGraphics, page, x, y + 82, width);
+                if (view.drawRecipe()) {
+                    renderRecipeReferencePage(guiGraphics, page, recipePageX(baseX, side), bookContentTop()
+                            + RECIPE_PAGE_TOP, width);
+                }
             }
             case NORMAL_CRAFTING, ARCANE_CRAFTING, CRUCIBLE_CRAFTING, INFUSION_CRAFTING, INFUSION_ENCHANTMENT, SMELTING,
-                    COMPOUND_CRAFTING -> renderRecipeReferencePage(guiGraphics, page, x + 11, y - 8, width);
+                    COMPOUND_CRAFTING -> renderRecipeReferencePage(guiGraphics, page, recipePageX(baseX, side),
+                            bookContentTop() + RECIPE_PAGE_TOP, width);
         }
     }
 
     private void renderTextResearchPage(GuiGraphics guiGraphics, BookPageView view, int x, int y, int width) {
-        String rawText = rawPageText(view.page());
-        if (hasCenteredLegacyHeading(rawText)) {
-            drawLegacyResearchText(guiGraphics, rawText, x, y, width, 0xFF4F3922, PAGE_TEXT_SCALE);
-            return;
-        }
         if (view.textLines().isEmpty()) {
-            drawScaledWordWrap(guiGraphics, pageText(view.page()), x, y, width, 0xFF4F3922, PAGE_TEXT_SCALE);
+            drawScaledWordWrap(guiGraphics, pageText(view.page()), x, y, width, 0xFF4F3922, PAGE_BODY_TEXT_SCALE);
             return;
         }
-        drawScaledLines(guiGraphics, view.textLines(), x, y, 0xFF4F3922, PAGE_TEXT_SCALE);
+        drawBookTextLines(guiGraphics, view.textLines(), x, y, width, 0xFF4F3922);
     }
 
     private static MutableComponent pageText(ResearchPage page) {
         if (page.textKey().isBlank()) {
-            return Component.translatable("tc.thaumonomicon.page.missing");
+            return researchText(Component.translatable("tc.thaumonomicon.page.missing"));
         }
-        return Component.translatable(page.textKey());
+        return researchText(Component.translatable(page.textKey()));
+    }
+
+    private static MutableComponent researchText(MutableComponent text) {
+        return text.withStyle(style -> style.withFont(RESEARCH_TEXT_FONT));
     }
 
     private static String rawPageText(ResearchPage page) {
@@ -498,10 +527,6 @@ public class ThaumonomiconScreen extends Screen {
             return "";
         }
         return I18n.get(page.textKey());
-    }
-
-    private static boolean hasCenteredLegacyHeading(String rawText) {
-        return rawText.contains("\u00a7l") && rawText.contains("\u00a7n");
     }
 
     private static boolean isCenteredLegacyHeading(String line) {
@@ -512,24 +537,49 @@ public class ThaumonomiconScreen extends Screen {
         return line.replaceAll("(?i)(\u00a7[0-9A-FK-OR])\\s+", "$1").trim();
     }
 
-    private void drawLegacyResearchText(GuiGraphics guiGraphics, String rawText, int x, int y, int width, int color,
-            float scale) {
-        int lineY = 0;
+    private List<BookTextLine> layoutResearchText(ResearchPage page, int width) {
+        String rawText = rawPageText(page);
+        if (rawText.isBlank()) {
+            return List.of();
+        }
+        List<BookTextLine> lines = new ArrayList<>();
+        boolean skipHeadingGap = false;
         for (String rawLine : rawText.split("\\n", -1)) {
             if (rawLine.isBlank()) {
-                lineY += this.font.lineHeight;
+                if (skipHeadingGap) {
+                    continue;
+                }
+                lines.add(BookTextLine.blank(this.font.lineHeight));
                 continue;
             }
+            skipHeadingGap = false;
             if (isCenteredLegacyHeading(rawLine)) {
                 Component heading = Component.literal(normalizeCenteredLegacyHeading(rawLine));
-                drawCenteredFittedString(guiGraphics, heading, x + width / 2, y + lineY, width, color, scale);
-                lineY += this.font.lineHeight + 2;
+                lines.add(new BookTextLine(heading.getVisualOrderText(), true, this.font.lineHeight + 2));
+                skipHeadingGap = true;
                 continue;
             }
-            Component line = Component.literal(rawLine.stripLeading());
-            List<FormattedCharSequence> wrapped = this.font.split(line, Math.round(width / scale));
-            drawScaledLines(guiGraphics, wrapped, x, y + lineY, color, scale);
-            lineY += wrapped.size() * this.font.lineHeight;
+            Component line = researchText(Component.literal(rawLine.stripLeading()));
+            for (FormattedCharSequence wrapped : this.font.split(line, Math.round(width / PAGE_BODY_TEXT_SCALE))) {
+                lines.add(new BookTextLine(wrapped, false, PAGE_BODY_LINE_HEIGHT));
+            }
+        }
+        return lines;
+    }
+
+    private void drawBookTextLines(GuiGraphics guiGraphics, List<BookTextLine> lines, int x, int y, int width,
+            int color) {
+        int lineY = 0;
+        for (BookTextLine line : lines) {
+            if (!line.blank()) {
+                if (line.centered()) {
+                    drawCenteredFormattedString(guiGraphics, line.text(), x + width / 2, y + lineY, width, color,
+                            PAGE_TEXT_SCALE);
+                } else {
+                    drawScaledLine(guiGraphics, line.text(), x, y + lineY, color, PAGE_BODY_TEXT_SCALE);
+                }
+            }
+            lineY += line.height();
         }
     }
 
@@ -550,18 +600,257 @@ public class ThaumonomiconScreen extends Screen {
     }
 
     private void renderRecipeReferencePage(GuiGraphics guiGraphics, ResearchPage page, int x, int y, int width) {
-        guiGraphics.blit(BOOK_OVERLAY, x + width / 2 - 52, y + 32, 104, 104, 112, 15, 52, 52, 512, 512);
+        if (page.type() == ResearchPage.PageType.NORMAL_CRAFTING
+                || page.type() == ResearchPage.PageType.TEXT_AND_RECIPE) {
+            if (renderNormalCraftingPage(guiGraphics, page, x, y, width)) {
+                return;
+            }
+        } else if (page.type() == ResearchPage.PageType.ARCANE_CRAFTING) {
+            if (renderArcaneCraftingPage(guiGraphics, page, x, y, width)) {
+                return;
+            }
+        } else if (page.type() == ResearchPage.PageType.SMELTING) {
+            if (renderSmeltingPage(guiGraphics, page, x, y, width)) {
+                return;
+            }
+        }
+        int recipeLeft = x + width / 2 - 56;
+        int recipeTop = y - RECIPE_HEADER_HEIGHT;
+        renderRecipeTitle(guiGraphics, recipeTitle(page), x, recipeTop, width);
+        renderRecipeFrame(guiGraphics, recipeLeft, recipeTop);
         if (page.recipeOutput().isPresent()) {
-            guiGraphics.renderItem(page.recipeOutput().get(), x + width / 2 - 8, y + 50);
+            guiGraphics.renderItem(page.recipeOutput().get(), recipeLeft + 48, recipeTop + 32);
         } else if (!page.recipeIds().isEmpty()) {
             guiGraphics.drawCenteredString(this.font, Component.literal(page.recipeIds().getFirst().getPath()),
-                    x + width / 2, y + 55, 0xFF4F3922);
+                    x + width / 2, recipeTop + 55, 0xFF4F3922);
         } else {
             guiGraphics.drawCenteredString(this.font, Component.translatable("tc.thaumonomicon.recipe.placeholder"),
-                    x + width / 2, y + 55, 0xFF4F3922);
+                    x + width / 2, recipeTop + 55, 0xFF4F3922);
         }
-        guiGraphics.drawCenteredString(this.font, Component.translatable("tc.thaumonomicon.recipe." + page.type().name().toLowerCase()),
-                x + width / 2, y + 8, 0xFF505030);
+    }
+
+    private static int recipePageX(int baseX, int side) {
+        return baseX + RECIPE_PAGE_LEFT_OFFSET + side * PAGE_SPACING;
+    }
+
+    private boolean renderNormalCraftingPage(GuiGraphics guiGraphics, ResearchPage page, int x, int y, int width) {
+        Optional<RecipeHolder<?>> holder = resolveRecipe(page);
+        if (holder.isEmpty()) {
+            return false;
+        }
+        Recipe<?> recipe = holder.get().value();
+        if (!(recipe instanceof CraftingRecipe craftingRecipe)) {
+            return false;
+        }
+
+        int recipeLeft = x + width / 2 - 56;
+        int recipeTop = y - RECIPE_HEADER_HEIGHT;
+        renderRecipeTitle(guiGraphics, normalCraftingTitle(recipe), x, recipeTop, width);
+        renderRecipeFrame(guiGraphics, recipeLeft, recipeTop);
+
+        ItemStack result = craftingRecipe.getResultItem(this.minecraft.level.registryAccess()).copy();
+        int outputX = recipeLeft + 48;
+        int outputY = recipeTop + 32;
+        renderRecipeStack(guiGraphics, result, outputX, outputY);
+
+        List<Ingredient> ingredients = craftingRecipe.getIngredients();
+        int recipeWidth = 3;
+        int recipeHeight = Mth.clamp(Mth.ceil(ingredients.size() / 3.0F), 1, 3);
+        if (recipe instanceof ShapedRecipe shapedRecipe) {
+            recipeWidth = Mth.clamp(shapedRecipe.getWidth(), 1, 3);
+            recipeHeight = Mth.clamp(shapedRecipe.getHeight(), 1, 3);
+        }
+
+        int baseX = recipeLeft + 16;
+        int baseY = recipeTop + 76;
+        for (int row = 0; row < recipeHeight; row++) {
+            for (int column = 0; column < recipeWidth; column++) {
+                int ingredientIndex = column + row * recipeWidth;
+                if (ingredientIndex >= ingredients.size()) {
+                    continue;
+                }
+                Ingredient ingredient = ingredients.get(ingredientIndex);
+                if (ingredient.isEmpty()) {
+                    continue;
+                }
+                int slotX = baseX + column * 32;
+                int slotY = baseY + row * 32;
+                renderRecipeIngredient(guiGraphics, ingredient, slotX, slotY);
+            }
+        }
+        return true;
+    }
+
+    private boolean renderArcaneCraftingPage(GuiGraphics guiGraphics, ResearchPage page, int x, int y, int width) {
+        Optional<RecipeHolder<?>> holder = resolveRecipe(page);
+        if (holder.isEmpty()) {
+            return false;
+        }
+        Recipe<?> recipe = holder.get().value();
+        if (!(recipe instanceof ArcaneWorktableRecipe arcaneRecipe)) {
+            return false;
+        }
+
+        int recipeLeft = x + width / 2 - 56;
+        int recipeTop = y - RECIPE_HEADER_HEIGHT;
+        renderRecipeTitle(guiGraphics, recipeTitle(page), x, recipeTop, width);
+        renderArcaneRecipeFrame(guiGraphics, recipeLeft, recipeTop);
+
+        ItemStack result = arcaneRecipe.getResultItem(this.minecraft.level.registryAccess()).copy();
+        renderRecipeStack(guiGraphics, result, recipeLeft + 48, recipeTop + 22);
+
+        List<Ingredient> ingredients = arcaneRecipe.getIngredients();
+        int recipeWidth = Mth.clamp(arcaneRecipe.getWidth(), 1, 3);
+        int recipeHeight = Mth.clamp(arcaneRecipe.getHeight(), 1, 3);
+        int baseX = recipeLeft + 16;
+        int baseY = recipeTop + 66;
+        for (int row = 0; row < recipeHeight; row++) {
+            for (int column = 0; column < recipeWidth; column++) {
+                int ingredientIndex = column + row * recipeWidth;
+                if (ingredientIndex >= ingredients.size()) {
+                    continue;
+                }
+                Ingredient ingredient = ingredients.get(ingredientIndex);
+                if (ingredient.isEmpty()) {
+                    continue;
+                }
+                renderRecipeIngredient(guiGraphics, ingredient, baseX + column * 32, baseY + row * 32);
+            }
+        }
+
+        renderPrimalVisCost(guiGraphics, arcaneRecipe.getVisCost(), recipeLeft, recipeTop + 172);
+        return true;
+    }
+
+    private boolean renderSmeltingPage(GuiGraphics guiGraphics, ResearchPage page, int x, int y, int width) {
+        Optional<RecipeHolder<?>> holder = resolveRecipe(page);
+        if (holder.isEmpty()) {
+            return false;
+        }
+        Recipe<?> recipe = holder.get().value();
+        if (!(recipe instanceof AbstractCookingRecipe cookingRecipe)) {
+            return false;
+        }
+
+        int recipeLeft = x + width / 2 - 56;
+        int recipeTop = y - RECIPE_HEADER_HEIGHT;
+        renderRecipeTitle(guiGraphics, recipeTitle(page), x, recipeTop, width);
+        renderSmeltingFrame(guiGraphics, recipeLeft, recipeTop);
+
+        List<Ingredient> ingredients = cookingRecipe.getIngredients();
+        if (!ingredients.isEmpty() && !ingredients.getFirst().isEmpty()) {
+            renderRecipeIngredient(guiGraphics, ingredients.getFirst(), recipeLeft + 48, recipeTop + 64);
+        }
+        ItemStack result = cookingRecipe.getResultItem(this.minecraft.level.registryAccess()).copy();
+        renderRecipeStack(guiGraphics, result, recipeLeft + 48, recipeTop + 144);
+        return true;
+    }
+
+    private Optional<RecipeHolder<?>> resolveRecipe(ResearchPage page) {
+        if (this.minecraft == null || this.minecraft.level == null || page.recipeIds().isEmpty()) {
+            return Optional.empty();
+        }
+        for (ResourceLocation recipeId : page.recipeIds()) {
+            Optional<RecipeHolder<?>> recipe = this.minecraft.level.getRecipeManager().byKey(recipeId);
+            if (recipe.isPresent()) {
+                return recipe;
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static Component normalCraftingTitle(Recipe<?> recipe) {
+        return Component.translatable(recipe instanceof ShapedRecipe
+                ? "tc.thaumonomicon.recipe.normal_crafting"
+                : "tc.thaumonomicon.recipe.normal_crafting_shapeless");
+    }
+
+    private static Component recipeTitle(ResearchPage page) {
+        return switch (page.type()) {
+            case ARCANE_CRAFTING -> Component.translatable("tc.thaumonomicon.recipe.arcane_crafting");
+            case CRUCIBLE_CRAFTING -> Component.translatable("tc.thaumonomicon.recipe.crucible_crafting");
+            case INFUSION_CRAFTING -> Component.translatable("tc.thaumonomicon.recipe.infusion_crafting");
+            case INFUSION_ENCHANTMENT -> Component.translatable("tc.thaumonomicon.recipe.infusion_enchantment");
+            case SMELTING -> Component.translatable("tc.thaumonomicon.recipe.smelting");
+            case COMPOUND_CRAFTING -> Component.translatable("tc.thaumonomicon.recipe.compound_crafting");
+            case NORMAL_CRAFTING, TEXT_AND_RECIPE -> Component.translatable("tc.thaumonomicon.recipe.normal_crafting");
+            default -> Component.translatable("tc.thaumonomicon.recipe.placeholder");
+        };
+    }
+
+    private void renderRecipeTitle(GuiGraphics guiGraphics, Component title, int x, int y, int width) {
+        Component recipeTitle = title.copy()
+                .withStyle(style -> style.withFont(ResourceLocation.withDefaultNamespace("default")));
+        int titleX = x + width / 2 - this.font.width(recipeTitle) / 2;
+        guiGraphics.drawString(this.font, recipeTitle, titleX, y, 0xFF000000, false);
+    }
+
+    private static void renderRecipeFrame(GuiGraphics guiGraphics, int recipeLeft, int y) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, RECIPE_GRID_ALPHA);
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft + 4, y + 64, 104, 104, 120, 30, 104, 104, 512, 512);
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft + 40, y + 24, 32, 32, 40, 6, 32, 32, 512, 512);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+    }
+
+    private static void renderArcaneRecipeFrame(GuiGraphics guiGraphics, int recipeLeft, int y) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, RECIPE_GRID_ALPHA);
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft + 4, y + 54, 104, 104, 224, 30, 104, 104, 512, 512);
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft + 40, y + 14, 32, 32, 40, 6, 32, 32, 512, 512);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.4F);
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft, y + 164, 24, 24, 136, 152, 24, 24, 512, 512);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+    }
+
+    private static void renderSmeltingFrame(GuiGraphics guiGraphics, int recipeLeft, int y) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, RECIPE_GRID_ALPHA);
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft, y + 28, 112, 128, 0, 384, 112, 128, 512, 512);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+    }
+
+    private void renderPrimalVisCost(GuiGraphics guiGraphics, PrimalVisStorage visCost, int recipeLeft, int y) {
+        if (visCost.isEmpty()) {
+            return;
+        }
+        List<Aspect> aspects = Aspect.getPrimalAspects().stream()
+                .filter(aspect -> visCost.get(aspect) > 0)
+                .toList();
+        int startX = recipeLeft + 14 + (5 - aspects.size()) * 8;
+        for (int index = 0; index < aspects.size(); index++) {
+            Aspect aspect = aspects.get(index);
+            int iconX = startX + index * 18;
+            renderAspectIcon(guiGraphics, aspect, iconX, y, 16, 1.0F);
+            drawScaledString(guiGraphics, Component.literal(String.valueOf(visCost.get(aspect))), iconX + 9, y + 9,
+                    0xFFFFFFFF, 0.5F, true);
+        }
+    }
+
+    private void renderRecipeIngredient(GuiGraphics guiGraphics, Ingredient ingredient, int x, int y) {
+        ItemStack[] items = ingredient.getItems();
+        if (items.length == 0) {
+            return;
+        }
+        int index = Math.floorMod((int)(System.currentTimeMillis() / 1000L), items.length);
+        renderRecipeStack(guiGraphics, items[index].copy(), x, y);
+    }
+
+    private void renderRecipeStack(GuiGraphics guiGraphics, ItemStack stack, int x, int y) {
+        if (stack.isEmpty()) {
+            return;
+        }
+        guiGraphics.renderItem(stack, x, y);
+        guiGraphics.renderItemDecorations(this.font, stack, x, y);
+        if (this.mouseX >= x && this.mouseY >= y && this.mouseX < x + 16 && this.mouseY < y + 16) {
+            guiGraphics.renderTooltip(this.font, stack, this.mouseX, this.mouseY);
+        }
     }
 
     private void drawScaledWordWrap(GuiGraphics guiGraphics, Component text, int x, int y, int width, int color,
@@ -583,6 +872,26 @@ public class ThaumonomiconScreen extends Screen {
             guiGraphics.drawString(this.font, line, 0, lineY, color, false);
             lineY += this.font.lineHeight;
         }
+        guiGraphics.pose().popPose();
+    }
+
+    private void drawScaledLine(GuiGraphics guiGraphics, FormattedCharSequence line, int x, int y, int color,
+            float scale) {
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(x, y, 0.0F);
+        guiGraphics.pose().scale(scale, scale, 1.0F);
+        guiGraphics.drawString(this.font, line, 0, 0, color, false);
+        guiGraphics.pose().popPose();
+    }
+
+    private void drawCenteredFormattedString(GuiGraphics guiGraphics, FormattedCharSequence text, int centerX, int y,
+            int maxWidth, int color, float baseScale) {
+        int textWidth = this.font.width(text);
+        float scale = Math.min(baseScale, maxWidth / (float) textWidth);
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(centerX - textWidth * scale / 2.0F, y, 0.0F);
+        guiGraphics.pose().scale(scale, scale, 1.0F);
+        guiGraphics.drawString(this.font, text, 0, 0, color, false);
         guiGraphics.pose().popPose();
     }
 
@@ -753,24 +1062,59 @@ public class ThaumonomiconScreen extends Screen {
         for (ResearchPage page : sourcePages) {
             if (page.type() == ResearchPage.PageType.TEXT || page.type() == ResearchPage.PageType.TEXT_CONCEALED
                     || page.type() == ResearchPage.PageType.TEXT_AND_RECIPE) {
-                List<FormattedCharSequence> lines = this.font.split(pageText(page), PAGE_TEXT_WIDTH);
+                List<BookTextLine> lines = layoutResearchText(page, PAGE_TEXT_WIDTH);
                 if (lines.isEmpty()) {
-                    pages.add(new BookPageView(page, List.of(), pages.isEmpty()));
+                    pages.add(new BookPageView(page, List.of(), pages.isEmpty(), true));
                     continue;
                 }
                 int index = 0;
                 while (index < lines.size()) {
                     boolean drawTitle = pages.isEmpty();
-                    int lineLimit = drawTitle ? PAGE_TEXT_LINES_WITH_TITLE : PAGE_TEXT_LINES;
-                    int next = Math.min(lines.size(), index + lineLimit);
-                    pages.add(new BookPageView(page, List.copyOf(lines.subList(index, next)), drawTitle));
+                    boolean recipePage = page.type() == ResearchPage.PageType.TEXT_AND_RECIPE
+                            && fitsWithinHeight(lines, index, lines.size(), availableTextHeight(drawTitle, true));
+                    int height = availableTextHeight(drawTitle, recipePage);
+                    int next = nextLineIndex(lines, index, height);
+                    pages.add(new BookPageView(page, List.copyOf(lines.subList(index, next)), drawTitle, recipePage));
                     index = next;
                 }
             } else {
-                pages.add(new BookPageView(page, List.of(), pages.isEmpty()));
+                pages.add(new BookPageView(page, List.of(), pages.isEmpty(), true));
             }
         }
         return pages;
+    }
+
+    private static int availableTextHeight(boolean drawTitle, boolean reserveRecipeSpace) {
+        if (reserveRecipeSpace) {
+            return PAGE_RECIPE_TEXT_HEIGHT;
+        }
+        int top = drawTitle ? PAGE_TEXT_TOP_WITH_TITLE : PAGE_TEXT_TOP_WITHOUT_TITLE;
+        return PAGE_TEXT_BOTTOM - top;
+    }
+
+    private static boolean fitsWithinHeight(List<BookTextLine> lines, int start, int end, int maxHeight) {
+        int height = 0;
+        for (int i = start; i < end; i++) {
+            height += lines.get(i).height();
+            if (height > maxHeight) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static int nextLineIndex(List<BookTextLine> lines, int start, int maxHeight) {
+        int height = 0;
+        int index = start;
+        while (index < lines.size()) {
+            int nextHeight = height + lines.get(index).height();
+            if (index > start && nextHeight > maxHeight) {
+                break;
+            }
+            height = nextHeight;
+            index++;
+        }
+        return Math.max(start + 1, index);
     }
 
     private int bookLeft() {
@@ -879,7 +1223,18 @@ public class ThaumonomiconScreen extends Screen {
         return knowledge.isComplete(entry.key()) || entry.hasFlag(ResearchFlag.AUTO_UNLOCK);
     }
 
-    private record BookPageView(ResearchPage page, List<FormattedCharSequence> textLines, boolean drawTitle) {
+    private record BookPageView(ResearchPage page, List<BookTextLine> textLines, boolean drawTitle,
+            boolean drawRecipe) {
+    }
+
+    private record BookTextLine(FormattedCharSequence text, boolean centered, boolean blank, int height) {
+        private static BookTextLine blank(int height) {
+            return new BookTextLine(FormattedCharSequence.EMPTY, false, true, height);
+        }
+
+        private BookTextLine(FormattedCharSequence text, boolean centered, int height) {
+            this(text, centered, false, height);
+        }
     }
 
     private static int scaleBackgroundSource(int value, int min, int max, int textureSpan) {

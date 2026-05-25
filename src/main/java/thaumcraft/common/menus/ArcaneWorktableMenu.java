@@ -37,6 +37,7 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
     private final Player player;
     private Optional<RecipeHolder<CraftingRecipe>> selectedVanillaRecipe = Optional.empty();
     private Optional<RecipeHolder<ArcaneWorktableRecipe>> selectedArcaneRecipe = Optional.empty();
+    private ItemStack lastSyncedResult = ItemStack.EMPTY;
 
     public ArcaneWorktableMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, new SimpleContainer(ArcaneWorktableBlockEntity.CONTAINER_SIZE));
@@ -88,10 +89,17 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
         this.updateResult();
     }
 
+    @Override
+    public void broadcastChanges() {
+        this.updateResult();
+        super.broadcastChanges();
+    }
+
     public boolean canTakeResult() {
         return !this.result.getItem(0).isEmpty() && (this.selectedVanillaRecipe.isPresent()
                 || this.selectedArcaneRecipe
-                        .filter(recipe -> ArcaneWorktableRecipes.hasPrimalCost(this.getWand(), recipe.value()))
+                        .filter(recipe -> ArcaneWorktableRecipes.hasPrimalCost(this.getWand(), this.player,
+                                recipe.value()))
                         .isPresent());
     }
 
@@ -142,6 +150,12 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
             } else {
                 slot.setChanged();
             }
+
+            if (stack.getCount() == moved.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTake(player, stack);
         }
         return moved;
     }
@@ -165,8 +179,9 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
                 .or(() -> this.selectedArcaneRecipe.map(recipe -> recipe))
                 .orElse(null));
         this.result.setItem(0, resultStack);
-        this.setRemoteSlot(RESULT_SLOT, resultStack);
-        if (this.player instanceof ServerPlayer serverPlayer) {
+        if (this.player instanceof ServerPlayer serverPlayer && !ItemStack.matches(this.lastSyncedResult, resultStack)) {
+            this.lastSyncedResult = resultStack.copy();
+            this.setRemoteSlot(RESULT_SLOT, resultStack);
             serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, this.incrementStateId(),
                     RESULT_SLOT, resultStack));
         }
@@ -185,12 +200,16 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
 
     public boolean isArcaneResultBlockedByVis() {
         return this.getSelectedRecipeForDisplay()
-                .filter(recipe -> !ArcaneWorktableRecipes.hasPrimalCost(this.getWand(), recipe.value()))
+                .filter(recipe -> !ArcaneWorktableRecipes.hasPrimalCost(this.getWand(), this.player, recipe.value()))
                 .isPresent();
     }
 
     public ItemStack getWandStack() {
         return this.getWand();
+    }
+
+    public ItemStack getResultStack() {
+        return this.result.getItem(0);
     }
 
     private ItemStack getWand() {

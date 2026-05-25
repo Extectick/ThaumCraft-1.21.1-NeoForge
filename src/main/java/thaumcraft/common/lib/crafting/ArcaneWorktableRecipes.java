@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
 import thaumcraft.common.crafting.ArcaneWorktableRecipe;
+import thaumcraft.common.items.wands.WandCastingItem;
 import thaumcraft.common.items.wands.WandVisHelper;
 import thaumcraft.common.registry.TCRecipeTypes;
 
@@ -60,11 +61,11 @@ public final class ArcaneWorktableRecipes {
 
         Optional<RecipeHolder<ArcaneWorktableRecipe>> recipeHolder = level.getRecipeManager()
                 .getRecipeFor(TCRecipeTypes.ARCANE_WORKTABLE.get(), worktableInput.input(), level);
-        if (recipeHolder.isEmpty() || recipeHolder.get().value() != recipe || !hasPrimalCost(wand, recipe)) {
+        if (recipeHolder.isEmpty() || recipeHolder.get().value() != recipe || !hasPrimalCost(wand, player, recipe)) {
             return false;
         }
 
-        consumePrimalCost(wand, recipe);
+        consumePrimalCost(wand, player, recipe);
         consumeIngredients(worktable, worktableInput, recipe, player);
         worktable.setChanged();
         return true;
@@ -97,17 +98,33 @@ public final class ArcaneWorktableRecipes {
     }
 
     public static boolean hasPrimalCost(ItemStack wand, ArcaneWorktableRecipe recipe) {
+        return hasPrimalCost(wand, null, recipe);
+    }
+
+    public static boolean hasPrimalCost(ItemStack wand, Player player, ArcaneWorktableRecipe recipe) {
         for (Aspect aspect : Aspect.getPrimalAspects()) {
-            if (!WandVisHelper.hasEnoughVis(wand, aspect, recipe.getVisCost().get(aspect))) {
+            if (!WandVisHelper.hasEnoughVis(wand, aspect, effectivePrimalCost(wand, player, recipe, aspect))) {
                 return false;
             }
         }
         return true;
     }
 
-    private static void consumePrimalCost(ItemStack wand, ArcaneWorktableRecipe recipe) {
+    public static int effectivePrimalCost(ItemStack wand, Player player, ArcaneWorktableRecipe recipe, Aspect aspect) {
+        int cost = recipe.getVisCost().get(aspect);
+        if (cost <= 0) {
+            return 0;
+        }
+        float modifier = 1.0F;
+        if (wand.getItem() instanceof WandCastingItem castingItem) {
+            modifier = castingItem.getConsumptionModifier(wand, player, aspect, true);
+        }
+        return Math.max(0, (int)(cost * modifier));
+    }
+
+    private static void consumePrimalCost(ItemStack wand, Player player, ArcaneWorktableRecipe recipe) {
         for (Aspect aspect : Aspect.getPrimalAspects()) {
-            WandVisHelper.consumeVis(wand, aspect, recipe.getVisCost().get(aspect));
+            WandVisHelper.consumeVis(wand, aspect, effectivePrimalCost(wand, player, recipe, aspect));
         }
     }
 

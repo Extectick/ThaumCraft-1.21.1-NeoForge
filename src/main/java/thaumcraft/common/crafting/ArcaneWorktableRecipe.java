@@ -77,6 +77,14 @@ public class ArcaneWorktableRecipe implements Recipe<CraftingInput> {
         return this.visCost;
     }
 
+    public int getWidth() {
+        return this.pattern.width();
+    }
+
+    public int getHeight() {
+        return this.pattern.height();
+    }
+
     public static class Serializer implements RecipeSerializer<ArcaneWorktableRecipe> {
         public static final MapCodec<ArcaneWorktableRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Codec.STRING.optionalFieldOf("group", "").forGetter(ArcaneWorktableRecipe::getGroup),

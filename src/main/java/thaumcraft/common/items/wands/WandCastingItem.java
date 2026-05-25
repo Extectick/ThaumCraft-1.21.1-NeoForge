@@ -25,6 +25,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import thaumcraft.common.curios.ThaumcraftCuriosCompat;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
 import thaumcraft.common.blocks.SimpleTableBlock;
 import thaumcraft.api.aspects.Aspect;
@@ -61,6 +62,14 @@ public class WandCastingItem extends Item {
 
     public boolean hasEnoughVis(ItemStack stack, Aspect aspect, int amount) {
         return WandVisHelper.hasEnoughVis(stack, aspect, amount);
+    }
+
+    public float getConsumptionModifier(ItemStack stack, Player player, Aspect aspect, boolean crafting) {
+        float modifier = 1.0F;
+        if (player != null) {
+            modifier -= ThaumcraftCuriosCompat.getVisDiscount(player, aspect) / 100.0F;
+        }
+        return Math.max(modifier, 0.1F);
     }
 
     public ItemStack getFocusItem(ItemStack stack) {

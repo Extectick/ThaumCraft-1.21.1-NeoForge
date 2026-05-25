@@ -89,7 +89,7 @@ public final class ResearchRegistry {
                 .icon(Thaumcraft.id("textures/item/knowledge_fragment.png"))
                 .parents("RESEARCH")
                 .flags(ResearchFlag.AUTO_UNLOCK, ResearchFlag.STUB, ResearchFlag.ROUND)
-                .pages(page("KNOWFRAG", 1))
+                .pages(page("KNOWFRAG", 1), ResearchPage.normalCrafting(Thaumcraft.id("unknown_research_notes")))
                 .build());
         register(ResearchEntry.builder("THAUMONOMICON", BASICS)
                 .tags(List.of(Aspect.MAGIC))
@@ -98,7 +98,7 @@ public final class ResearchRegistry {
                 .icon(Thaumcraft.id("textures/item/thaumonomicon.png"))
                 .parents("RESEARCH")
                 .flags(ResearchFlag.AUTO_UNLOCK, ResearchFlag.STUB, ResearchFlag.ROUND)
-                .pages(page("THAUMONOMICON", 1))
+                .pages(page("THAUMONOMICON", 1), ResearchPage.normalCrafting(Thaumcraft.id("wand_casting")))
                 .build());
         register(ResearchEntry.builder("ORE", BASICS)
                 .tags(List.of(Aspect.MINE))
