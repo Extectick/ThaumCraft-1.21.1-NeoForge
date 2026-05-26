@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    " E ",
+    " C ",
+    " E "
+  ],
+  "key": {
+    "C": {
+      "item": "thaumcraft:void_wand_cap_inert"
+    },
+    "E": {
+      "item": "thaumcraft:ethereal_essence"
+    }
+  },
+  "vis": {
+    "entropy": 1800,
+    "order": 1800,
+    "air": 1800,
+    "fire": 1800
+  },
+  "result": {
+    "id": "thaumcraft:void_wand_cap"
+  }
+}

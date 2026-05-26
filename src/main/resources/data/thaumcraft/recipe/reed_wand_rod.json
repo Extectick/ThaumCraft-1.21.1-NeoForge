@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    " S ",
+    " C ",
+    " S "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:sugar_cane"
+    },
+    "S": {
+      "item": "thaumcraft:air_shard"
+    }
+  },
+  "vis": {
+    "air": 1200
+  },
+  "result": {
+    "id": "thaumcraft:reed_wand_rod"
+  }
+}

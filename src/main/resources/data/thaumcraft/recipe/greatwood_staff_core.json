@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    "  P",
+    " R ",
+    "R  "
+  ],
+  "key": {
+    "P": {
+      "item": "thaumcraft:primal_charm"
+    },
+    "R": {
+      "item": "thaumcraft:greatwood_wand_rod"
+    }
+  },
+  "vis": {
+    "order": 800
+  },
+  "result": {
+    "id": "thaumcraft:greatwood_staff_core"
+  }
+}

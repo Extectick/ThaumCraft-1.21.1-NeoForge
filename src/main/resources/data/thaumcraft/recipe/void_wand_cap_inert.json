@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    "NNN",
+    "N N"
+  ],
+  "key": {
+    "N": {
+      "item": "thaumcraft:void_nugget"
+    }
+  },
+  "vis": {
+    "air": 1800,
+    "fire": 1800,
+    "order": 2700,
+    "entropy": 2700
+  },
+  "result": {
+    "id": "thaumcraft:void_wand_cap_inert"
+  }
+}

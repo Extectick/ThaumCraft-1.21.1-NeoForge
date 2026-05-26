@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
 import thaumcraft.common.crafting.ArcaneWorktableRecipe;
+import thaumcraft.common.crafting.DynamicArcaneRecipe;
 import thaumcraft.common.items.wands.WandCastingItem;
 import thaumcraft.common.items.wands.WandVisHelper;
 import thaumcraft.common.registry.TCRecipeTypes;
@@ -61,11 +62,12 @@ public final class ArcaneWorktableRecipes {
 
         Optional<RecipeHolder<ArcaneWorktableRecipe>> recipeHolder = level.getRecipeManager()
                 .getRecipeFor(TCRecipeTypes.ARCANE_WORKTABLE.get(), worktableInput.input(), level);
-        if (recipeHolder.isEmpty() || recipeHolder.get().value() != recipe || !hasPrimalCost(wand, player, recipe)) {
+        if (recipeHolder.isEmpty() || recipeHolder.get().value() != recipe
+                || !hasPrimalCost(wand, player, recipe, worktableInput.input())) {
             return false;
         }
 
-        consumePrimalCost(wand, player, recipe);
+        consumePrimalCost(wand, player, recipe, worktableInput.input());
         consumeIngredients(worktable, worktableInput, recipe, player);
         worktable.setChanged();
         return true;
@@ -102,8 +104,12 @@ public final class ArcaneWorktableRecipes {
     }
 
     public static boolean hasPrimalCost(ItemStack wand, Player player, ArcaneWorktableRecipe recipe) {
+        return hasPrimalCost(wand, player, recipe, null);
+    }
+
+    public static boolean hasPrimalCost(ItemStack wand, Player player, ArcaneWorktableRecipe recipe, CraftingInput input) {
         for (Aspect aspect : Aspect.getPrimalAspects()) {
-            if (!WandVisHelper.hasEnoughVis(wand, aspect, effectivePrimalCost(wand, player, recipe, aspect))) {
+            if (!WandVisHelper.hasEnoughVis(wand, aspect, effectivePrimalCost(wand, player, recipe, input, aspect))) {
                 return false;
             }
         }
@@ -111,7 +117,12 @@ public final class ArcaneWorktableRecipes {
     }
 
     public static int effectivePrimalCost(ItemStack wand, Player player, ArcaneWorktableRecipe recipe, Aspect aspect) {
-        int cost = recipe.getVisCost().get(aspect);
+        return effectivePrimalCost(wand, player, recipe, null, aspect);
+    }
+
+    public static int effectivePrimalCost(ItemStack wand, Player player, ArcaneWorktableRecipe recipe,
+            CraftingInput input, Aspect aspect) {
+        int cost = getVisCost(recipe, input).get(aspect);
         if (cost <= 0) {
             return 0;
         }
@@ -122,10 +133,18 @@ public final class ArcaneWorktableRecipes {
         return Math.max(0, (int)(cost * modifier));
     }
 
-    private static void consumePrimalCost(ItemStack wand, Player player, ArcaneWorktableRecipe recipe) {
+    private static void consumePrimalCost(ItemStack wand, Player player, ArcaneWorktableRecipe recipe,
+            CraftingInput input) {
         for (Aspect aspect : Aspect.getPrimalAspects()) {
-            WandVisHelper.consumeVis(wand, aspect, effectivePrimalCost(wand, player, recipe, aspect));
+            WandVisHelper.consumeVis(wand, aspect, effectivePrimalCost(wand, player, recipe, input, aspect));
         }
+    }
+
+    private static thaumcraft.api.aspects.PrimalVisStorage getVisCost(ArcaneWorktableRecipe recipe, CraftingInput input) {
+        if (input != null && recipe instanceof DynamicArcaneRecipe dynamicRecipe) {
+            return dynamicRecipe.getVisCost(input);
+        }
+        return recipe.getVisCost();
     }
 
     private static void consumeIngredients(Container worktable, WorktableInput worktableInput,

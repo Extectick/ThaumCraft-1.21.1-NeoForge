@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.items.ResearchNotesItem;
+import thaumcraft.common.items.wands.WandCastingItem;
 import thaumcraft.common.items.wands.WandVisHelper;
 import thaumcraft.common.research.ResearchRegistry;
 
@@ -21,6 +22,10 @@ public final class TCCreativeTabs {
             .displayItems((parameters, output) -> {
                 TCItems.SIMPLE_ITEMS.forEach(item -> output.accept(item.get()));
                 output.accept(WandVisHelper.fillAllVis(TCItems.WAND_CASTING.get().getDefaultInstance()));
+                output.accept(WandVisHelper.fillAllVis(WandCastingItem.createVariant(TCItems.WAND_CASTING.get(),
+                        WandCastingItem.ROD_WOOD, WandCastingItem.CAP_IRON, true)));
+                output.accept(WandVisHelper.fillAllVis(WandCastingItem.createVariant(TCItems.WAND_CASTING.get(),
+                        WandCastingItem.ROD_GREATWOOD_STAFF, WandCastingItem.CAP_IRON, false)));
                 output.accept(TCItems.RUNIC_RING_LESSER.get());
                 output.accept(TCItems.RUNIC_RING.get());
                 output.accept(TCItems.RUNIC_RING_CHARGED.get());

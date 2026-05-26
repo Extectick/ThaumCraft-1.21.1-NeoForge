@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    " S ",
+    " C ",
+    " S "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:ice"
+    },
+    "S": {
+      "item": "thaumcraft:water_shard"
+    }
+  },
+  "vis": {
+    "water": 1200
+  },
+  "result": {
+    "id": "thaumcraft:ice_wand_rod"
+  }
+}

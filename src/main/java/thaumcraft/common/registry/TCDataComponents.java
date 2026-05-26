@@ -1,7 +1,10 @@
 package thaumcraft.common.registry;
 
+import com.mojang.serialization.Codec;
+
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -27,6 +30,26 @@ public final class TCDataComponents {
             () -> DataComponentType.<ItemStack>builder()
                     .persistent(ItemStack.OPTIONAL_CODEC)
                     .networkSynchronized(ItemStack.OPTIONAL_STREAM_CODEC)
+                    .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> FOCUS_FRUGAL = REGISTRY.register("focus_frugal",
+            () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> WAND_ROD = REGISTRY.register("wand_rod",
+            () -> DataComponentType.<String>builder()
+                    .persistent(Codec.STRING)
+                    .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                    .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> WAND_CAP = REGISTRY.register("wand_cap",
+            () -> DataComponentType.<String>builder()
+                    .persistent(Codec.STRING)
+                    .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                    .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> WAND_SCEPTRE = REGISTRY.register("wand_sceptre",
+            () -> DataComponentType.<Boolean>builder()
+                    .persistent(Codec.BOOL)
+                    .networkSynchronized(ByteBufCodecs.BOOL)
                     .build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<FocusPouchContents>> FOCUS_POUCH_CONTENTS = REGISTRY.register("focus_pouch_contents",
             () -> DataComponentType.<FocusPouchContents>builder()

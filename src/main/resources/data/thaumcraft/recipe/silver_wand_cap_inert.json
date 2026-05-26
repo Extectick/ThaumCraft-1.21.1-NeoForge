@@ -1,0 +1,20 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    "NNN",
+    "N N"
+  ],
+  "key": {
+    "N": {
+      "item": "thaumcraft:silver_nugget"
+    }
+  },
+  "vis": {
+    "air": 400,
+    "fire": 400,
+    "order": 400
+  },
+  "result": {
+    "id": "thaumcraft:silver_wand_cap_inert"
+  }
+}

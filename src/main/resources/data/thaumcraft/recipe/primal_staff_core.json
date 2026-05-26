@@ -1,0 +1,33 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    "SBS",
+    "GPG",
+    "SBS"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumcraft:silverwood_wand_rod"
+    },
+    "B": {
+      "item": "thaumcraft:balanced_shard"
+    },
+    "G": {
+      "item": "thaumcraft:greatwood_staff_core"
+    },
+    "P": {
+      "item": "thaumcraft:primal_charm"
+    }
+  },
+  "vis": {
+    "air": 3200,
+    "fire": 3200,
+    "water": 3200,
+    "earth": 3200,
+    "order": 3200,
+    "entropy": 3200
+  },
+  "result": {
+    "id": "thaumcraft:primal_staff_core"
+  }
+}

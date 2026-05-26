@@ -24,6 +24,7 @@ import thaumcraft.common.items.curios.ThaumcraftCurioItem;
 import thaumcraft.common.items.curios.VisAmuletItem;
 import thaumcraft.common.items.curios.VisDiscountCurioItem;
 import thaumcraft.common.items.wands.WandCastingItem;
+import thaumcraft.common.items.wands.WandPartItem;
 
 public final class TCItems {
     public static final DeferredRegister.Items REGISTRY = DeferredRegister.createItems(Thaumcraft.MODID);
@@ -121,7 +122,32 @@ public final class TCItems {
     public static final DeferredItem<BlockItem> GREEN_TALLOW_CANDLE = REGISTRY.registerSimpleBlockItem(TCBlocks.GREEN_TALLOW_CANDLE);
     public static final DeferredItem<BlockItem> RED_TALLOW_CANDLE = REGISTRY.registerSimpleBlockItem(TCBlocks.RED_TALLOW_CANDLE);
     public static final DeferredItem<BlockItem> BLACK_TALLOW_CANDLE = REGISTRY.registerSimpleBlockItem(TCBlocks.BLACK_TALLOW_CANDLE);
-    public static final DeferredItem<Item> IRON_WAND_CAP = simple("iron_wand_cap");
+    public static final DeferredItem<WandPartItem> IRON_WAND_CAP = wandCap("iron_wand_cap", "iron");
+    public static final DeferredItem<WandPartItem> COPPER_WAND_CAP = wandCap("copper_wand_cap", "copper");
+    public static final DeferredItem<WandPartItem> GOLD_WAND_CAP = wandCap("gold_wand_cap", "gold");
+    public static final DeferredItem<WandPartItem> SILVER_WAND_CAP = wandCap("silver_wand_cap", "silver");
+    public static final DeferredItem<WandPartItem> THAUMIUM_WAND_CAP = wandCap("thaumium_wand_cap", "thaumium");
+    public static final DeferredItem<WandPartItem> VOID_WAND_CAP = wandCap("void_wand_cap", "void");
+    public static final DeferredItem<Item> SILVER_WAND_CAP_INERT = simple("silver_wand_cap_inert");
+    public static final DeferredItem<Item> THAUMIUM_WAND_CAP_INERT = simple("thaumium_wand_cap_inert");
+    public static final DeferredItem<Item> VOID_WAND_CAP_INERT = simple("void_wand_cap_inert");
+    public static final DeferredItem<WandPartItem> GREATWOOD_WAND_ROD = wandRod("greatwood_wand_rod", "greatwood");
+    public static final DeferredItem<WandPartItem> OBSIDIAN_WAND_ROD = wandRod("obsidian_wand_rod", "obsidian");
+    public static final DeferredItem<WandPartItem> SILVERWOOD_WAND_ROD = wandRod("silverwood_wand_rod", "silverwood");
+    public static final DeferredItem<WandPartItem> ICE_WAND_ROD = wandRod("ice_wand_rod", "ice");
+    public static final DeferredItem<WandPartItem> QUARTZ_WAND_ROD = wandRod("quartz_wand_rod", "quartz");
+    public static final DeferredItem<WandPartItem> REED_WAND_ROD = wandRod("reed_wand_rod", "reed");
+    public static final DeferredItem<WandPartItem> BLAZE_WAND_ROD = wandRod("blaze_wand_rod", "blaze");
+    public static final DeferredItem<WandPartItem> BONE_WAND_ROD = wandRod("bone_wand_rod", "bone");
+    public static final DeferredItem<WandPartItem> GREATWOOD_STAFF_CORE = wandRod("greatwood_staff_core", "greatwood_staff");
+    public static final DeferredItem<WandPartItem> OBSIDIAN_STAFF_CORE = wandRod("obsidian_staff_core", "obsidian_staff");
+    public static final DeferredItem<WandPartItem> SILVERWOOD_STAFF_CORE = wandRod("silverwood_staff_core", "silverwood_staff");
+    public static final DeferredItem<WandPartItem> ICE_STAFF_CORE = wandRod("ice_staff_core", "ice_staff");
+    public static final DeferredItem<WandPartItem> QUARTZ_STAFF_CORE = wandRod("quartz_staff_core", "quartz_staff");
+    public static final DeferredItem<WandPartItem> REED_STAFF_CORE = wandRod("reed_staff_core", "reed_staff");
+    public static final DeferredItem<WandPartItem> BLAZE_STAFF_CORE = wandRod("blaze_staff_core", "blaze_staff");
+    public static final DeferredItem<WandPartItem> BONE_STAFF_CORE = wandRod("bone_staff_core", "bone_staff");
+    public static final DeferredItem<WandPartItem> PRIMAL_STAFF_CORE = wandRod("primal_staff_core", "primal_staff");
     public static final DeferredItem<Item> WAND_CASTING = REGISTRY.registerItem("wand_casting", WandCastingItem::new);
     public static final DeferredItem<Item> THAUMONOMICON = REGISTRY.registerItem("thaumonomicon", ThaumonomiconItem::new);
     public static final DeferredItem<Item> ALUMENTUM = simple("alumentum");
@@ -342,6 +368,31 @@ public final class TCItems {
             RED_TALLOW_CANDLE,
             BLACK_TALLOW_CANDLE,
             IRON_WAND_CAP,
+            COPPER_WAND_CAP,
+            GOLD_WAND_CAP,
+            SILVER_WAND_CAP_INERT,
+            SILVER_WAND_CAP,
+            THAUMIUM_WAND_CAP_INERT,
+            THAUMIUM_WAND_CAP,
+            VOID_WAND_CAP_INERT,
+            VOID_WAND_CAP,
+            GREATWOOD_WAND_ROD,
+            OBSIDIAN_WAND_ROD,
+            SILVERWOOD_WAND_ROD,
+            ICE_WAND_ROD,
+            QUARTZ_WAND_ROD,
+            REED_WAND_ROD,
+            BLAZE_WAND_ROD,
+            BONE_WAND_ROD,
+            GREATWOOD_STAFF_CORE,
+            OBSIDIAN_STAFF_CORE,
+            SILVERWOOD_STAFF_CORE,
+            ICE_STAFF_CORE,
+            QUARTZ_STAFF_CORE,
+            REED_STAFF_CORE,
+            BLAZE_STAFF_CORE,
+            BONE_STAFF_CORE,
+            PRIMAL_STAFF_CORE,
             WAND_CASTING,
             THAUMONOMICON,
             ALUMENTUM,
@@ -417,6 +468,14 @@ public final class TCItems {
 
     private static DeferredItem<Item> simple(String name, Item.Properties properties) {
         return REGISTRY.registerSimpleItem(name, properties);
+    }
+
+    private static DeferredItem<WandPartItem> wandCap(String name, String tag) {
+        return REGISTRY.registerItem(name, properties -> new WandPartItem(properties, WandPartItem.Kind.CAP, tag));
+    }
+
+    private static DeferredItem<WandPartItem> wandRod(String name, String tag) {
+        return REGISTRY.registerItem(name, properties -> new WandPartItem(properties, WandPartItem.Kind.ROD, tag));
     }
 
     private static DeferredItem<ItemFocusBasic> focus(String name, PrimalVisStorage visCost, int color,

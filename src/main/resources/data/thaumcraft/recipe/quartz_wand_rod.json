@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    " S ",
+    " C ",
+    " S "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:quartz_block"
+    },
+    "S": {
+      "item": "thaumcraft:order_shard"
+    }
+  },
+  "vis": {
+    "order": 1200
+  },
+  "result": {
+    "id": "thaumcraft:quartz_wand_rod"
+  }
+}

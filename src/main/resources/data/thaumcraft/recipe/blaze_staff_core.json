@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    "  P",
+    " R ",
+    "R  "
+  ],
+  "key": {
+    "P": {
+      "item": "thaumcraft:primal_charm"
+    },
+    "R": {
+      "item": "thaumcraft:blaze_wand_rod"
+    }
+  },
+  "vis": {
+    "order": 1400
+  },
+  "result": {
+    "id": "thaumcraft:blaze_staff_core"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    " S ",
+    " C ",
+    " S "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:blaze_rod"
+    },
+    "S": {
+      "item": "thaumcraft:fire_shard"
+    }
+  },
+  "vis": {
+    "fire": 1200
+  },
+  "result": {
+    "id": "thaumcraft:blaze_wand_rod"
+  }
+}

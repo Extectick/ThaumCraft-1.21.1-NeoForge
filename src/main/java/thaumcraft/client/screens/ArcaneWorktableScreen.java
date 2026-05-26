@@ -86,11 +86,12 @@ public class ArcaneWorktableScreen extends AbstractContainerScreen<ArcaneWorktab
         }
 
         ItemStack wand = this.menu.getWandStack();
+        net.minecraft.world.item.crafting.CraftingInput input = this.menu.getArcaneCraftingInput();
         int count = 0;
         for (Aspect aspect : Aspect.getPrimalAspects()) {
-            int cost = ArcaneWorktableRecipes.effectivePrimalCost(wand, this.minecraft.player, recipe, aspect);
+            int cost = ArcaneWorktableRecipes.effectivePrimalCost(wand, this.minecraft.player, recipe, input, aspect);
             if (cost > 0) {
-                boolean hasEnough = ArcaneWorktableRecipes.hasPrimalCost(wand, this.minecraft.player, recipe);
+                boolean hasEnough = ArcaneWorktableRecipes.hasPrimalCost(wand, this.minecraft.player, recipe, input);
                 float pulse = Mth.sin((Minecraft.getInstance().gui.getGuiTicks() + count * 10) / 2.0F) * 0.2F - 0.2F;
                 float alpha = hasEnough || WandVisHelper.hasEnoughVis(wand, aspect, cost) ? 1.0F : 0.5F + pulse;
                 this.renderAspectTag(guiGraphics, aspect, cost, this.leftPos + ASPECT_LOCS[count][0] - 8,
@@ -99,7 +100,7 @@ public class ArcaneWorktableScreen extends AbstractContainerScreen<ArcaneWorktab
             count++;
         }
 
-        if (!ArcaneWorktableRecipes.hasPrimalCost(wand, this.minecraft.player, recipe)) {
+        if (!ArcaneWorktableRecipes.hasPrimalCost(wand, this.minecraft.player, recipe, input)) {
             guiGraphics.pose().pushPose();
             guiGraphics.pose().scale(0.5F, 0.5F, 1.0F);
             String text = "Insufficient vis";

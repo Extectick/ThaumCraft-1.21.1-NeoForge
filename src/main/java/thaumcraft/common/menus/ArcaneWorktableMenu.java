@@ -55,7 +55,7 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(worktable, ArcaneWorktableBlockEntity.WAND_SLOT, 160, 24) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.getItem() instanceof WandCastingItem;
+                return stack.getItem() instanceof WandCastingItem wand && !wand.isStaff(stack);
             }
         });
 
@@ -84,6 +84,11 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
     }
 
     @Override
+    public boolean canDragTo(Slot slot) {
+        return slot.container != this.worktable && super.canDragTo(slot);
+    }
+
+    @Override
     public void slotsChanged(Container container) {
         super.slotsChanged(container);
         this.updateResult();
@@ -96,10 +101,11 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
     }
 
     public boolean canTakeResult() {
+        CraftingInput input = this.asArcaneCraftingInput();
         return !this.result.getItem(0).isEmpty() && (this.selectedVanillaRecipe.isPresent()
                 || this.selectedArcaneRecipe
                         .filter(recipe -> ArcaneWorktableRecipes.hasPrimalCost(this.getWand(), this.player,
-                                recipe.value()))
+                                recipe.value(), input))
                         .isPresent());
     }
 
@@ -138,6 +144,9 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else if (stack.getItem() instanceof WandCastingItem) {
+                if (((WandCastingItem) stack.getItem()).isStaff(stack)) {
+                    return ItemStack.EMPTY;
+                }
                 if (!this.moveItemStackTo(stack, WAND_MENU_SLOT, WAND_MENU_SLOT + 1, false)) {
                     return ItemStack.EMPTY;
                 }
@@ -191,6 +200,10 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
         return ArcaneWorktableRecipes.createInput(this.worktable).input();
     }
 
+    public CraftingInput getArcaneCraftingInput() {
+        return this.asArcaneCraftingInput();
+    }
+
     public Optional<RecipeHolder<ArcaneWorktableRecipe>> getSelectedRecipeForDisplay() {
         CraftingInput input = this.asArcaneCraftingInput();
         return ArcaneWorktableRecipes.findVanillaRecipe(this.player.level(), input).isPresent()
@@ -199,8 +212,9 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
     }
 
     public boolean isArcaneResultBlockedByVis() {
+        CraftingInput input = this.asArcaneCraftingInput();
         return this.getSelectedRecipeForDisplay()
-                .filter(recipe -> !ArcaneWorktableRecipes.hasPrimalCost(this.getWand(), this.player, recipe.value()))
+                .filter(recipe -> !ArcaneWorktableRecipes.hasPrimalCost(this.getWand(), this.player, recipe.value(), input))
                 .isPresent();
     }
 

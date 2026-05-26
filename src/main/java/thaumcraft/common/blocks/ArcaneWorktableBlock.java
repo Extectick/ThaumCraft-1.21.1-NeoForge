@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -28,7 +27,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
 import thaumcraft.common.items.wands.WandCastingItem;
-import thaumcraft.common.lib.crafting.ArcaneWorktableRecipes;
 import thaumcraft.common.registry.TCSoundEvents;
 
 public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBlock {
@@ -74,19 +72,24 @@ public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBloc
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        if (stack.getItem() instanceof WandCastingItem) {
-            if (player.isShiftKeyDown()) {
-                return level.isClientSide ? ItemInteractionResult.SUCCESS
-                        : insertOrExtractWand(stack, worktable, player, hand);
+        if (stack.getItem() instanceof WandCastingItem wand && player.isShiftKeyDown()) {
+            if (wand.isStaff(stack)) {
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
-            return level.isClientSide ? ItemInteractionResult.SUCCESS : craftWithWand(level, pos, worktable, stack, player);
+            return level.isClientSide ? ItemInteractionResult.SUCCESS
+                    : insertOrExtractWand(stack, worktable, player, hand);
         }
 
         if (player.isShiftKeyDown()) {
             return level.isClientSide ? ItemInteractionResult.SUCCESS : extractLastGridItem(worktable, player);
         }
 
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (level.isClientSide) {
+            return ItemInteractionResult.SUCCESS;
+        }
+
+        openWorktable(worktable, player);
+        return ItemInteractionResult.CONSUME;
     }
 
     @Override
@@ -102,8 +105,7 @@ public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBloc
         }
 
         if (!player.isShiftKeyDown()) {
-            player.openMenu(worktable);
-            level.playSound(null, pos, TCSoundEvents.CREAK.get(), SoundSource.BLOCKS, 0.25F, 1.0F);
+            openWorktable(worktable, player);
             return InteractionResult.CONSUME;
         }
 
@@ -121,30 +123,23 @@ public class ArcaneWorktableBlock extends SimpleTableBlock implements EntityBloc
         return InteractionResult.CONSUME;
     }
 
+    private static void openWorktable(ArcaneWorktableBlockEntity worktable, Player player) {
+        player.openMenu(worktable);
+    }
+
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         Containers.dropContentsOnDestroy(state, newState, level, pos);
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    private static ItemInteractionResult craftWithWand(Level level, BlockPos pos, ArcaneWorktableBlockEntity worktable,
-            ItemStack wand, Player player) {
-        if (ArcaneWorktableRecipes.tryCraft(level, worktable, wand, player)) {
-            level.playSound(null, pos, TCSoundEvents.WAND.get(), SoundSource.BLOCKS, 0.8F, 1.0F);
-            level.playSound(null, pos, TCSoundEvents.CRAFTSTART.get(), SoundSource.BLOCKS, 0.45F, 1.0F);
-            return ItemInteractionResult.CONSUME;
-        }
-
-        player.displayClientMessage(Component.translatable("container.thaumcraft.arcane_worktable.no_recipe"), true);
-        level.playSound(null, pos, TCSoundEvents.WANDFAIL.get(), SoundSource.BLOCKS, 0.6F, 1.0F);
-        level.playSound(null, pos, TCSoundEvents.CRAFTFAIL.get(), SoundSource.BLOCKS, 0.45F, 1.0F);
-        return ItemInteractionResult.CONSUME;
-    }
-
     private static ItemInteractionResult insertOrExtractWand(ItemStack heldStack, ArcaneWorktableBlockEntity worktable,
             Player player, InteractionHand hand) {
         ItemStack storedWand = worktable.getWand();
         if (storedWand.isEmpty()) {
+            if (heldStack.getItem() instanceof WandCastingItem wand && wand.isStaff(heldStack)) {
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            }
             if (player.getAbilities().instabuild) {
                 return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }

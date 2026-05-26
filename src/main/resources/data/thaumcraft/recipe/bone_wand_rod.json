@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    " S ",
+    " C ",
+    " S "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:bone"
+    },
+    "S": {
+      "item": "thaumcraft:entropy_shard"
+    }
+  },
+  "vis": {
+    "entropy": 1200
+  },
+  "result": {
+    "id": "thaumcraft:bone_wand_rod"
+  }
+}

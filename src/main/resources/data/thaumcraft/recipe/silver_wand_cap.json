@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    " E ",
+    " C ",
+    " E "
+  ],
+  "key": {
+    "C": {
+      "item": "thaumcraft:silver_wand_cap_inert"
+    },
+    "E": {
+      "item": "thaumcraft:ethereal_essence"
+    }
+  },
+  "vis": {
+    "air": 400,
+    "order": 400,
+    "water": 400,
+    "earth": 400
+  },
+  "result": {
+    "id": "thaumcraft:silver_wand_cap"
+  }
+}

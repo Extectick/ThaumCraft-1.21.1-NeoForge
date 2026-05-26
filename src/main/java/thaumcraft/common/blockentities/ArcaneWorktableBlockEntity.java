@@ -1,6 +1,7 @@
 package thaumcraft.common.blockentities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -8,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -18,10 +20,11 @@ import thaumcraft.common.items.wands.WandCastingItem;
 import thaumcraft.common.menus.ArcaneWorktableMenu;
 import thaumcraft.common.registry.TCBlockEntities;
 
-public class ArcaneWorktableBlockEntity extends BlockEntity implements Container, MenuProvider {
+public class ArcaneWorktableBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
     public static final int GRID_SIZE = 9;
     public static final int WAND_SLOT = 9;
     public static final int CONTAINER_SIZE = 10;
+    private static final int[] AUTOMATION_SLOTS = new int[] { WAND_SLOT };
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
 
@@ -102,7 +105,22 @@ public class ArcaneWorktableBlockEntity extends BlockEntity implements Container
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return slot != WAND_SLOT || stack.getItem() instanceof WandCastingItem;
+        return slot != WAND_SLOT || stack.getItem() instanceof WandCastingItem wand && !wand.isStaff(stack);
+    }
+
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        return AUTOMATION_SLOTS;
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction direction) {
+        return slot == WAND_SLOT && this.canPlaceItem(slot, stack);
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction direction) {
+        return slot == WAND_SLOT;
     }
 
     @Override

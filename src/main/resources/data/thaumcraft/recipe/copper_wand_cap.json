@@ -1,0 +1,20 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    "NNN",
+    "N N"
+  ],
+  "key": {
+    "N": {
+      "item": "thaumcraft:copper_nugget"
+    }
+  },
+  "vis": {
+    "air": 200,
+    "fire": 200,
+    "order": 200
+  },
+  "result": {
+    "id": "thaumcraft:copper_wand_cap"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    " S ",
+    " C ",
+    " S "
+  ],
+  "key": {
+    "C": {
+      "item": "thaumcraft:silverwood_log"
+    },
+    "S": {
+      "item": "thaumcraft:balanced_shard"
+    }
+  },
+  "vis": {
+    "order": 1200
+  },
+  "result": {
+    "id": "thaumcraft:silverwood_wand_rod"
+  }
+}

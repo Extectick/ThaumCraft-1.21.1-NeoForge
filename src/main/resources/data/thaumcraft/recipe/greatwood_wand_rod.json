@@ -1,0 +1,18 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    " G",
+    "G "
+  ],
+  "key": {
+    "G": {
+      "item": "thaumcraft:greatwood_log"
+    }
+  },
+  "vis": {
+    "entropy": 300
+  },
+  "result": {
+    "id": "thaumcraft:greatwood_wand_rod"
+  }
+}

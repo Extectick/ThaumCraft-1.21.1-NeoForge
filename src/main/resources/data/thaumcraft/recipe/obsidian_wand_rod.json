@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "pattern": [
+    " S ",
+    " C ",
+    " S "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:obsidian"
+    },
+    "S": {
+      "item": "thaumcraft:earth_shard"
+    }
+  },
+  "vis": {
+    "earth": 1200
+  },
+  "result": {
+    "id": "thaumcraft:obsidian_wand_rod"
+  }
+}
