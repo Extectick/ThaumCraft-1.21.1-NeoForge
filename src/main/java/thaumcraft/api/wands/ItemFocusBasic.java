@@ -5,6 +5,9 @@ import java.util.Locale;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -81,12 +84,16 @@ public class ItemFocusBasic extends Item {
             for (Aspect aspect : Aspect.getPrimalAspects()) {
                 int cost = this.visCost.get(aspect);
                 if (cost > 0) {
-                    tooltipComponents.add(Component.translatable("item.thaumcraft.focus.cost.line",
-                            Component.translatable("tc.aspect." + aspect.getTag()), formatVis(cost))
-                            .withStyle(ChatFormatting.GRAY));
+                    tooltipComponents.add(visCostLine(aspect, cost));
                 }
             }
         }
+    }
+
+    private static MutableComponent visCostLine(Aspect aspect, int cost) {
+        return Component.empty()
+                .append(Component.translatable("tc.aspect." + aspect.getTag()).setStyle(aspectStyle(aspect)))
+                .append(Component.literal(" x " + formatVis(cost)).withStyle(ChatFormatting.GRAY));
     }
 
     private static String formatVis(int amount) {
@@ -94,6 +101,10 @@ public class ItemFocusBasic extends Item {
             return Integer.toString(amount / 100);
         }
         return String.format(Locale.ROOT, "%.2f", amount / 100.0D).replaceAll("0+$", "").replaceAll("\\.$", "");
+    }
+
+    private static Style aspectStyle(Aspect aspect) {
+        return Style.EMPTY.withColor(TextColor.fromRgb(aspect.getColor()));
     }
 
     public enum WandFocusAnimation {

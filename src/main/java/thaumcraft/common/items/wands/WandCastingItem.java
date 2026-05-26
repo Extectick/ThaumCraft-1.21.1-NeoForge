@@ -331,7 +331,8 @@ public class WandCastingItem extends Item {
     private MutableComponent detailedVisLine(ItemStack stack, Aspect aspect) {
         int amount = this.getVis(stack, aspect);
         int percent = Math.round(this.getConsumptionModifier(stack, null, aspect, false) * 100.0F);
-        return Component.translatable("tc.aspect." + aspect.getTag()).setStyle(aspectStyle(aspect))
+        return Component.empty()
+                .append(Component.translatable("tc.aspect." + aspect.getTag()).setStyle(aspectStyle(aspect)))
                 .append(Component.literal(" x " + formatVis(amount) + ", ").withStyle(ChatFormatting.WHITE))
                 .append(Component.literal("(" + percent + "% vis cost)").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
     }

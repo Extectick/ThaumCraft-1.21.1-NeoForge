@@ -13,10 +13,12 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.blocks.ArcanePedestalBlock;
 import thaumcraft.common.blocks.ArcaneWorktableBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock.TubeMode;
 import thaumcraft.common.blocks.ResearchTableBlock;
+import thaumcraft.common.blocks.RunicMatrixBlock;
 import thaumcraft.common.blocks.SimpleJarBlock;
 import thaumcraft.common.blocks.SimpleMirrorBlock;
 import thaumcraft.common.blocks.SimplePlantBlock;
@@ -71,11 +73,13 @@ public final class TCBlocks {
     public static final DeferredBlock<ArcaneWorktableBlock> ARCANE_WORKTABLE = REGISTRY.register("arcane_worktable",
             () -> new ArcaneWorktableBlock(tableProperties()));
     public static final DeferredBlock<Block> ALCHEMICAL_FURNACE = stoneDevice("alchemical_furnace");
-    public static final DeferredBlock<Block> ARCANE_PEDESTAL = stoneDevice("arcane_pedestal");
+    public static final DeferredBlock<ArcanePedestalBlock> ARCANE_PEDESTAL = REGISTRY.register("arcane_pedestal",
+            () -> new ArcanePedestalBlock(stoneDeviceProperties()));
     public static final DeferredBlock<Block> WAND_RECHARGE_PEDESTAL = stoneDevice("wand_recharge_pedestal");
     public static final DeferredBlock<Block> COMPOUND_RECHARGE_FOCUS = stoneDevice("compound_recharge_focus");
     public static final DeferredBlock<Block> ARCANE_SPA = stoneDevice("arcane_spa");
-    public static final DeferredBlock<Block> RUNIC_MATRIX = stoneDevice("runic_matrix");
+    public static final DeferredBlock<RunicMatrixBlock> RUNIC_MATRIX = REGISTRY.register("runic_matrix",
+            () -> new RunicMatrixBlock(stoneDeviceProperties().lightLevel(state -> 10)));
     public static final DeferredBlock<Block> INFUSION_PILLAR = stoneDevice("infusion_pillar");
     public static final DeferredBlock<Block> NODE_STABILIZER = stoneDevice("node_stabilizer");
     public static final DeferredBlock<Block> ADVANCED_NODE_STABILIZER = stoneDevice("advanced_node_stabilizer");
@@ -280,10 +284,14 @@ public final class TCBlocks {
     }
 
     private static DeferredBlock<Block> stoneDevice(String name) {
-        return REGISTRY.registerSimpleBlock(name, BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+        return REGISTRY.registerSimpleBlock(name, stoneDeviceProperties());
+    }
+
+    private static BlockBehaviour.Properties stoneDeviceProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                 .strength(3.0F, 25.0F)
                 .requiresCorrectToolForDrops()
-                .noOcclusion());
+                .noOcclusion();
     }
 
     private static DeferredBlock<Block> metalDevice(String name) {

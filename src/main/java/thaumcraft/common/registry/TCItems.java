@@ -68,7 +68,6 @@ public final class TCItems {
     public static final DeferredItem<BlockItem> COMPOUND_RECHARGE_FOCUS = REGISTRY.registerSimpleBlockItem(TCBlocks.COMPOUND_RECHARGE_FOCUS);
     public static final DeferredItem<BlockItem> ARCANE_SPA = REGISTRY.registerSimpleBlockItem(TCBlocks.ARCANE_SPA);
     public static final DeferredItem<BlockItem> RUNIC_MATRIX = REGISTRY.registerSimpleBlockItem(TCBlocks.RUNIC_MATRIX);
-    public static final DeferredItem<BlockItem> INFUSION_PILLAR = REGISTRY.registerSimpleBlockItem(TCBlocks.INFUSION_PILLAR);
     public static final DeferredItem<BlockItem> NODE_STABILIZER = REGISTRY.registerSimpleBlockItem(TCBlocks.NODE_STABILIZER);
     public static final DeferredItem<BlockItem> ADVANCED_NODE_STABILIZER = REGISTRY.registerSimpleBlockItem(TCBlocks.ADVANCED_NODE_STABILIZER);
     public static final DeferredItem<BlockItem> NODE_TRANSDUCER = REGISTRY.registerSimpleBlockItem(TCBlocks.NODE_TRANSDUCER);
@@ -313,7 +312,6 @@ public final class TCItems {
             COMPOUND_RECHARGE_FOCUS,
             ARCANE_SPA,
             RUNIC_MATRIX,
-            INFUSION_PILLAR,
             NODE_STABILIZER,
             ADVANCED_NODE_STABILIZER,
             NODE_TRANSDUCER,

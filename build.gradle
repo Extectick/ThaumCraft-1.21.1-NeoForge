@@ -109,6 +109,7 @@ dependencies {
 
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    localRuntime files("libs/jei-1.21.1-neoforge-19.27.0.340.jar")
 
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

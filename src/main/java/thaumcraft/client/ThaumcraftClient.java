@@ -12,6 +12,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
@@ -24,9 +25,11 @@ import thaumcraft.client.hud.FocusSelectorOverlay;
 import thaumcraft.client.hud.ResearchNotificationOverlay;
 import thaumcraft.client.hud.WandVisHudOverlay;
 import thaumcraft.client.input.TCKeyMappings;
+import thaumcraft.client.renderers.block.ArcanePedestalRenderer;
 import thaumcraft.client.renderers.item.TCItemRenderers;
 import thaumcraft.client.screens.ArcaneWorktableScreen;
 import thaumcraft.client.screens.ResearchTableScreen;
+import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
@@ -60,6 +63,7 @@ public class ThaumcraftClient {
         modEventBus.addListener(this::registerKeyMappings);
         modEventBus.addListener(this::registerMenuScreens);
         modEventBus.addListener(this::registerClientExtensions);
+        modEventBus.addListener(this::registerBlockEntityRenderers);
         modEventBus.addListener(this::registerBlockColors);
         modEventBus.addListener(this::registerItemColors);
         NeoForge.EVENT_BUS.addListener(TCKeyMappings::onClientTick);
@@ -117,6 +121,10 @@ public class ThaumcraftClient {
 
     private void registerClientExtensions(RegisterClientExtensionsEvent event) {
         TCItemRenderers.register(event);
+    }
+
+    private void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(TCBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
     }
 
     private void registerBlockColors(RegisterColorHandlersEvent.Block event) {

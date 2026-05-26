@@ -5,9 +5,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.blockentities.ArcanePedestalBlockEntity;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
 import thaumcraft.common.blockentities.EssentiaTubeBlockEntity;
 import thaumcraft.common.blockentities.ResearchTableBlockEntity;
+import thaumcraft.common.blockentities.RunicMatrixBlockEntity;
 import thaumcraft.common.blockentities.WardedJarBlockEntity;
 
 public final class TCBlockEntities {
@@ -15,6 +17,14 @@ public final class TCBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcaneWorktableBlockEntity>> ARCANE_WORKTABLE =
             REGISTRY.register("arcane_worktable", () -> BlockEntityType.Builder
                     .of(ArcaneWorktableBlockEntity::new, TCBlocks.ARCANE_WORKTABLE.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcanePedestalBlockEntity>> ARCANE_PEDESTAL =
+            REGISTRY.register("arcane_pedestal", () -> BlockEntityType.Builder
+                    .of(ArcanePedestalBlockEntity::new, TCBlocks.ARCANE_PEDESTAL.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RunicMatrixBlockEntity>> RUNIC_MATRIX =
+            REGISTRY.register("runic_matrix", () -> BlockEntityType.Builder
+                    .of(RunicMatrixBlockEntity::new, TCBlocks.RUNIC_MATRIX.get())
                     .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ResearchTableBlockEntity>> RESEARCH_TABLE =
             REGISTRY.register("research_table", () -> BlockEntityType.Builder
