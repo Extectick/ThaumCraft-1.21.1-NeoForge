@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "CAP_void",
+  "catalyst": {
+    "item": "thaumcraft:void_wand_cap_inert"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:ethereal_essence"
+    },
+    {
+      "item": "thaumcraft:ethereal_essence"
+    },
+    {
+      "item": "thaumcraft:ethereal_essence"
+    },
+    {
+      "item": "thaumcraft:ethereal_essence"
+    }
+  ],
+  "instability": 8,
+  "result": {
+    "id": "thaumcraft:void_wand_cap"
+  }
+}

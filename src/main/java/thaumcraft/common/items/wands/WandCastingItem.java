@@ -32,6 +32,8 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.PrimalVisStorage;
 import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.common.items.curios.FocusPouchCurioItem;
+import thaumcraft.common.lib.crafting.InfusionAltarBuilder;
+import thaumcraft.common.lib.crafting.InfusionCrafting;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
@@ -264,6 +266,16 @@ public class WandCastingItem extends Item {
         BlockPos pos = context.getClickedPos();
         ItemStack wand = context.getItemInHand();
         BlockState state = level.getBlockState(pos);
+
+        InteractionResult infusionCraftingResult = InfusionCrafting.tryStart(level, pos, context.getPlayer());
+        if (infusionCraftingResult != InteractionResult.PASS) {
+            return infusionCraftingResult;
+        }
+
+        InteractionResult infusionAltarResult = InfusionAltarBuilder.tryCreate(level, pos, wand, context.getPlayer());
+        if (infusionAltarResult != InteractionResult.PASS) {
+            return infusionAltarResult;
+        }
 
         if (state.is(TCBlocks.TABLE.get())) {
             if (!level.isClientSide) {

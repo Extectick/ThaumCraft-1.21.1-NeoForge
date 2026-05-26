@@ -8,6 +8,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.blockentities.ArcanePedestalBlockEntity;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
 import thaumcraft.common.blockentities.EssentiaTubeBlockEntity;
+import thaumcraft.common.blockentities.InfusionPillarBlockEntity;
 import thaumcraft.common.blockentities.ResearchTableBlockEntity;
 import thaumcraft.common.blockentities.RunicMatrixBlockEntity;
 import thaumcraft.common.blockentities.WardedJarBlockEntity;
@@ -25,6 +26,10 @@ public final class TCBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RunicMatrixBlockEntity>> RUNIC_MATRIX =
             REGISTRY.register("runic_matrix", () -> BlockEntityType.Builder
                     .of(RunicMatrixBlockEntity::new, TCBlocks.RUNIC_MATRIX.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionPillarBlockEntity>> INFUSION_PILLAR =
+            REGISTRY.register("infusion_pillar", () -> BlockEntityType.Builder
+                    .of(InfusionPillarBlockEntity::new, TCBlocks.INFUSION_PILLAR.get())
                     .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ResearchTableBlockEntity>> RESEARCH_TABLE =
             REGISTRY.register("research_table", () -> BlockEntityType.Builder

@@ -26,6 +26,8 @@ import thaumcraft.client.hud.ResearchNotificationOverlay;
 import thaumcraft.client.hud.WandVisHudOverlay;
 import thaumcraft.client.input.TCKeyMappings;
 import thaumcraft.client.renderers.block.ArcanePedestalRenderer;
+import thaumcraft.client.renderers.block.InfusionPillarRenderer;
+import thaumcraft.client.renderers.block.RunicMatrixRenderer;
 import thaumcraft.client.renderers.item.TCItemRenderers;
 import thaumcraft.client.screens.ArcaneWorktableScreen;
 import thaumcraft.client.screens.ResearchTableScreen;
@@ -125,6 +127,8 @@ public class ThaumcraftClient {
 
     private void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(TCBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.RUNIC_MATRIX.get(), RunicMatrixRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.INFUSION_PILLAR.get(), InfusionPillarRenderer::new);
     }
 
     private void registerBlockColors(RegisterColorHandlersEvent.Block event) {

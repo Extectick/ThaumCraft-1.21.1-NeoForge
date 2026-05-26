@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "CAP_thaumium",
+  "catalyst": {
+    "item": "thaumcraft:thaumium_wand_cap_inert"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:ethereal_essence"
+    },
+    {
+      "item": "thaumcraft:ethereal_essence"
+    },
+    {
+      "item": "thaumcraft:ethereal_essence"
+    }
+  ],
+  "instability": 5,
+  "result": {
+    "id": "thaumcraft:thaumium_wand_cap"
+  }
+}

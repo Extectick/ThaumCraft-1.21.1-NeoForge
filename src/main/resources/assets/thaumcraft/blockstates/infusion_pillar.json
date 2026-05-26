@@ -1,7 +1,31 @@
 {
   "variants": {
-    "": {
+    "corner=north_west,top=false": {
       "model": "thaumcraft:block/infusion_pillar"
+    },
+    "corner=north_east,top=false": {
+      "model": "thaumcraft:block/infusion_pillar",
+      "y": 270
+    },
+    "corner=south_east,top=false": {
+      "model": "thaumcraft:block/infusion_pillar",
+      "y": 180
+    },
+    "corner=south_west,top=false": {
+      "model": "thaumcraft:block/infusion_pillar",
+      "y": 90
+    },
+    "corner=north_west,top=true": {
+      "model": "thaumcraft:block/infusion_pillar_top"
+    },
+    "corner=north_east,top=true": {
+      "model": "thaumcraft:block/infusion_pillar_top"
+    },
+    "corner=south_east,top=true": {
+      "model": "thaumcraft:block/infusion_pillar_top"
+    },
+    "corner=south_west,top=true": {
+      "model": "thaumcraft:block/infusion_pillar_top"
     }
   }
 }

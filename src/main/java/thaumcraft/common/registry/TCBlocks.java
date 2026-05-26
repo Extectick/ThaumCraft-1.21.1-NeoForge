@@ -17,6 +17,7 @@ import thaumcraft.common.blocks.ArcanePedestalBlock;
 import thaumcraft.common.blocks.ArcaneWorktableBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock.TubeMode;
+import thaumcraft.common.blocks.InfusionPillarBlock;
 import thaumcraft.common.blocks.ResearchTableBlock;
 import thaumcraft.common.blocks.RunicMatrixBlock;
 import thaumcraft.common.blocks.SimpleJarBlock;
@@ -80,7 +81,8 @@ public final class TCBlocks {
     public static final DeferredBlock<Block> ARCANE_SPA = stoneDevice("arcane_spa");
     public static final DeferredBlock<RunicMatrixBlock> RUNIC_MATRIX = REGISTRY.register("runic_matrix",
             () -> new RunicMatrixBlock(stoneDeviceProperties().lightLevel(state -> 10)));
-    public static final DeferredBlock<Block> INFUSION_PILLAR = stoneDevice("infusion_pillar");
+    public static final DeferredBlock<InfusionPillarBlock> INFUSION_PILLAR = REGISTRY.register("infusion_pillar",
+            () -> new InfusionPillarBlock(stoneDeviceProperties()));
     public static final DeferredBlock<Block> NODE_STABILIZER = stoneDevice("node_stabilizer");
     public static final DeferredBlock<Block> ADVANCED_NODE_STABILIZER = stoneDevice("advanced_node_stabilizer");
     public static final DeferredBlock<Block> NODE_TRANSDUCER = stoneDevice("node_transducer");
