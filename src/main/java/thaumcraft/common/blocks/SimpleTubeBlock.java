@@ -49,6 +49,10 @@ public class SimpleTubeBlock extends Block {
     private static final VoxelShape WAND_SOUTH_SHAPE = Block.box(6.72D, 6.72D, 8.0D, 9.28D, 9.28D, 16.0D);
     private static final VoxelShape WAND_WEST_SHAPE = Block.box(0.0D, 6.72D, 6.72D, 8.0D, 9.28D, 9.28D);
     private static final VoxelShape WAND_EAST_SHAPE = Block.box(8.0D, 6.72D, 6.72D, 16.0D, 9.28D, 9.28D);
+    private static final VoxelShape[] SHAPES = buildShapeCache(CORE, DOWN_SHAPE, UP_SHAPE, NORTH_SHAPE, SOUTH_SHAPE,
+            WEST_SHAPE, EAST_SHAPE);
+    private static final VoxelShape[] WAND_SHAPES = buildShapeCache(WAND_CORE, WAND_DOWN_SHAPE, WAND_UP_SHAPE,
+            WAND_NORTH_SHAPE, WAND_SOUTH_SHAPE, WAND_WEST_SHAPE, WAND_EAST_SHAPE);
 
     public SimpleTubeBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -105,26 +109,7 @@ public class SimpleTubeBlock extends Block {
         if (context.isHoldingItem(TCItems.WAND_CASTING.get())) {
             return getWandShape(level, pos);
         }
-        VoxelShape shape = CORE;
-        if (state.getValue(DOWN)) {
-            shape = Shapes.or(shape, DOWN_SHAPE);
-        }
-        if (state.getValue(UP)) {
-            shape = Shapes.or(shape, UP_SHAPE);
-        }
-        if (state.getValue(NORTH)) {
-            shape = Shapes.or(shape, NORTH_SHAPE);
-        }
-        if (state.getValue(SOUTH)) {
-            shape = Shapes.or(shape, SOUTH_SHAPE);
-        }
-        if (state.getValue(WEST)) {
-            shape = Shapes.or(shape, WEST_SHAPE);
-        }
-        if (state.getValue(EAST)) {
-            shape = Shapes.or(shape, EAST_SHAPE);
-        }
-        return shape;
+        return SHAPES[connectionMask(state)];
     }
 
     @Override
@@ -162,26 +147,77 @@ public class SimpleTubeBlock extends Block {
     }
 
     private static VoxelShape getWandShape(BlockGetter level, BlockPos pos) {
-        VoxelShape shape = WAND_CORE;
+        int mask = 0;
         if (canTraceSide(level, pos, Direction.DOWN)) {
-            shape = Shapes.or(shape, WAND_DOWN_SHAPE);
+            mask |= 1;
         }
         if (canTraceSide(level, pos, Direction.UP)) {
-            shape = Shapes.or(shape, WAND_UP_SHAPE);
+            mask |= 1 << 1;
         }
         if (canTraceSide(level, pos, Direction.NORTH)) {
-            shape = Shapes.or(shape, WAND_NORTH_SHAPE);
+            mask |= 1 << 2;
         }
         if (canTraceSide(level, pos, Direction.SOUTH)) {
-            shape = Shapes.or(shape, WAND_SOUTH_SHAPE);
+            mask |= 1 << 3;
         }
         if (canTraceSide(level, pos, Direction.WEST)) {
-            shape = Shapes.or(shape, WAND_WEST_SHAPE);
+            mask |= 1 << 4;
         }
         if (canTraceSide(level, pos, Direction.EAST)) {
-            shape = Shapes.or(shape, WAND_EAST_SHAPE);
+            mask |= 1 << 5;
         }
-        return shape;
+        return WAND_SHAPES[mask];
+    }
+
+    private static VoxelShape[] buildShapeCache(VoxelShape core, VoxelShape down, VoxelShape up, VoxelShape north,
+            VoxelShape south, VoxelShape west, VoxelShape east) {
+        VoxelShape[] cache = new VoxelShape[64];
+        for (int mask = 0; mask < cache.length; mask++) {
+            VoxelShape shape = core;
+            if ((mask & 1) != 0) {
+                shape = Shapes.or(shape, down);
+            }
+            if ((mask & (1 << 1)) != 0) {
+                shape = Shapes.or(shape, up);
+            }
+            if ((mask & (1 << 2)) != 0) {
+                shape = Shapes.or(shape, north);
+            }
+            if ((mask & (1 << 3)) != 0) {
+                shape = Shapes.or(shape, south);
+            }
+            if ((mask & (1 << 4)) != 0) {
+                shape = Shapes.or(shape, west);
+            }
+            if ((mask & (1 << 5)) != 0) {
+                shape = Shapes.or(shape, east);
+            }
+            cache[mask] = shape;
+        }
+        return cache;
+    }
+
+    private static int connectionMask(BlockState state) {
+        int mask = 0;
+        if (state.getValue(DOWN)) {
+            mask |= 1;
+        }
+        if (state.getValue(UP)) {
+            mask |= 1 << 1;
+        }
+        if (state.getValue(NORTH)) {
+            mask |= 1 << 2;
+        }
+        if (state.getValue(SOUTH)) {
+            mask |= 1 << 3;
+        }
+        if (state.getValue(WEST)) {
+            mask |= 1 << 4;
+        }
+        if (state.getValue(EAST)) {
+            mask |= 1 << 5;
+        }
+        return mask;
     }
 
     private static boolean canTraceSide(BlockGetter level, BlockPos pos, Direction direction) {

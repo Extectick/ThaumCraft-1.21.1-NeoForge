@@ -45,7 +45,6 @@ import thaumcraft.common.research.ResearchNoteData;
 
 @Mod(value = Thaumcraft.MODID, dist = Dist.CLIENT)
 public class ThaumcraftClient {
-    private final long clientBootstrapStart = System.nanoTime();
     private static final int SILVERWOOD_LEAF_COLOR = 0x88A3AA;
     private static final int WHITE = 0xF0F0F0;
     private static final int ORANGE = 0xEB8844;
@@ -65,7 +64,6 @@ public class ThaumcraftClient {
     private static final int BLACK = 0x1E1B1B;
 
     public ThaumcraftClient(IEventBus modEventBus, ModContainer container) {
-        logClientTiming("constructor start");
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         modEventBus.addListener(this::clientSetup);
         modEventBus.addListener(this::registerGuiLayers);
@@ -78,13 +76,10 @@ public class ThaumcraftClient {
         modEventBus.addListener(this::registerItemColors);
         NeoForge.EVENT_BUS.addListener(TCKeyMappings::onClientTick);
         NeoForge.EVENT_BUS.addListener(AspectTooltipHandler::gatherComponents);
-        logClientTiming("constructor complete");
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
-        logClientTiming("FMLClientSetupEvent start");
         event.enqueueWork(() -> {
-            logClientTiming("FMLClientSetupEvent enqueueWork start");
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.WHITE_TALLOW_CANDLE.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.ORANGE_TALLOW_CANDLE.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.MAGENTA_TALLOW_CANDLE.get(), RenderType.cutout());
@@ -112,19 +107,16 @@ public class ThaumcraftClient {
                             .getOrDefault(TCDataComponents.RESEARCH_NOTE, ResearchNoteData.EMPTY).complete()
                                     ? 1.0F
                                     : 0.0F);
-            logClientTiming("FMLClientSetupEvent enqueueWork complete");
         });
     }
 
     private void registerMenuScreens(RegisterMenuScreensEvent event) {
-        logClientTiming("RegisterMenuScreensEvent");
         event.register(TCMenuTypes.ALCHEMICAL_FURNACE.get(), AlchemicalFurnaceScreen::new);
         event.register(TCMenuTypes.ARCANE_WORKTABLE.get(), ArcaneWorktableScreen::new);
         event.register(TCMenuTypes.RESEARCH_TABLE.get(), ResearchTableScreen::new);
     }
 
     private void registerGuiLayers(RegisterGuiLayersEvent event) {
-        logClientTiming("RegisterGuiLayersEvent");
         event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("wand_vis"), (guiGraphics, deltaTracker) ->
                 WandVisHudOverlay.render(guiGraphics));
         event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("focus_selector"), (guiGraphics, deltaTracker) ->
@@ -134,17 +126,14 @@ public class ThaumcraftClient {
     }
 
     private void registerKeyMappings(RegisterKeyMappingsEvent event) {
-        logClientTiming("RegisterKeyMappingsEvent");
         TCKeyMappings.register(event);
     }
 
     private void registerClientExtensions(RegisterClientExtensionsEvent event) {
-        logClientTiming("RegisterClientExtensionsEvent");
         TCItemRenderers.register(event);
     }
 
     private void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        logClientTiming("RegisterBlockEntityRenderersEvent");
         event.registerBlockEntityRenderer(TCBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.RUNIC_MATRIX.get(), RunicMatrixRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.INFUSION_PILLAR.get(), InfusionPillarRenderer::new);
@@ -154,7 +143,6 @@ public class ThaumcraftClient {
     }
 
     private void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-        logClientTiming("RegisterBlockColorsEvent");
         event.register((state, level, pos, tintIndex) -> level != null && pos != null
                 ? BiomeColors.getAverageFoliageColor(level, pos)
                 : FoliageColor.getDefaultColor(), TCBlocks.GREATWOOD_LEAVES.get());
@@ -178,7 +166,6 @@ public class ThaumcraftClient {
     }
 
     private void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        logClientTiming("RegisterItemColorsEvent");
         event.register((stack, tintIndex) -> {
             if (tintIndex != 1) {
                 return 0xFFFFFFFF;
@@ -205,10 +192,5 @@ public class ThaumcraftClient {
         event.register((stack, tintIndex) -> GREEN, TCItems.GREEN_TALLOW_CANDLE.get());
         event.register((stack, tintIndex) -> RED, TCItems.RED_TALLOW_CANDLE.get());
         event.register((stack, tintIndex) -> BLACK, TCItems.BLACK_TALLOW_CANDLE.get());
-    }
-
-    private void logClientTiming(String marker) {
-        long elapsedMs = (System.nanoTime() - this.clientBootstrapStart) / 1_000_000L;
-        Thaumcraft.LOGGER.info("Thaumcraft client startup timing: {} at {} ms", marker, elapsedMs);
     }
 }
