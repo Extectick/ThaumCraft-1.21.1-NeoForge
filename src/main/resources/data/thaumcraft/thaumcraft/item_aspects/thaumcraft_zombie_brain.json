@@ -1,0 +1,8 @@
+{
+  "item": "thaumcraft:zombie_brain",
+  "aspects": {
+    "cognitio": 4,
+    "corpus": 2,
+    "exanimis": 2
+  }
+}

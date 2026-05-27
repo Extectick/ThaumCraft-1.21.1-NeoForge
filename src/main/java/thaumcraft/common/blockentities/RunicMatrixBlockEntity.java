@@ -17,9 +17,11 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import thaumcraft.api.aspects.PrimalVisStorage;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.crafting.InfusionRecipe;
 import thaumcraft.common.lib.crafting.InfusionAltarScan;
+import thaumcraft.common.lib.events.EssentiaHandler;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCSoundEvents;
 
@@ -39,7 +41,7 @@ public class RunicMatrixBlockEntity extends BlockEntity {
     private ItemStack recipeInput = ItemStack.EMPTY;
     private List<ItemStack> recipeIngredients = List.of();
     private ItemStack recipeOutput = ItemStack.EMPTY;
-    private PrimalVisStorage recipeEssentia = PrimalVisStorage.EMPTY;
+    private AspectList recipeEssentia = AspectList.EMPTY;
     private ResourceLocation recipeId;
     private String recipePlayer = "";
 
@@ -136,6 +138,7 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         this.symmetry = tag.getInt("symmetry");
         this.tickCount = tag.getInt("tickCount");
         this.pedestals = loadPedestals(tag);
+        this.recipeEssentia = AspectList.load(tag, "recipeEssentia");
     }
 
     @Override
@@ -147,6 +150,7 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         tag.putInt("instability", this.instability);
         tag.putInt("symmetry", this.symmetry);
         tag.putInt("tickCount", this.tickCount);
+        this.recipeEssentia.writeToNBT(tag, "recipeEssentia");
         savePedestals(tag, this.pedestals);
     }
 
@@ -200,8 +204,8 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         return this.recipeOutput;
     }
 
-    public PrimalVisStorage getRecipeEssentia() {
-        return this.recipeEssentia;
+    public AspectList getRecipeEssentia() {
+        return this.recipeEssentia.copy();
     }
 
     public ResourceLocation getRecipeId() {
@@ -253,10 +257,7 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         }
 
         if (this.hasRemainingEssentia()) {
-            // Essentia drain is the next porting layer. Keep the slot in the cycle so recipe data is already shaped
-            // like old Thaumcraft, but don't block recipes that do not yet define essentia costs.
-            this.recipeEssentia = PrimalVisStorage.EMPTY;
-            this.markChangedAndSync();
+            this.drainNextEssentia(level);
             return;
         }
 
@@ -274,6 +275,22 @@ public class RunicMatrixBlockEntity extends BlockEntity {
 
     private boolean hasRemainingEssentia() {
         return !this.recipeEssentia.isEmpty();
+    }
+
+    private void drainNextEssentia(Level level) {
+        for (Aspect aspect : this.recipeEssentia.getAspects()) {
+            if (this.recipeEssentia.getAmount(aspect) <= 0) {
+                continue;
+            }
+            if (EssentiaHandler.drainEssentia(level, this.worldPosition, aspect, 12)) {
+                this.recipeEssentia = this.recipeEssentia.copy().remove(aspect, 1);
+                this.markChangedAndSync();
+            } else if (level.random.nextInt(100) < Math.max(1, this.instability)) {
+                this.instability++;
+                this.markChangedAndSync();
+            }
+            return;
+        }
     }
 
     private boolean consumeNextIngredient(Level level) {
@@ -305,7 +322,7 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         this.recipeInput = ItemStack.EMPTY;
         this.recipeIngredients = List.of();
         this.recipeOutput = ItemStack.EMPTY;
-        this.recipeEssentia = PrimalVisStorage.EMPTY;
+        this.recipeEssentia = AspectList.EMPTY;
         this.recipeId = null;
         this.recipePlayer = "";
         this.itemCount = 0;
@@ -316,7 +333,7 @@ public class RunicMatrixBlockEntity extends BlockEntity {
     private void failCrafting(Level level) {
         this.instability = 0;
         this.crafting = false;
-        this.recipeEssentia = PrimalVisStorage.EMPTY;
+        this.recipeEssentia = AspectList.EMPTY;
         this.recipeIngredients = List.of();
         this.recipeOutput = ItemStack.EMPTY;
         this.recipeId = null;

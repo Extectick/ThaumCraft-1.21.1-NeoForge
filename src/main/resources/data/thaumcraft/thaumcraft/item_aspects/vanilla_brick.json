@@ -1,0 +1,7 @@
+{
+  "item": "minecraft:brick",
+  "aspects": {
+    "terra": 1,
+    "ignis": 1
+  }
+}

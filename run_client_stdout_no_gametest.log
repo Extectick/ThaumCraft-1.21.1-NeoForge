@@ -1,0 +1,326 @@
+Calculating task graph as configuration cache cannot be reused because file 'build.gradle' has changed.
+> Task :cacheVersionManifest1.21.1 UP-TO-DATE
+> Task :neoFormJoined1.21.1-20240808.144430DownloadAssets UP-TO-DATE
+> Task :neoFormJoined1.21.1-20240808.144430ExtractNatives UP-TO-DATE
+> Task :neoFormListLibraries UP-TO-DATE
+> Task :cacheVersionExecutableServer1.21.1 UP-TO-DATE
+> Task :cacheVersionMappingsClient1.21.1 UP-TO-DATE
+> Task :cacheVersionExecutableClient1.21.1 UP-TO-DATE
+> Task :cacheVersionExtractedServer1.21.1 UP-TO-DATE
+> Task :neoFormStripClient UP-TO-DATE
+> Task :create1.21.1ClientExtraJar UP-TO-DATE
+> Task :neoFormStripServer UP-TO-DATE
+> Task :neoFormMergeMappings UP-TO-DATE
+> Task :selectRawArtifactNg_dummy_ng.net.minecraft_client_1.21.1_client-extra UP-TO-DATE
+> Task :neoFormMerge UP-TO-DATE
+> Task :neoFormListTransformLibraries UP-TO-DATE
+> Task :neoFormRename UP-TO-DATE
+> Task :neoFormDecompile UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :neoFormInject UP-TO-DATE
+> Task :neoFormPatch UP-TO-DATE
+> Task :neoFormPatchUserDev UP-TO-DATE
+> Task :neoFormTransformSource UP-TO-DATE
+> Task :neoFormRecompile UP-TO-DATE
+> Task :supplyRawJarForneoFormJoined1.21.1-20240808.144430 UP-TO-DATE
+> Task :selectRawArtifactNg_dummy_ng.net.neoforged_neoforge_21.1.230 UP-TO-DATE
+> Task :writeMinecraftClasspathClient UP-TO-DATE
+> Task :compileJava UP-TO-DATE
+> Task :classes UP-TO-DATE
+
+> Task :runClient
+[19:32:37.573] [main/INFO] [Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientdev, --version, 21.1.230, --assetIndex, asset-index, --assetsDir, C:\Users\extec\.gradle\caches\minecraft\assets, --gameDir, ., --fml.fmlVersion, 4.0.42, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.230, --fml.neoFormVersion, 20240808.144430] 
+[19:32:37.576] [main/INFO] [Launcher/MODLAUNCHER]: JVM identified as Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.3+9-LTS 
+[19:32:37.578] [main/INFO] [Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.3 by Eclipse Adoptium; OS Windows 11 arch amd64 version 10.0 
+[19:32:38.293] [main/INFO] [loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow 
+[19:32:38.396] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6 
+[19:32:38.556] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6 
+[19:32:38.625] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/C:/Users/extec/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%23142!/ Service=ModLauncher Env=CLIENT 
+[19:32:38.714] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "neoforge-21.1.230.jar" [locator: neoforge devenv provider ([V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\.gradle\repositories\ng_dummy_ng\net\neoforged\neoforge\21.1.230\neoforge-21.1.230.jar])] 
+[19:32:38.732] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "neoforge-21.1.230.jar" [locator: neoforge devenv provider ([V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\.gradle\repositories\ng_dummy_ng\net\neoforged\neoforge\21.1.230\neoforge-21.1.230.jar])] 
+[19:32:38.739] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "architectury-13.0.8-neoforge.jar" [locator: {mods folder locator at V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\mods}, reader: mod manifest] 
+[19:32:38.744] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "main" [locator: userdev mods and services, reader: mod manifest] 
+[19:32:38.750] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "jei-1.21.1-neoforge-19.27.0.340.jar" [locator: userdev mods and services, reader: mod manifest] 
+[19:32:38.756] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "neoforge-21.1.230.jar" [locator: userdev mods and services, reader: mod manifest] 
+[19:32:38.759] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "curios-neoforge-9.5.1+1.21.1.jar" [locator: userdev mods and services, reader: mod manifest] 
+[19:32:38.772] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: NVIDIA GeForce RTX 3060 Ti/PCIe/SSE2 GL version 4.6.0 NVIDIA 595.71, NVIDIA Corporation 
+[19:32:38.809] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found gamelibrary file "mixinextras-neoforge-0.5.3.jar" [locator: userdev mods and services, reader: mod manifest] 
+[19:32:38.947] [main/WARN] [selection.JarSelector/]: Attempted to select a dependency jar for JarJar which was passed in as source: library:mixinextras.neoforge. Using Mod File: C:\Users\extec\.gradle\caches\modules-2\files-2.1\io.github.llamalad7\mixinextras-neoforge\0.5.3\a0919957808de97707c5fb4ce073e66aeef3e187\mixinextras-neoforge-0.5.3.jar 
+[19:32:38.947] [main/INFO] [loading.moddiscovery.locators.JarInJarDependencyLocator/]: Found 1 dependencies adding them to mods collection 
+[19:32:38.948] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found library file "net.neoforged.neoforge-coremods-21.1.230.jar" [parent: neoforge-21.1.230.jar, locator: jarinjar, reader: mod manifest] 
+[19:32:38.949] [main/INFO] [loading.moddiscovery.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		Architectury 13.0.8 (architectury)
+		Curios API 9.5.1+1.21.1 (curios)
+		Just Enough Items 19.27.0.340 (jei)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.230 (neoforge)
+		Thaumcraft 4.2.3.5-port.0 (thaumcraft) 
+[19:32:39.667] [main/INFO] [mixin/]: Compatibility level set to JAVA_21 
+[19:32:39.677] [main/INFO] [LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientdev' with arguments [--version, 21.1.230, --gameDir, ., --assetsDir, C:\Users\extec\.gradle\caches\minecraft\assets, --assetIndex, asset-index] 
+[19:32:39.757] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.neoforge.mixins.json could not be read. If this is a development environment you can ignore this message 
+[19:32:39.757] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.mixins.json could not be read. If this is a development environment you can ignore this message 
+[19:32:40.145] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.3). 
+WARN StatusConsoleListener Advanced terminal features are not available in this environment
+[19:32:40] [main/DEBUG] [io.ne.ut.in.lo.InternalLoggerFactory/]: Using SLF4J as the default logging framework
+[19:32:40] [main/DEBUG] [io.ne.ut.ResourceLeakDetector/]: -Dio.netty.leakDetection.level: simple
+[19:32:40] [main/DEBUG] [io.ne.ut.ResourceLeakDetector/]: -Dio.netty.leakDetection.targetRecords: 4
+[19:32:41] [main/DEBUG] [mixin/]: Mixing MixinV1460 from curios.neoforge.mixins.json into net.minecraft.util.datafix.schemas.V1460
+[19:32:41] [main/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinV1460 from mod curios->@Inject::captureSchema(Lcom/mojang/datafixers/schemas/Schema;Ljava/util/Map;Ljava/util/Map;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V doesn't use it's CallbackInfo
+[19:32:41] [main/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinV1460 from mod curios->@Inject::captureSchema(Lcom/mojang/datafixers/schemas/Schema;Ljava/util/Map;Ljava/util/Map;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V has 0 override(s) in child classes
+[19:32:41] [main/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinV1460 from mod curios->@Inject::captureSchema(Lcom/mojang/datafixers/schemas/Schema;Ljava/util/Map;Ljava/util/Map;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V won't be passed a CallbackInfo as a result
+[19:32:41] [main/DEBUG] [mixin/]: Mixing MixinLivingEntity from curios.neoforge.mixins.json into net.minecraft.world.entity.LivingEntity
+[19:32:41] [main/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinLivingEntity from mod curios->@Inject::curio$canFreeze(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:32:41] [main/DEBUG] [mixin/]: Mixing AccessorEntity from curios.mixins.json into net.minecraft.world.entity.Entity
+[19:32:41] [main/DEBUG] [os.ut.FileUtil/]: No oshi.properties file found from ClassLoader cpw.mods.modlauncher.TransformingClassLoader@3bead518
+[19:32:41] [Datafixer Bootstrap/INFO] [mojang/DataFixerBuilder]: 229 Datafixer optimizations took 298 milliseconds
+[19:32:41] [main/DEBUG] [os.ut.FileUtil/]: No oshi.architecture.properties file found from ClassLoader cpw.mods.modlauncher.TransformingClassLoader@3bead518
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: Mixing MappedRegistryAccessor from neoforge.mixins.json into net.minecraft.core.MappedRegistry
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: Mixing inject.MixinBlock from architectury-common.mixins.json into net.minecraft.world.level.block.Block
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinBlock from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: Mixing neoforge.LiquidBlockAccessor from architectury.mixins.json into net.minecraft.world.level.block.LiquidBlock
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:neoforge.LiquidBlockAccessor from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: Mixing inject.MixinLiquidBlock from architectury-common.mixins.json into net.minecraft.world.level.block.LiquidBlock
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinLiquidBlock from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: Mixing MixinPowderSnowBlock from curios.neoforge.mixins.json into net.minecraft.world.level.block.PowderSnowBlock
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinPowderSnowBlock from mod curios->@Inject::curios$canEntityWalkOnPowderSnow(Lnet/minecraft/world/entity/Entity;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinPowderSnowBlock from mod curios->@Inject::curios$canEntityWalkOnPowderSnow(Lnet/minecraft/world/entity/Entity;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: Mixing inject.MixinEntityType from architectury-common.mixins.json into net.minecraft.world.entity.EntityType
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinEntityType from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: Mixing inject.MixinFluid from architectury-common.mixins.json into net.minecraft.world.level.material.Fluid
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinFluid from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: Mixing MixinFallingBlockEntity from architectury.mixins.json into net.minecraft.world.entity.item.FallingBlockEntity
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:MixinFallingBlockEntity from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:MixinFallingBlockEntity from mod architectury->@Inject::handleLand(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/core/BlockPos;ZZDLnet/minecraft/world/level/block/state/BlockState;)V doesn't use it's CallbackInfo
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:MixinFallingBlockEntity from mod architectury->@Inject::handleLand(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/core/BlockPos;ZZDLnet/minecraft/world/level/block/state/BlockState;)V has 0 override(s) in child classes
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:MixinFallingBlockEntity from mod architectury->@Inject::handleLand(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/core/BlockPos;ZZDLnet/minecraft/world/level/block/state/BlockState;)V won't be passed a CallbackInfo as a result
+[19:32:42] [pool-10-thread-1/DEBUG] [mixin/]: Mixing BlockEntityTypeAccessor from neoforge.mixins.json into net.minecraft.world.level.block.entity.BlockEntityType
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: Mixing inject.MixinItem from architectury-common.mixins.json into net.minecraft.world.item.Item
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinItem from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinItem from mod architectury->@Inject::init(Lnet/minecraft/world/item/Item$Properties;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V doesn't use it's CallbackInfo
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinItem from mod architectury->@Inject::init(Lnet/minecraft/world/item/Item$Properties;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V has 0 override(s) in child classes
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinItem from mod architectury->@Inject::init(Lnet/minecraft/world/item/Item$Properties;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V won't be passed a CallbackInfo as a result
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: Mixing neoforge.MixinBucketItem from architectury.mixins.json into net.minecraft.world.item.BucketItem
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:neoforge.MixinBucketItem from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: Mixing neoforge.BucketItemAccessor from architectury.mixins.json into net.minecraft.world.item.BucketItem
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:neoforge.BucketItemAccessor from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: Mixing inject.MixinBucketItem from architectury-common.mixins.json into net.minecraft.world.item.BucketItem
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinBucketItem from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:neoforge.MixinBucketItem from mod architectury->@Inject::fillBucket(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/phys/BlockHitResult;)V does use it's CallbackInfoReturnable
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: Mixing inject.MixinItemProperties from architectury-common.mixins.json into net.minecraft.world.item.Item$Properties
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinItemProperties from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent0/]: -Dio.netty.noUnsafe: false
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent0/]: Java version: 21
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent0/]: sun.misc.Unsafe.theUnsafe: available
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent0/]: sun.misc.Unsafe.copyMemory: available
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent0/]: sun.misc.Unsafe.storeFence: available
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent0/]: java.nio.Buffer.address: available
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent0/]: java.nio.Bits.unaligned: available, true
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent0/]: java.nio.DirectByteBuffer.<init>(long, {int,long}): unavailable
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent/]: sun.misc.Unsafe: available
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent/]: maxDirectMemory: 17137926144 bytes (maybe)
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent/]: -Dio.netty.tmpdir: C:\Users\extec\AppData\Local\Temp (java.io.tmpdir)
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent/]: -Dio.netty.bitMode: 64 (sun.arch.data.model)
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent/]: Platform: Windows
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent/]: -Dio.netty.maxDirectMemory: -1 bytes
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent/]: -Dio.netty.uninitializedArrayAllocationThreshold: -1
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.CleanerJava9/]: java.nio.ByteBuffer.cleaner(): available
+[19:32:43] [pool-10-thread-1/DEBUG] [io.ne.ut.in.PlatformDependent/]: -Dio.netty.noPreferDirect: false
+[19:32:43] [pool-10-thread-1/DEBUG] [mixin/]: Mixing MixinNbtPredicate from curios.neoforge.mixins.json into net.minecraft.advancements.critereon.NbtPredicate
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: Mixing MixinLightningBolt from architectury-common.mixins.json into net.minecraft.world.entity.LightningBolt
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:MixinLightningBolt from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:MixinLightningBolt from mod architectury->@Inject::handleLightning(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;Ljava/util/List;)V doesn't use it's CallbackInfo
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:MixinLightningBolt from mod architectury->@Inject::handleLightning(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;Ljava/util/List;)V has 0 override(s) in child classes
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:MixinLightningBolt from mod architectury->@Inject::handleLightning(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;Ljava/util/List;)V won't be passed a CallbackInfo as a result
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: Mixing inject.MixinFoodPropertiesBuilder from architectury-common.mixins.json into net.minecraft.world.food.FoodProperties$Builder
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: architectury-common.mixins.json:inject.MixinFoodPropertiesBuilder from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: Mixing MixinInventory from curios.neoforge.mixins.json into net.minecraft.world.entity.player.Inventory
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: Mixing MixinInventory from architectury.mixins.json into net.minecraft.world.entity.player.Inventory
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:MixinInventory from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinInventory from mod curios->@Inject::curios$containsStack(Lnet/minecraft/world/item/ItemStack;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinInventory from mod curios->@Inject::curios$containsTag(Lnet/minecraft/tags/TagKey;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinInventory from mod curios->@Inject::curios$contains(Ljava/util/function/Predicate;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinInventory from mod curios->@Inject::curios$hasAnyMatching(Ljava/util/function/Predicate;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:MixinInventory from mod architectury->@Inject::updateItems(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V doesn't use it's CallbackInfo
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:MixinInventory from mod architectury->@Inject::updateItems(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V has 0 override(s) in child classes
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: architectury.mixins.json:MixinInventory from mod architectury->@Inject::updateItems(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V won't be passed a CallbackInfo as a result
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: Mixing MixinEnchantedCountIncreaseFunction from curios.neoforge.mixins.json into net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction
+[19:32:44] [pool-10-thread-1/DEBUG] [mixin/]: Mixing MixinApplyBonusCount from curios.neoforge.mixins.json into net.minecraft.world.level.storage.loot.functions.ApplyBonusCount
+[19:32:45] [main/DEBUG] [mixin/]: Mixing MixinLevelEvent from architectury.mixins.json into net.neoforged.neoforge.event.level.LevelEvent
+[19:32:45] [main/DEBUG] [mixin/]: architectury.mixins.json:MixinLevelEvent from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:45] [main/DEBUG] [mixin/]: Mixing client.MixinCommandSourceStack from architectury.mixins.json into net.minecraft.commands.CommandSourceStack
+[19:32:45] [main/DEBUG] [mixin/]: architectury.mixins.json:client.MixinCommandSourceStack from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:45] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[19:32:45] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[19:32:45] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[19:32:45] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[19:32:45] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[19:32:45] [Render thread/DEBUG] [mixin/]: Mixing MixinClientLevel from architectury.mixins.json into net.minecraft.client.multiplayer.ClientLevel
+[19:32:45] [Render thread/DEBUG] [mixin/]: architectury.mixins.json:MixinClientLevel from mod architectury: Class version 65 required is higher than the class version supported by the current version of Mixin (JAVA_16 supports class version 60)
+[19:32:46] [Render thread/DEBUG] [mixin/]: architectury.mixins.json:MixinClientLevel from mod architectury->@Inject::tickEntities(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V doesn't use it's CallbackInfo
+[19:32:46] [Render thread/DEBUG] [mixin/]: architectury.mixins.json:MixinClientLevel from mod architectury->@Inject::tickEntities(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V has 0 override(s) in child classes
+[19:32:46] [Render thread/DEBUG] [mixin/]: architectury.mixins.json:MixinClientLevel from mod architectury->@Inject::tickEntities(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V won't be passed a CallbackInfo as a result
+[19:32:46] [Render thread/DEBUG] [mixin/]: architectury.mixins.json:MixinClientLevel from mod architectury->@Inject::tickEntitiesPost(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V doesn't use it's CallbackInfo
+[19:32:46] [Render thread/DEBUG] [mixin/]: architectury.mixins.json:MixinClientLevel from mod architectury->@Inject::tickEntitiesPost(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V has 0 override(s) in child classes
+[19:32:46] [Render thread/DEBUG] [mixin/]: architectury.mixins.json:MixinClientLevel from mod architectury->@Inject::tickEntitiesPost(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V won't be passed a CallbackInfo as a result
+[19:32:46] [Render thread/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/V:/GitProjects/ThaumCraft/sources/ThaumCraft-1.21.1-NeoForge/.gradle/repositories/ng_dummy_ng/net/neoforged/neoforge/21.1.230/neoforge-21.1.230.jar%23196!/assets/.mcassetsroot' uses unexpected schema
+[19:32:46] [Render thread/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/V:/GitProjects/ThaumCraft/sources/ThaumCraft-1.21.1-NeoForge/.gradle/repositories/ng_dummy_ng/net/neoforged/neoforge/21.1.230/neoforge-21.1.230.jar%23196!/data/.mcassetsroot' uses unexpected schema
+[19:32:46] [Render thread/INFO] [mojang/YggdrasilAuthenticationService]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[19:32:46] [Render thread/INFO] [minecraft/Minecraft]: Setting user: Dev
+[19:32:46] [Render thread/INFO] [minecraft/Minecraft]: Backend library: LWJGL version 3.3.3+5
+[19:32:46] [Render thread/DEBUG] [ne.ne.fm.ModWorkManager/LOADING]: Using 20 threads for parallel mod-loading
+[19:32:46] [Render thread/DEBUG] [ne.ne.fm.ja.FMLModContainer/LOADING]: Creating FMLModContainer instance for [top.theillusivec4.curios.Curios]
+[19:32:46] [Render thread/DEBUG] [ne.ne.fm.ja.FMLModContainer/LOADING]: Creating FMLModContainer instance for [thaumcraft.Thaumcraft, thaumcraft.client.ThaumcraftClient]
+[19:32:46] [Render thread/DEBUG] [ne.ne.fm.ja.FMLModContainer/LOADING]: Creating FMLModContainer instance for [dev.architectury.neoforge.ArchitecturyNeoForge]
+[19:32:46] [Render thread/DEBUG] [ne.ne.fm.ja.FMLModContainer/LOADING]: Creating FMLModContainer instance for [net.neoforged.neoforge.common.NeoForgeMod, net.neoforged.neoforge.client.ClientNeoForgeMod]
+[19:32:46] [Render thread/DEBUG] [ne.ne.fm.ja.FMLModContainer/LOADING]: Creating FMLModContainer instance for [mezz.jei.neoforge.JustEnoughItems]
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Config file jei-server.toml for jei tracking
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.ne.in.ve.ne.NeoForgeVersion/CORE]: Found NeoForge version 21.1.230
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.ne.in.ve.ne.NeoForgeVersion/CORE]: Found FML version 4.0.42
+[19:32:46] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.230, for MC 1.21.1
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Config file curios-client.toml for curios tracking
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Config file curios-common.toml for curios tracking
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Config file curios-server.toml for curios tracking
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Attempting to inject @EventBusSubscriber classes into the eventbus for curios
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class top.theillusivec4.curios.Curios$ClientProxy for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Config file neoforge-client.toml for neoforge tracking
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Config file neoforge-server.toml for neoforge tracking
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Config file neoforge-common.toml for neoforge tracking
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Ltop/theillusivec4/curios/Curios$ClientProxy; to the mod event bus of mod curios
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.co.pl.Services/]: Loaded mezz.jei.neoforge.platform.PlatformHelper@ad23bca for service interface mezz.jei.common.platform.IPlatformHelper
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.co.co.fi.ConfigSerializer/]: Loading config file: V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\jei\jei-debug.ini
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.co.co.fi.ConfigSchema/]: Localization has not loaded yet, waiting to save the config file until JEI starts.
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.co.co.fi.ConfigSerializer/]: Loading config file: V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\jei\jei-mod-id-format.ini
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.co.co.fi.ConfigSchema/]: Localization has not loaded yet, waiting to save the config file until JEI starts.
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.co.co.fi.ConfigSerializer/]: Loading config file: V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\jei\jei-colors.ini
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.co.co.fi.ConfigSchema/]: Localization has not loaded yet, waiting to save the config file until JEI starts.
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Attempting to inject @EventBusSubscriber classes into the eventbus for architectury
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Attempting to inject @EventBusSubscriber classes into the eventbus for neoforge
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.server.command.ConfigCommand for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/server/command/ConfigCommand; to the game event bus
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.network.NetworkInitialization for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/network/NetworkInitialization; to the mod event bus of mod neoforge
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.network.filters.GenericPacketSplitter for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.co.co.fi.ConfigSerializer/]: Loading config file: V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\jei\jei-client.ini
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.co.co.fi.ConfigSchema/]: Localization has not loaded yet, waiting to save the config file until JEI starts.
+[19:32:46] [modloading-worker-0/INFO] [me.je.li.lo.PluginCaller/]: Sending ConfigManager...
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.li.lo.PluginCallerTimerRunnable/]: Sending ConfigManager: jei:minecraft...
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.li.lo.PluginCallerTimerRunnable/]: Sending ConfigManager: curios:curios...
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.li.lo.PluginCallerTimerRunnable/]: Sending ConfigManager: jei:neoforge_gui...
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.li.lo.PluginCallerTimerRunnable/]: Sending ConfigManager: jei:debug...
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.li.lo.PluginCallerTimerRunnable/]: Sending ConfigManager: jei:gui...
+[19:32:46] [modloading-worker-0/DEBUG] [me.je.li.lo.PluginCallerTimerRunnable/]: Sending ConfigManager: jei:internal...
+[19:32:46] [modloading-worker-0/INFO] [me.je.li.lo.PluginCaller/]: Sending ConfigManager took 3.143 milliseconds
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Attempting to inject @EventBusSubscriber classes into the eventbus for jei
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.AbstractByteBuf/]: -Dio.netty.buffer.checkAccessible: true
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.AbstractByteBuf/]: -Dio.netty.buffer.checkBounds: true
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.ut.ResourceLeakDetectorFactory/]: Loaded default ResourceLeakDetector: io.netty.util.ResourceLeakDetector@685c6e9a
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.ut.in.InternalThreadLocalMap/]: -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.ut.in.InternalThreadLocalMap/]: -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.numHeapArenas: 40
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.numDirectArenas: 40
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.pageSize: 8192
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.maxOrder: 9
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.chunkSize: 4194304
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.smallCacheSize: 256
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.normalCacheSize: 64
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.maxCachedBufferCapacity: 32768
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.cacheTrimInterval: 8192
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.cacheTrimIntervalMillis: 0
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.useCacheForAllThreads: false
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.PooledByteBufAllocator/]: -Dio.netty.allocator.maxCachedByteBuffersPerChunk: 1023
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Config file thaumcraft-common.toml for thaumcraft tracking
+[19:32:46] [modloading-worker-0/INFO] [th.Thaumcraft/]: Thaumcraft NeoForge port bootstrap loaded
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.ByteBufUtil/]: -Dio.netty.allocator.type: pooled
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.ByteBufUtil/]: -Dio.netty.threadLocalDirectBufferSize: 0
+[19:32:46] [modloading-worker-0/DEBUG] [io.ne.bu.ByteBufUtil/]: -Dio.netty.maxThreadLocalCharBufferSize: 16384
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Attempting to inject @EventBusSubscriber classes into the eventbus for thaumcraft
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/network/filters/GenericPacketSplitter; to the mod event bus of mod neoforge
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.network.ConfigurationInitialization for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/network/ConfigurationInitialization; to the mod event bus of mod neoforge
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.common.MonsterRoomHooks for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/common/MonsterRoomHooks; to the game event bus
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.common.DeferredSpawnEggItem$CommonHandler for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/common/DeferredSpawnEggItem$CommonHandler; to the mod event bus of mod neoforge
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.common.DeferredSpawnEggItem$ColorRegisterHandler for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/common/DeferredSpawnEggItem$ColorRegisterHandler; to the mod event bus of mod neoforge
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.client.ParticleBoundsDebugRenderer for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/client/ParticleBoundsDebugRenderer; to the game event bus
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.client.model.data.ModelDataManager for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/client/model/data/ModelDataManager; to the game event bus
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.client.ClientHooks$ClientEvents for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/client/ClientHooks$ClientEvents; to the mod event bus of mod neoforge
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.client.BlockEntityRenderBoundsDebugRenderer for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/client/BlockEntityRenderBoundsDebugRenderer; to the game event bus
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.attachment.AttachmentSync for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/attachment/AttachmentSync; to the game event bus
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/LOADING]: Scanning class net.neoforged.neoforge.attachment.AttachmentInternals for @SubscribeEvent-annotated methods
+[19:32:46] [modloading-worker-0/DEBUG] [ne.ne.fm.ja.AutomaticEventSubscriber/]: Subscribing @EventBusSubscriber class Lnet/neoforged/neoforge/attachment/AttachmentInternals; to the game event bus
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loading configs type CLIENT
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\curios-client.toml
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\curios-client.toml for changes
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.ne.co.NeoForgeConfig/FORGEMOD]: Loaded NeoForge config file neoforge-client.toml
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\neoforge-client.toml
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\neoforge-client.toml for changes
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loading configs type COMMON
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\curios-common.toml
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\curios-common.toml for changes
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.ne.co.NeoForgeConfig/FORGEMOD]: Loaded NeoForge config file neoforge-common.toml
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\neoforge-common.toml
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\neoforge-common.toml for changes
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loaded TOML config file V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\thaumcraft-common.toml
+[19:33:17] [modloading-sync-worker/DEBUG] [ne.ne.fm.co.ConfigTracker/CONFIG]: Watching TOML config file V:\GitProjects\ThaumCraft\sources\ThaumCraft-1.21.1-NeoForge\run\client\config\thaumcraft-common.toml for changes
+[19:33:17] [Render thread/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: []
+[19:33:18] [Render thread/INFO] [minecraft/ReloadableResourceManager]: Reloading ResourceManager: vanilla, mod_resources, mod/curios, mod/thaumcraft, mod/architectury, mod/neoforge, mod/jei
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: Mixing MixinCuriosApi from curios.neoforge.mixins.json into top.theillusivec4.curios.api.CuriosApi
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$registerCurio(Lnet/minecraft/world/item/Item;Ltop/theillusivec4/curios/api/type/capability/ICurioItem;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V does use it's CallbackInfo
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$getSlots(ZLorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$getEntitySlots(Lnet/minecraft/world/entity/EntityType;ZLorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$getItemStackSlots(Lnet/minecraft/world/item/ItemStack;ZLorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$getItemStackSlots(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$getCurio(Lnet/minecraft/world/item/ItemStack;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$getCuriosInventory(Lnet/minecraft/world/entity/LivingEntity;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$isStackValid(Ltop/theillusivec4/curios/api/SlotContext;Lnet/minecraft/world/item/ItemStack;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$getAttributeModifiers(Ltop/theillusivec4/curios/api/SlotContext;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/world/item/ItemStack;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$addSlotModifier(Lcom/google/common/collect/Multimap;Ljava/lang/String;Lnet/minecraft/resources/ResourceLocation;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V does use it's CallbackInfo
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$addSlotModifier(Lnet/minecraft/world/item/ItemStack;Ljava/lang/String;Lnet/minecraft/resources/ResourceLocation;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;Ljava/lang/String;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V does use it's CallbackInfo
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$addModifier(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/Holder;Lnet/minecraft/resources/ResourceLocation;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;Ljava/lang/String;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V does use it's CallbackInfo
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$registerCurioPredicate(Lnet/minecraft/resources/ResourceLocation;Ljava/util/function/Predicate;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V does use it's CallbackInfo
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$getCurioPredicate(Lnet/minecraft/resources/ResourceLocation;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$getCurioPredicates(Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$testCurioPredicates(Ljava/util/Set;Ltop/theillusivec4/curios/api/SlotResult;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$getUuid(Ltop/theillusivec4/curios/api/SlotContext;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfoReturnable;)V does use it's CallbackInfoReturnable
+[19:33:18] [Worker-Main-1/DEBUG] [mixin/]: curios.neoforge.mixins.json:MixinCuriosApi from mod curios->@Inject::curios$broadcastCurioBreakEvent(Ltop/theillusivec4/curios/api/SlotContext;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V does use it's CallbackInfo
+[19:33:18] [Render thread/DEBUG] [ne.ne.fm.DeferredWorkQueue/LOADING]: Dispatching synchronous work for work queue Common setup: 2 jobs
+[19:33:18] [Render thread/DEBUG] [ne.ne.fm.DeferredWorkQueue/LOADING]: Synchronous work queue completed in 9.260 ms
+[19:33:18] [Worker-Main-12/INFO] [minecraft/UnihexProvider]: Found unifont_all_no_pua-15.1.05.hex, loading
+[19:33:18] [Worker-Main-10/INFO] [minecraft/UnihexProvider]: Found unifont_jp_patch-15.1.05.hex, loading
+[19:33:18] [Render thread/DEBUG] [ne.ne.fm.DeferredWorkQueue/LOADING]: Dispatching synchronous work for work queue Sided setup: 1 jobs
+[19:33:18] [Render thread/DEBUG] [ne.ne.fm.DeferredWorkQueue/LOADING]: Synchronous work queue completed in 50.55 ms
+[19:33:18] [Worker-Main-15/WARN] [minecraft/SpriteLoader]: Texture thaumcraft:item/focus_pech_depth with size 8x8 limits mip level from 4 to 3
+[19:33:18] [Worker-Main-15/WARN] [minecraft/SpriteLoader]: Texture thaumcraft:item/focus_primal_depth with size 6x6 limits mip level from 3 to 1
+[19:33:19] [Worker-Main-16/WARN] [minecraft/ModelManager]: Missing textures in model thaumcraft:arcane_alembic#inventory:
+    minecraft:textures/atlas/blocks.png:thaumcraft:models/alembic
+[19:33:19] [Render thread/WARN] [minecraft/SoundEngine]: Missing sound for event: minecraft:item.goat_horn.play
+[19:33:19] [Render thread/WARN] [minecraft/SoundEngine]: Missing sound for event: minecraft:entity.goat.screaming.horn_break
+[19:33:19] [Render thread/INFO] [mojang/Library]: OpenAL initialized on device OpenAL Soft on �������� (fifine Microphone)
+[19:33:19] [Render thread/INFO] [minecraft/SoundEngine]: Sound engine started
+[19:33:19] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 1024x1024x4 minecraft:textures/atlas/blocks.png-atlas
+[19:33:19] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 256x256x4 minecraft:textures/atlas/signs.png-atlas
+[19:33:19] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
+[19:33:19] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
+[19:33:19] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 1024x1024x4 minecraft:textures/atlas/armor_trims.png-atlas
+[19:33:19] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
+[19:33:19] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 128x64x4 minecraft:textures/atlas/decorated_pot.png-atlas
+[19:33:19] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
+[19:33:19] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
+[19:33:20] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x256x0 minecraft:textures/atlas/particles.png-atlas
+[19:33:20] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
+[19:33:20] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 256x128x0 minecraft:textures/atlas/mob_effects.png-atlas
+[19:33:20] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 64x64x0 minecraft:textures/atlas/map_decorations.png-atlas
+[19:33:20] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 1024x512x0 minecraft:textures/atlas/gui.png-atlas
+[19:33:20] [Render thread/WARN] [minecraft/ShaderInstance]: Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.
+[19:33:20] [Render thread/INFO] [ne.ne.ne.cl.en.an.js.AnimationLoader/]: Loaded 0 entity animations
+[19:33:20] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 256x256x0 jei:textures/atlas/gui.png-atlas

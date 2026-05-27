@@ -1,0 +1,7 @@
+{
+  "item": "minecraft:glowstone_dust",
+  "aspects": {
+    "sensus": 1,
+    "lux": 2
+  }
+}

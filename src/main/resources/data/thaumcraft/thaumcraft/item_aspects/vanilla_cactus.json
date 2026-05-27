@@ -1,0 +1,8 @@
+{
+  "item": "minecraft:cactus",
+  "aspects": {
+    "herba": 3,
+    "aqua": 1,
+    "perditio": 1
+  }
+}

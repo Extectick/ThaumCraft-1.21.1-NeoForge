@@ -1,0 +1,7 @@
+{
+  "item": "minecraft:glowstone",
+  "aspects": {
+    "sensus": 3,
+    "lux": 10
+  }
+}

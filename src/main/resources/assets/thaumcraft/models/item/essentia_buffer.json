@@ -1,4 +1,39 @@
 {
-  "parent": "thaumcraft:block/essentia_buffer"
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/pipe_buffer",
+    "pipe": "thaumcraft:block/pipe_buffer",
+    "core": "thaumcraft:block/pipe_buffer"
+  },
+  "elements": [
+    {
+      "from": [4, 4, 4],
+      "to": [12, 12, 12],
+      "faces": {
+        "down": { "texture": "#core" },
+        "up": { "texture": "#core" },
+        "north": { "texture": "#core" },
+        "south": { "texture": "#core" },
+        "west": { "texture": "#core" },
+        "east": { "texture": "#core" }
+      }
+    },
+    {
+      "from": [7, 0, 7],
+      "to": [9, 16, 9],
+      "faces": {
+        "down": { "texture": "#pipe" },
+        "up": { "texture": "#pipe" },
+        "north": { "texture": "#pipe" },
+        "south": { "texture": "#pipe" },
+        "west": { "texture": "#pipe" },
+        "east": { "texture": "#pipe" }
+      }
+    }
+  ],
+  "display": {
+    "gui": { "rotation": [30, 225, 0], "translation": [0, 0, 0], "scale": [1.0, 1.0, 1.0] },
+    "ground": { "rotation": [0, 0, 0], "translation": [0, 3, 0], "scale": [0.5, 0.5, 0.5] },
+    "fixed": { "rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [1.0, 1.0, 1.0] }
+  }
 }
-

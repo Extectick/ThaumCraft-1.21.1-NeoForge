@@ -18,5 +18,13 @@ public final class TCItemRenderers {
                 return this.renderer;
             }
         }, TCItems.WAND_CASTING.get());
+        event.registerItem(new IClientItemExtensions() {
+            private final ArcaneAlembicItemRenderer renderer = ArcaneAlembicItemRenderer.create();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return this.renderer;
+            }
+        }, TCItems.ARCANE_ALEMBIC.get());
     }
 }

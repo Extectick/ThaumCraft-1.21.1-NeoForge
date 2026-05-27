@@ -13,8 +13,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.blocks.AlchemicalFurnaceBlock;
+import thaumcraft.common.blocks.ArcaneAlembicBlock;
 import thaumcraft.common.blocks.ArcanePedestalBlock;
 import thaumcraft.common.blocks.ArcaneWorktableBlock;
+import thaumcraft.common.blocks.BrainInAJarBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock.TubeMode;
 import thaumcraft.common.blocks.InfusionPillarBlock;
@@ -73,7 +76,9 @@ public final class TCBlocks {
     public static final DeferredBlock<SimpleTableBlock> DECONSTRUCTION_TABLE = table("deconstruction_table");
     public static final DeferredBlock<ArcaneWorktableBlock> ARCANE_WORKTABLE = REGISTRY.register("arcane_worktable",
             () -> new ArcaneWorktableBlock(tableProperties()));
-    public static final DeferredBlock<Block> ALCHEMICAL_FURNACE = stoneDevice("alchemical_furnace");
+    public static final DeferredBlock<AlchemicalFurnaceBlock> ALCHEMICAL_FURNACE = REGISTRY.register("alchemical_furnace",
+            () -> new AlchemicalFurnaceBlock(stoneDeviceProperties()
+                    .lightLevel(state -> state.getValue(AlchemicalFurnaceBlock.LIT) ? 12 : 0)));
     public static final DeferredBlock<ArcanePedestalBlock> ARCANE_PEDESTAL = REGISTRY.register("arcane_pedestal",
             () -> new ArcanePedestalBlock(stoneDeviceProperties()));
     public static final DeferredBlock<Block> WAND_RECHARGE_PEDESTAL = stoneDevice("wand_recharge_pedestal");
@@ -89,7 +94,8 @@ public final class TCBlocks {
     public static final DeferredBlock<Block> FOCAL_MANIPULATOR = stoneDevice("focal_manipulator");
     public static final DeferredBlock<Block> FLUX_SCRUBBER = stoneDevice("flux_scrubber");
     public static final DeferredBlock<Block> CRUCIBLE = metalDevice("crucible");
-    public static final DeferredBlock<Block> ARCANE_ALEMBIC = metalDevice("arcane_alembic");
+    public static final DeferredBlock<ArcaneAlembicBlock> ARCANE_ALEMBIC = REGISTRY.register("arcane_alembic",
+            () -> new ArcaneAlembicBlock(metalDeviceProperties()));
     public static final DeferredBlock<Block> VIS_CHARGE_RELAY = metalDevice("vis_charge_relay");
     public static final DeferredBlock<Block> ADVANCED_ALCHEMICAL_CONSTRUCT = metalDevice("advanced_alchemical_construct");
     public static final DeferredBlock<Block> ITEM_GRATE = metalDevice("item_grate");
@@ -114,9 +120,11 @@ public final class TCBlocks {
     public static final DeferredBlock<SimpleTubeBlock> ESSENTIA_CRYSTALLIZER = tube("essentia_crystallizer");
     public static final DeferredBlock<WardedJarBlock> WARDED_JAR = REGISTRY.register("warded_jar",
             () -> new WardedJarBlock(jarProperties()));
-    public static final DeferredBlock<SimpleJarBlock> BRAIN_IN_A_JAR = jar("brain_in_a_jar");
+    public static final DeferredBlock<BrainInAJarBlock> BRAIN_IN_A_JAR = REGISTRY.register("brain_in_a_jar",
+            () -> new BrainInAJarBlock(jarProperties()));
     public static final DeferredBlock<SimpleJarBlock> NODE_IN_A_JAR = jar("node_in_a_jar");
-    public static final DeferredBlock<SimpleJarBlock> VOID_JAR = jar("void_jar");
+    public static final DeferredBlock<WardedJarBlock> VOID_JAR = REGISTRY.register("void_jar",
+            () -> new WardedJarBlock(jarProperties()));
     public static final DeferredBlock<SimpleMirrorBlock> MAGIC_MIRROR = mirror("magic_mirror");
     public static final DeferredBlock<SimpleMirrorBlock> ESSENTIA_MIRROR = mirror("essentia_mirror");
     public static final DeferredBlock<StairBlock> ARCANE_STONE_STAIRS = stairs("arcane_stone_stairs", ARCANE_STONE);
@@ -297,10 +305,14 @@ public final class TCBlocks {
     }
 
     private static DeferredBlock<Block> metalDevice(String name) {
-        return REGISTRY.registerSimpleBlock(name, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+        return REGISTRY.registerSimpleBlock(name, metalDeviceProperties());
+    }
+
+    private static BlockBehaviour.Properties metalDeviceProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
                 .strength(3.0F, 17.0F)
                 .requiresCorrectToolForDrops()
-                .noOcclusion());
+                .noOcclusion();
     }
 
     private static DeferredBlock<SimpleTubeBlock> tube(String name) {
@@ -312,8 +324,8 @@ public final class TCBlocks {
     }
 
     private static BlockBehaviour.Properties tubeProperties() {
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
-                .strength(0.6F, 1.0F)
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(0.5F, 5.0F)
                 .noOcclusion();
     }
 

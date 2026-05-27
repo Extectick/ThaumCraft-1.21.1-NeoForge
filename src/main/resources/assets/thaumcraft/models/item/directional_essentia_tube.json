@@ -1,4 +1,52 @@
 {
-  "parent": "thaumcraft:block/directional_essentia_tube"
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/pipe_oneway",
+    "pipe": "thaumcraft:block/pipe_1",
+    "core": "thaumcraft:block/pipe_2",
+    "oneway": "thaumcraft:block/pipe_oneway"
+  },
+  "elements": [
+    {
+      "from": [7, 0, 7],
+      "to": [9, 16, 9],
+      "faces": {
+        "down": { "texture": "#pipe" },
+        "up": { "texture": "#pipe" },
+        "north": { "texture": "#pipe" },
+        "south": { "texture": "#pipe" },
+        "west": { "texture": "#pipe" },
+        "east": { "texture": "#pipe" }
+      }
+    },
+    {
+      "from": [6.5, 6.5, 6.5],
+      "to": [9.5, 9.5, 9.5],
+      "faces": {
+        "down": { "texture": "#core" },
+        "up": { "texture": "#core" },
+        "north": { "texture": "#core" },
+        "south": { "texture": "#core" },
+        "west": { "texture": "#core" },
+        "east": { "texture": "#core" }
+      }
+    },
+    {
+      "from": [6.98, 2, 6.98],
+      "to": [9.02, 14, 9.02],
+      "faces": {
+        "down": { "texture": "#oneway" },
+        "up": { "texture": "#oneway" },
+        "north": { "texture": "#oneway" },
+        "south": { "texture": "#oneway" },
+        "west": { "texture": "#oneway" },
+        "east": { "texture": "#oneway" }
+      }
+    }
+  ],
+  "display": {
+    "gui": { "rotation": [30, 225, 0], "translation": [0, 0, 0], "scale": [1.0, 1.0, 1.0] },
+    "ground": { "rotation": [0, 0, 0], "translation": [0, 3, 0], "scale": [0.55, 0.55, 0.55] },
+    "fixed": { "rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [1.0, 1.0, 1.0] }
+  }
 }
-

@@ -1,6 +1,44 @@
 {
-  "variants": {
-    "": { "model": "thaumcraft:block/directional_essentia_tube" }
-  }
+  "multipart": [
+    {
+      "when": {
+        "AND": [
+          { "OR": [{ "north": "true" }, { "south": "true" }, { "west": "true" }, { "east": "true" }, { "up": "true" }, { "down": "true" }] },
+          { "north_extended": "false" },
+          { "south_extended": "false" },
+          { "west_extended": "false" },
+          { "east_extended": "false" },
+          { "up_extended": "false" },
+          { "down_extended": "false" }
+        ]
+      },
+      "apply": { "model": "thaumcraft:block/tube_core_conduit" }
+    },
+    {
+      "when": {
+        "OR": [
+          { "AND": [{ "north": "false" }, { "south": "false" }, { "west": "false" }, { "east": "false" }, { "up": "false" }, { "down": "false" }] },
+          { "north_extended": "true" },
+          { "south_extended": "true" },
+          { "west_extended": "true" },
+          { "east_extended": "true" },
+          { "up_extended": "true" },
+          { "down_extended": "true" }
+        ]
+      },
+      "apply": { "model": "thaumcraft:block/directional_tube_core" }
+    },
+    { "when": { "north": "true", "north_extended": "false" }, "apply": { "model": "thaumcraft:block/directional_tube_arm" } },
+    { "when": { "north_extended": "true" }, "apply": { "model": "thaumcraft:block/directional_tube_arm_extended" } },
+    { "when": { "south": "true", "south_extended": "false" }, "apply": { "model": "thaumcraft:block/directional_tube_arm", "y": 180 } },
+    { "when": { "south_extended": "true" }, "apply": { "model": "thaumcraft:block/directional_tube_arm_extended", "y": 180 } },
+    { "when": { "west": "true", "west_extended": "false" }, "apply": { "model": "thaumcraft:block/directional_tube_arm", "y": 270 } },
+    { "when": { "west_extended": "true" }, "apply": { "model": "thaumcraft:block/directional_tube_arm_extended", "y": 270 } },
+    { "when": { "east": "true", "east_extended": "false" }, "apply": { "model": "thaumcraft:block/directional_tube_arm", "y": 90 } },
+    { "when": { "east_extended": "true" }, "apply": { "model": "thaumcraft:block/directional_tube_arm_extended", "y": 90 } },
+    { "when": { "up": "true", "up_extended": "false" }, "apply": { "model": "thaumcraft:block/directional_tube_arm", "x": 270 } },
+    { "when": { "up_extended": "true" }, "apply": { "model": "thaumcraft:block/directional_tube_arm_extended", "x": 270 } },
+    { "when": { "down": "true", "down_extended": "false" }, "apply": { "model": "thaumcraft:block/directional_tube_arm", "x": 90 } },
+    { "when": { "down_extended": "true" }, "apply": { "model": "thaumcraft:block/directional_tube_arm_extended", "x": 90 } }
+  ]
 }
-

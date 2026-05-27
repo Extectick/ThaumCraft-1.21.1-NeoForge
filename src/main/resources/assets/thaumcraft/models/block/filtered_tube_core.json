@@ -1,0 +1,7 @@
+{
+  "parent": "thaumcraft:block/tube_core",
+  "textures": {
+    "particle": "thaumcraft:block/pipe_filter",
+    "core": "thaumcraft:block/pipe_filter_core"
+  }
+}

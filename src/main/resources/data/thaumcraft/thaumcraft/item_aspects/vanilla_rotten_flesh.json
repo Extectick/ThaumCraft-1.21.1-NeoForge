@@ -1,0 +1,7 @@
+{
+  "item": "minecraft:rotten_flesh",
+  "aspects": {
+    "humanus": 1,
+    "corpus": 2
+  }
+}

@@ -5,7 +5,8 @@
     "particle": "thaumcraft:block/jar_side",
     "top": "thaumcraft:block/jar_top",
     "side": "thaumcraft:block/jar_side",
-    "bottom": "thaumcraft:block/jar_bottom"
+    "bottom": "thaumcraft:block/jar_bottom",
+    "liquid": "thaumcraft:block/animatedglow"
   },
   "elements": [
     { "from": [3, 0, 3], "to": [13, 12, 13], "faces": { "down": { "texture": "#bottom" }, "up": { "texture": "#top" }, "north": { "texture": "#side" }, "south": { "texture": "#side" }, "west": { "texture": "#side" }, "east": { "texture": "#side" } } },

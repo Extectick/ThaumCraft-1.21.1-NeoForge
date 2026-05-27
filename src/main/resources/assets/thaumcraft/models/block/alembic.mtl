@@ -1,0 +1,23 @@
+newmtl wire_085028177
+Ka 1.0 1.0 1.0
+Kd 1.0 1.0 1.0
+Ks 0.0 0.0 0.0
+map_Kd thaumcraft:models/alembic
+
+newmtl wire_177148027
+Ka 1.0 1.0 1.0
+Kd 1.0 1.0 1.0
+Ks 0.0 0.0 0.0
+map_Kd thaumcraft:models/alembic
+
+newmtl wire_228214153
+Ka 1.0 1.0 1.0
+Kd 1.0 1.0 1.0
+Ks 0.0 0.0 0.0
+map_Kd thaumcraft:models/alembic
+
+newmtl wire_153228153
+Ka 1.0 1.0 1.0
+Kd 1.0 1.0 1.0
+Ks 0.0 0.0 0.0
+map_Kd thaumcraft:models/alembic

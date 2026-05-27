@@ -24,13 +24,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
 import thaumcraft.common.blocks.SimpleTableBlock;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.PrimalVisStorage;
 import thaumcraft.api.wands.ItemFocusBasic;
+import thaumcraft.api.wands.IWandable;
 import thaumcraft.common.items.curios.FocusPouchCurioItem;
 import thaumcraft.common.lib.crafting.InfusionAltarBuilder;
 import thaumcraft.common.lib.crafting.InfusionCrafting;
@@ -266,13 +269,25 @@ public class WandCastingItem extends Item {
         BlockPos pos = context.getClickedPos();
         ItemStack wand = context.getItemInHand();
         BlockState state = level.getBlockState(pos);
+        Player player = context.getPlayer();
 
-        InteractionResult infusionCraftingResult = InfusionCrafting.tryStart(level, pos, context.getPlayer());
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof IWandable wandable && player != null) {
+            BlockHitResult hitResult = new BlockHitResult(context.getClickLocation(), context.getClickedFace(), pos,
+                    context.isInside());
+            InteractionResult wandableResult = wandable.onWandRightClick(level, pos, player, wand,
+                    hitResult);
+            if (wandableResult != InteractionResult.PASS) {
+                return wandableResult;
+            }
+        }
+
+        InteractionResult infusionCraftingResult = InfusionCrafting.tryStart(level, pos, player);
         if (infusionCraftingResult != InteractionResult.PASS) {
             return infusionCraftingResult;
         }
 
-        InteractionResult infusionAltarResult = InfusionAltarBuilder.tryCreate(level, pos, wand, context.getPlayer());
+        InteractionResult infusionAltarResult = InfusionAltarBuilder.tryCreate(level, pos, wand, player);
         if (infusionAltarResult != InteractionResult.PASS) {
             return infusionAltarResult;
         }
@@ -283,7 +298,6 @@ public class WandCastingItem extends Item {
                         .setValue(SimpleTableBlock.FACING, state.getValue(SimpleTableBlock.FACING));
                 level.setBlock(pos, worktableState, 3);
 
-                Player player = context.getPlayer();
                 if (player == null || !player.getAbilities().instabuild) {
                     if (level.getBlockEntity(pos) instanceof ArcaneWorktableBlockEntity worktable) {
                         worktable.setWand(wand.copyWithCount(1));

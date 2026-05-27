@@ -1,0 +1,7 @@
+{
+  "item": "minecraft:terracotta",
+  "aspects": {
+    "terra": 4,
+    "ignis": 1
+  }
+}

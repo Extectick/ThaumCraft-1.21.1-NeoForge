@@ -1,4 +1,51 @@
 {
-  "parent": "thaumcraft:block/filtered_essentia_tube"
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/pipe_filter",
+    "pipe": "thaumcraft:block/pipe_filter",
+    "core": "thaumcraft:block/pipe_filter_core"
+  },
+  "elements": [
+    {
+      "from": [7, 0, 7],
+      "to": [9, 16, 9],
+      "faces": {
+        "down": { "texture": "#pipe" },
+        "up": { "texture": "#pipe" },
+        "north": { "texture": "#pipe" },
+        "south": { "texture": "#pipe" },
+        "west": { "texture": "#pipe" },
+        "east": { "texture": "#pipe" }
+      }
+    },
+    {
+      "from": [5.5, 5.5, 5.5],
+      "to": [10.5, 10.5, 10.5],
+      "faces": {
+        "down": { "texture": "#pipe" },
+        "up": { "texture": "#pipe" },
+        "north": { "texture": "#pipe" },
+        "south": { "texture": "#pipe" },
+        "west": { "texture": "#pipe" },
+        "east": { "texture": "#pipe" }
+      }
+    },
+    {
+      "from": [5.5, 5.5, 5.5],
+      "to": [10.5, 10.5, 10.5],
+      "faces": {
+        "down": { "texture": "#core" },
+        "up": { "texture": "#core" },
+        "north": { "texture": "#core" },
+        "south": { "texture": "#core" },
+        "west": { "texture": "#core" },
+        "east": { "texture": "#core" }
+      }
+    }
+  ],
+  "display": {
+    "gui": { "rotation": [30, 225, 0], "translation": [0, 0, 0], "scale": [1.15, 1.15, 1.15] },
+    "ground": { "rotation": [0, 0, 0], "translation": [0, 3, 0], "scale": [0.55, 0.55, 0.55] },
+    "fixed": { "rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [1.0, 1.0, 1.0] }
+  }
 }
-

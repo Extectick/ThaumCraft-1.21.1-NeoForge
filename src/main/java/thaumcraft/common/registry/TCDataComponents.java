@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.EssentiaStorage;
 import thaumcraft.api.aspects.PrimalVisStorage;
 import thaumcraft.common.items.wands.FocusPouchContents;
@@ -25,6 +26,11 @@ public final class TCDataComponents {
             () -> DataComponentType.<EssentiaStorage>builder()
                     .persistent(EssentiaStorage.CODEC)
                     .networkSynchronized(EssentiaStorage.STREAM_CODEC)
+                    .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Aspect>> JAR_FILTER = REGISTRY.register("jar_filter",
+            () -> DataComponentType.<Aspect>builder()
+                    .persistent(Aspect.CODEC)
+                    .networkSynchronized(Aspect.STREAM_CODEC)
                     .build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemStack>> WAND_FOCUS = REGISTRY.register("wand_focus",
             () -> DataComponentType.<ItemStack>builder()

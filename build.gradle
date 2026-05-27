@@ -52,7 +52,7 @@ runs {
         // "SCAN": For mods scan.
         // "REGISTRIES": For firing of registry events.
         // "REGISTRYDUMP": For getting the contents of all registries.
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.markers', ''
 
         // Recommended logging level for the console
         // You can set various levels here.
@@ -66,7 +66,7 @@ runs {
 
     client {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        systemProperty 'neoforge.enabledGameTestNamespaces', ''
     }
 
     server {

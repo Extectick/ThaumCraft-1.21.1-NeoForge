@@ -1,0 +1,8 @@
+{
+  "item": "thaumcraft:infused_fire_ore",
+  "aspects": {
+    "terra": 1,
+    "ignis": 2,
+    "vitreus": 2
+  }
+}

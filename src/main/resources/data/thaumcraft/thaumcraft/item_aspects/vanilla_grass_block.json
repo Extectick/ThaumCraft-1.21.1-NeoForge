@@ -1,0 +1,7 @@
+{
+  "item": "minecraft:grass_block",
+  "aspects": {
+    "terra": 1,
+    "herba": 1
+  }
+}

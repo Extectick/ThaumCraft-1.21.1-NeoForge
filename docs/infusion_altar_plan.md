@@ -13,6 +13,9 @@
 - [x] Add Infusion recipe type and serializer.
 - [x] Add initial crafting start and matrix recipe state.
 - [x] Add first crafting progress/completion logic.
+- [x] Add shared `AspectList` foundation for old-style essentia costs.
+- [x] Replace infusion recipe essentia placeholder with `AspectList`.
+- [x] Add first old-style essentia drain pass from nearby containers.
 - [ ] Add instability and symmetry checks.
 - [ ] Add Thaumonomicon/JEI display for infusion recipes.
 
@@ -52,11 +55,16 @@
   - unordered surrounding `components`
   - `result`
   - `instability`
-  - placeholder primal `essentia` storage for the next drain step.
+  - optional old-style multi-aspect `essentia` map using aspect tags.
 - A wand click on an active, valid, non-crafting matrix now starts the first matching infusion recipe using the central pedestal and discovered surrounding pedestals.
 - During crafting the matrix now consumes matched component items from surrounding pedestals and replaces the central catalyst with the recipe result when no ingredients remain.
 - Client-side `infuserstart` / `infuser` sounds are played from the matrix while crafting, mirroring the old client effect loop.
-- Essentia costs are currently shaped in the recipe data but temporarily skipped during the cycle until the old jar/tube drain behavior is ported.
+- The new `thaumcraft.api.aspects.AspectList` foundation exists for multi-aspect recipe costs and item aspect data. It has old-style operations, JSON codec, network codec, and NBT helpers.
+- `ObjectAspectRegistry` now provides old-style `getObjectTags(ItemStack)` and `getBonusTags(ItemStack, AspectList)` behavior. Item aspects are loaded from `data/*/thaumcraft/item_aspects/*.json`, with exact item ids and modern item tags supported, missing entries can be generated from crafting/arcane/infusion recipes, and dynamic bonuses are added for tools, armor, bows, enchantments, potion effects, and essentia-storing items.
+- Holding Shift over an item in inventory now renders assigned aspects as icons with amounts, using the bonus-aware item aspect registry.
+- `InfusionRecipe` and `RunicMatrixBlockEntity` now use `AspectList` for remaining recipe essentia instead of the temporary `PrimalVisStorage` placeholder.
+- During crafting the matrix now drains one required essentia at a time from nearby `IEssentiaContainer` block entities in radius 12 before it consumes pedestal items. This is the first drain pass and does not yet implement old tube suction/pathing.
+- Warded and void jars now participate in old-style essentia transport: jars pull from the tube above them, void jars accept overflow, labels lock jars to an aspect, filtered jars render the old label/aspect marker, and filled/labeled jar item stacks preserve their contents/filter when broken and placed again.
 - Initial test infusion recipes exist for `thaumium_wand_cap_infusion` and `void_wand_cap_infusion` so the start path can be tested in-game before completion logic is added.
 
 ## Old Thaumcraft Behavior Notes
@@ -68,4 +76,4 @@
 - Breaking old pillar metadata dropped source decorative blocks, not a pillar item.
 
 ## Next Step
-Add old-style essentia drain, component beam particles, and instability events.
+Add explicit essentia costs to migrated infusion recipes once jar/tube filling is stable, then port source-to-matrix FX and the remaining instability/symmetry behavior. Continue expanding item aspect data from old `ConfigAspects` as new ported items/blocks appear. The detailed aspect/essentia port plan is tracked in `docs/essentia_aspect_port_plan.md`.

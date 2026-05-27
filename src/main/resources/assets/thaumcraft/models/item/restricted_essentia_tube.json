@@ -1,4 +1,8 @@
 {
-  "parent": "thaumcraft:block/restricted_essentia_tube"
+  "parent": "thaumcraft:item/essentia_tube",
+  "textures": {
+    "particle": "thaumcraft:block/pipe_restrict",
+    "pipe": "thaumcraft:block/pipe_restrict",
+    "core": "thaumcraft:block/pipe_restrict"
+  }
 }
-

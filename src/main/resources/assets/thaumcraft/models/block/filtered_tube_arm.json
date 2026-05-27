@@ -1,0 +1,6 @@
+{
+  "parent": "thaumcraft:block/template_tube_arm",
+  "textures": {
+    "pipe": "thaumcraft:block/pipe_filter"
+  }
+}

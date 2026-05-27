@@ -15,6 +15,10 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.lib.crafting.ObjectAspectRegistry;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import thaumcraft.common.research.ResearchEntry;
 import thaumcraft.common.research.ResearchManager;
@@ -36,6 +40,9 @@ public final class TCCommands {
                 .requires(source -> source.hasPermission(2))
                 .then(Commands.literal("help")
                         .executes(TCCommands::help))
+                .then(Commands.literal("aspects")
+                        .then(Commands.literal("hand")
+                                .executes(TCCommands::showHeldItemAspects)))
                 .then(Commands.literal("research")
                         .then(Commands.literal("list")
                                 .executes(TCCommands::listResearch))
@@ -54,7 +61,39 @@ public final class TCCommands {
         source.sendSuccess(() -> Component.literal("§3You can also use /thaum or /tc instead of /thaumcraft."), false);
         source.sendSuccess(() -> Component.literal("§3Use this to give research to a player."), false);
         source.sendSuccess(() -> Component.literal("  /thaumcraft research <list|player> <all|reset|<research>>"), false);
+        source.sendSuccess(() -> Component.literal("  /thaumcraft aspects hand"), false);
         return 1;
+    }
+
+    private static int showHeldItemAspects(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        ItemStack stack = player.getMainHandItem();
+        if (stack.isEmpty()) {
+            context.getSource().sendFailure(Component.literal("§cHold an item first."));
+            return 0;
+        }
+
+        AspectList aspects = ObjectAspectRegistry.getObjectTagsWithBonus(stack);
+        if (aspects.isEmpty()) {
+            context.getSource().sendSuccess(() -> Component.literal("§7No aspects for " + stack.getHoverName().getString()
+                    + ". Loaded entries: " + ObjectAspectRegistry.itemEntryCount() + " items, "
+                    + ObjectAspectRegistry.tagEntryCount() + " tags, "
+                    + ObjectAspectRegistry.generatedEntryCount() + " generated."), false);
+            return 0;
+        }
+
+        StringBuilder message = new StringBuilder("§5");
+        message.append(stack.getHoverName().getString()).append(": ");
+        boolean first = true;
+        for (Aspect aspect : aspects.getAspectsSorted()) {
+            if (!first) {
+                message.append(", ");
+            }
+            first = false;
+            message.append(aspect.getTag()).append(" ").append(aspects.getAmount(aspect));
+        }
+        context.getSource().sendSuccess(() -> Component.literal(message.toString()), false);
+        return aspects.visSize();
     }
 
     private static int listResearch(CommandContext<CommandSourceStack> context) {

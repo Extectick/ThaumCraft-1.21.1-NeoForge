@@ -1,0 +1,6 @@
+{
+  "item": "minecraft:torch",
+  "aspects": {
+    "lux": 1
+  }
+}

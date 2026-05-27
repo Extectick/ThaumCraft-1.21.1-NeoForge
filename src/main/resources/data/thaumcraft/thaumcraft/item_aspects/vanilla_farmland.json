@@ -1,0 +1,7 @@
+{
+  "item": "minecraft:farmland",
+  "aspects": {
+    "terra": 1,
+    "meto": 2
+  }
+}

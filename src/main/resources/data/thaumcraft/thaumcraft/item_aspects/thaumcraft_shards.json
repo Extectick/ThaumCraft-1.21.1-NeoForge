@@ -1,0 +1,11 @@
+{
+  "item": "thaumcraft:balanced_shard",
+  "aspects": {
+    "aer": 1,
+    "terra": 1,
+    "ignis": 1,
+    "aqua": 1,
+    "ordo": 1,
+    "perditio": 1
+  }
+}

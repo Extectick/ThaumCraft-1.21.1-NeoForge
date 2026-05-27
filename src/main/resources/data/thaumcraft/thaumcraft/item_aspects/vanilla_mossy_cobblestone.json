@@ -1,0 +1,8 @@
+{
+  "item": "minecraft:mossy_cobblestone",
+  "aspects": {
+    "terra": 1,
+    "herba": 1,
+    "praecantatio": 1
+  }
+}

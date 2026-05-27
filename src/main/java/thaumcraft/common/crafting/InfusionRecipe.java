@@ -18,7 +18,7 @@ import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import thaumcraft.api.aspects.PrimalVisStorage;
+import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.registry.TCRecipeSerializers;
 import thaumcraft.common.registry.TCRecipeTypes;
 
@@ -29,17 +29,17 @@ public class InfusionRecipe implements Recipe<InfusionRecipe.Input> {
     private final NonNullList<Ingredient> components;
     private final ItemStack result;
     private final int instability;
-    private final PrimalVisStorage essentia;
+    private final AspectList essentia;
 
     public InfusionRecipe(String group, String research, Ingredient catalyst, List<Ingredient> components,
-            ItemStack result, int instability, PrimalVisStorage essentia) {
+            ItemStack result, int instability, AspectList essentia) {
         this.group = group;
         this.research = research;
         this.catalyst = catalyst;
         this.components = NonNullList.copyOf(components);
         this.result = result;
         this.instability = Math.max(0, instability);
-        this.essentia = essentia;
+        this.essentia = essentia.copy();
     }
 
     @Override
@@ -127,8 +127,8 @@ public class InfusionRecipe implements Recipe<InfusionRecipe.Input> {
         return this.instability;
     }
 
-    public PrimalVisStorage getEssentia() {
-        return this.essentia;
+    public AspectList getEssentia() {
+        return this.essentia.copy();
     }
 
     public record Input(ItemStack catalyst, List<ItemStack> components) implements RecipeInput {
@@ -157,7 +157,7 @@ public class InfusionRecipe implements Recipe<InfusionRecipe.Input> {
                 Ingredient.CODEC_NONEMPTY.listOf().fieldOf("components").forGetter(InfusionRecipe::getComponents),
                 ItemStack.STRICT_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
                 Codec.INT.optionalFieldOf("instability", 0).forGetter(InfusionRecipe::getInstability),
-                PrimalVisStorage.CODEC.optionalFieldOf("essentia", PrimalVisStorage.EMPTY)
+                AspectList.CODEC.optionalFieldOf("essentia", AspectList.EMPTY)
                         .forGetter(InfusionRecipe::getEssentia))
                 .apply(instance, InfusionRecipe::new));
 
@@ -185,7 +185,7 @@ public class InfusionRecipe implements Recipe<InfusionRecipe.Input> {
             }
             ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
             int instability = buffer.readVarInt();
-            PrimalVisStorage essentia = PrimalVisStorage.STREAM_CODEC.decode(buffer);
+            AspectList essentia = AspectList.STREAM_CODEC.decode(buffer);
             return new InfusionRecipe(group, research, catalyst, components, result, instability, essentia);
         }
 
@@ -199,7 +199,7 @@ public class InfusionRecipe implements Recipe<InfusionRecipe.Input> {
             }
             ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
             buffer.writeVarInt(recipe.instability);
-            PrimalVisStorage.STREAM_CODEC.encode(buffer, recipe.essentia);
+            AspectList.STREAM_CODEC.encode(buffer, recipe.essentia);
         }
     }
 }

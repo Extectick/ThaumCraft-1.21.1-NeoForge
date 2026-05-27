@@ -1,0 +1,7 @@
+{
+  "tag": "minecraft:saplings",
+  "aspects": {
+    "arbor": 1,
+    "herba": 2
+  }
+}

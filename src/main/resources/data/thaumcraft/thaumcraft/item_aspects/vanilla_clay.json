@@ -1,0 +1,7 @@
+{
+  "item": "minecraft:clay",
+  "aspects": {
+    "terra": 3,
+    "aqua": 3
+  }
+}

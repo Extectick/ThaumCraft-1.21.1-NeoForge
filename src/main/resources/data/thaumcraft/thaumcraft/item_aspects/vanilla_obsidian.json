@@ -1,0 +1,8 @@
+{
+  "item": "minecraft:obsidian",
+  "aspects": {
+    "terra": 2,
+    "ignis": 2,
+    "tenebrae": 1
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "thaumcraft:block/template_tube_arm_extended",
+  "textures": {
+    "pipe": "thaumcraft:block/pipe_1"
+  }
+}

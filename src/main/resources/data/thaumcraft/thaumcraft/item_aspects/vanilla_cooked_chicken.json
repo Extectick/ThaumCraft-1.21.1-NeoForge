@@ -1,0 +1,8 @@
+{
+  "item": "minecraft:cooked_chicken",
+  "aspects": {
+    "fabrico": 1,
+    "corpus": 4,
+    "fames": 3
+  }
+}

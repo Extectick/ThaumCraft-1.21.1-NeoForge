@@ -1,0 +1,8 @@
+{
+  "item": "minecraft:chicken",
+  "aspects": {
+    "corpus": 3,
+    "victus": 2,
+    "bestia": 1
+  }
+}

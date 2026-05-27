@@ -5,8 +5,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.blockentities.AlchemicalFurnaceBlockEntity;
+import thaumcraft.common.blockentities.ArcaneAlembicBlockEntity;
 import thaumcraft.common.blockentities.ArcanePedestalBlockEntity;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
+import thaumcraft.common.blockentities.BrainInAJarBlockEntity;
 import thaumcraft.common.blockentities.EssentiaTubeBlockEntity;
 import thaumcraft.common.blockentities.InfusionPillarBlockEntity;
 import thaumcraft.common.blockentities.ResearchTableBlockEntity;
@@ -18,6 +21,14 @@ public final class TCBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcaneWorktableBlockEntity>> ARCANE_WORKTABLE =
             REGISTRY.register("arcane_worktable", () -> BlockEntityType.Builder
                     .of(ArcaneWorktableBlockEntity::new, TCBlocks.ARCANE_WORKTABLE.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlchemicalFurnaceBlockEntity>> ALCHEMICAL_FURNACE =
+            REGISTRY.register("alchemical_furnace", () -> BlockEntityType.Builder
+                    .of(AlchemicalFurnaceBlockEntity::new, TCBlocks.ALCHEMICAL_FURNACE.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcaneAlembicBlockEntity>> ARCANE_ALEMBIC =
+            REGISTRY.register("arcane_alembic", () -> BlockEntityType.Builder
+                    .of(ArcaneAlembicBlockEntity::new, TCBlocks.ARCANE_ALEMBIC.get())
                     .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcanePedestalBlockEntity>> ARCANE_PEDESTAL =
             REGISTRY.register("arcane_pedestal", () -> BlockEntityType.Builder
@@ -37,7 +48,11 @@ public final class TCBlockEntities {
                     .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WardedJarBlockEntity>> WARDED_JAR =
             REGISTRY.register("warded_jar", () -> BlockEntityType.Builder
-                    .of(WardedJarBlockEntity::new, TCBlocks.WARDED_JAR.get())
+                    .of(WardedJarBlockEntity::new, TCBlocks.WARDED_JAR.get(), TCBlocks.VOID_JAR.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BrainInAJarBlockEntity>> BRAIN_IN_A_JAR =
+            REGISTRY.register("brain_in_a_jar", () -> BlockEntityType.Builder
+                    .of(BrainInAJarBlockEntity::new, TCBlocks.BRAIN_IN_A_JAR.get())
                     .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EssentiaTubeBlockEntity>> ESSENTIA_TUBE =
             REGISTRY.register("essentia_tube", () -> BlockEntityType.Builder

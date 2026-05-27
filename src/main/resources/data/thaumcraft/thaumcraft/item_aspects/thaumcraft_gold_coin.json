@@ -1,0 +1,7 @@
+{
+  "item": "thaumcraft:gold_coin",
+  "aspects": {
+    "metallum": 1,
+    "lucrum": 2
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "item": "minecraft:bedrock",
+  "aspects": {
+    "vacuos": 16,
+    "perditio": 16,
+    "terra": 16,
+    "tenebrae": 16
+  }
+}

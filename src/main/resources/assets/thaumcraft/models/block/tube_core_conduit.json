@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "thaumcraft:block/pipe_1",
+    "core": "thaumcraft:block/pipe_3"
+  },
+  "elements": [
+    {
+      "from": [6.5, 6.5, 6.5],
+      "to": [9.5, 9.5, 9.5],
+      "faces": {
+        "down": { "texture": "#core" },
+        "up": { "texture": "#core" },
+        "north": { "texture": "#core" },
+        "south": { "texture": "#core" },
+        "west": { "texture": "#core" },
+        "east": { "texture": "#core" }
+      }
+    }
+  ],
+  "render_type": "minecraft:cutout"
+}
