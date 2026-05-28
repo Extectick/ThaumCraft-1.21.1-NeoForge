@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -212,7 +213,14 @@ public class WandCastingItem extends Item {
         int maxVis = this.getMaxVis(stack);
         tooltipComponents.add(Component.translatable("item.thaumcraft.wand.capacity", formatVis(maxVis))
                 .withStyle(ChatFormatting.GOLD));
-        tooltipComponents.add(compactVisLine(stack));
+
+        if (Screen.hasShiftDown()) {
+            for (Aspect aspect : Aspect.getPrimalAspects()) {
+                tooltipComponents.add(detailedVisLine(stack, aspect));
+            }
+        } else {
+            tooltipComponents.add(compactVisLine(stack));
+        }
 
         ItemStack focus = this.getFocusItem(stack);
         if (!focus.isEmpty()) {
