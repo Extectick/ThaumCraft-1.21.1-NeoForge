@@ -27,14 +27,17 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.blocks.FluxBlock;
 import thaumcraft.common.crafting.InfusionRecipe;
 import thaumcraft.common.lib.crafting.InfusionAltarScan;
 import thaumcraft.common.lib.events.EssentiaHandler;
 import thaumcraft.common.network.BlockZapFxPayload;
 import thaumcraft.common.network.InfusionSourceFxPayload;
+import thaumcraft.common.network.PedestalSparkleFxPayload;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCRecipeTypes;
 import thaumcraft.common.registry.TCSoundEvents;
+import thaumcraft.common.research.WarpManager;
 
 public class RunicMatrixBlockEntity extends BlockEntity {
     private boolean active;
@@ -79,6 +82,7 @@ public class RunicMatrixBlockEntity extends BlockEntity {
             }
             matrix.craftCount++;
             spawnCraftRunes(level, pos);
+            spawnInstabilityBolt(level, pos, matrix.instability);
         } else if (matrix.craftCount > 0) {
             matrix.craftCount = Math.max(0, matrix.craftCount - 2);
             if (matrix.craftCount > 50) {
@@ -102,10 +106,27 @@ public class RunicMatrixBlockEntity extends BlockEntity {
     }
 
     private static void spawnCraftRunes(Level level, BlockPos pos) {
-        double x = pos.getX() + 0.5D + (level.random.nextDouble() - 0.5D) * 0.8D;
-        double y = pos.getY() - 1.5D + level.random.nextDouble() * 0.6D;
-        double z = pos.getZ() + 0.5D + (level.random.nextDouble() - 0.5D) * 0.8D;
-        level.addParticle(net.minecraft.core.particles.ParticleTypes.ENCHANT, x, y, z, 0.0D, -0.03D, 0.0D);
+        invokeClientFx("blockRunes", level, pos, 0);
+    }
+
+    private static void spawnInstabilityBolt(Level level, BlockPos pos, int instability) {
+        if (instability <= 0) {
+            return;
+        }
+        invokeClientFx("instabilityBolt", level, pos, instability);
+    }
+
+    private static void invokeClientFx(String method, Level level, BlockPos pos, int instability) {
+        try {
+            Class<?> handler = Class.forName("thaumcraft.client.fx.InfusionMatrixClientFx");
+            if (instability == 0) {
+                handler.getMethod(method, Level.class, BlockPos.class).invoke(null, level, pos);
+            } else {
+                handler.getMethod(method, Level.class, BlockPos.class, int.class).invoke(null, level, pos, instability);
+            }
+        } catch (ReflectiveOperationException exception) {
+            thaumcraft.Thaumcraft.LOGGER.warn("Unable to handle infusion matrix client fx {}", method, exception);
+        }
     }
 
     private void serverTick(Level level, BlockPos pos) {
@@ -455,6 +476,7 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         this.recipeInstability = 0;
         this.itemCount = 0;
         level.playSound(null, this.worldPosition, TCSoundEvents.CRAFTSTART.get(), SoundSource.BLOCKS, 0.5F, 1.25F);
+        sendPedestalSparkleFx(level, centerPedestal.getBlockPos(), 12);
         this.markChangedAndSync();
     }
 
@@ -598,8 +620,11 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         List<Player> targets = level.getEntitiesOfClass(Player.class, effectBounds());
         if (!targets.isEmpty()) {
             Player target = targets.get(level.random.nextInt(targets.size()));
-            target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200 + level.random.nextInt(200), 0, true,
-                    true));
+            if (level.random.nextFloat() < 0.25F) {
+                WarpManager.addStickyWarpToPlayer(target, 1);
+            } else {
+                WarpManager.addWarpToPlayer(target, 1 + level.random.nextInt(5), true);
+            }
         }
     }
 
@@ -624,10 +649,9 @@ public class RunicMatrixBlockEntity extends BlockEntity {
             }
 
             if (type == 1 || type == 3) {
-                level.playSound(null, pedestalPos, TCSoundEvents.SPILL.get(), SoundSource.BLOCKS, 0.3F, 1.0F);
+                FluxBlock.placeFlux(level, pedestalPos.above(), false);
             } else if (type == 2 || type == 4) {
-                level.playSound(null, pedestalPos, net.minecraft.sounds.SoundEvents.FIRE_EXTINGUISH,
-                        SoundSource.BLOCKS, 0.3F, 1.0F);
+                FluxBlock.placeFlux(level, pedestalPos.above(), true);
             } else if (type == 5) {
                 level.explode(null, pedestalPos.getX() + 0.5D, pedestalPos.getY() + 0.5D, pedestalPos.getZ() + 0.5D,
                         1.0F, Level.ExplosionInteraction.NONE);
@@ -636,6 +660,7 @@ public class RunicMatrixBlockEntity extends BlockEntity {
             sendBlockZapFx(level, this.worldPosition.getX() + 0.5D, this.worldPosition.getY() + 0.5D,
                     this.worldPosition.getZ() + 0.5D, pedestalPos.getX() + 0.5D, pedestalPos.getY() + 1.5D,
                     pedestalPos.getZ() + 0.5D);
+            sendPedestalSparkleFx(level, pedestalPos, 11);
             return;
         }
     }
@@ -658,6 +683,13 @@ public class RunicMatrixBlockEntity extends BlockEntity {
             PacketDistributor.sendToPlayersNear(serverLevel, null, this.worldPosition.getX(), this.worldPosition.getY(),
                     this.worldPosition.getZ(), 32.0D,
                     new BlockZapFxPayload(fromX, fromY, fromZ, toX, toY, toZ));
+        }
+    }
+
+    private void sendPedestalSparkleFx(Level level, BlockPos pedestalPos, int eventId) {
+        if (level instanceof ServerLevel serverLevel) {
+            PacketDistributor.sendToPlayersNear(serverLevel, null, this.worldPosition.getX(), this.worldPosition.getY(),
+                    this.worldPosition.getZ(), 32.0D, new PedestalSparkleFxPayload(pedestalPos, eventId));
         }
     }
 }

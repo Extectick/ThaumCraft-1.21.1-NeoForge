@@ -104,6 +104,8 @@ public class ThaumcraftClient {
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.BRAIN_IN_A_JAR.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.NODE_IN_A_JAR.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.VOID_JAR.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TCBlocks.FLUX_GOO.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TCBlocks.FLUX_GAS.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.MAGIC_MIRROR.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.ESSENTIA_MIRROR.get(), RenderType.translucent());
             ItemProperties.register(TCItems.RESEARCH_NOTES.get(), Thaumcraft.id("discovery"),

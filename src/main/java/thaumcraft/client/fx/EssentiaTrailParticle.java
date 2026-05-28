@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import thaumcraft.Thaumcraft;
 
 public class EssentiaTrailParticle extends SingleQuadParticle {
-    private static final ParticleRenderType RENDER_TYPE = new ParticleRenderType() {
+    static final ParticleRenderType RENDER_TYPE = new ParticleRenderType() {
         @Nullable
         @Override
         public BufferBuilder begin(Tesselator tesselator, TextureManager textureManager) {

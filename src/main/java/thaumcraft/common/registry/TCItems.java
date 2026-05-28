@@ -74,6 +74,8 @@ public final class TCItems {
     public static final DeferredItem<BlockItem> NODE_TRANSDUCER = REGISTRY.registerSimpleBlockItem(TCBlocks.NODE_TRANSDUCER);
     public static final DeferredItem<BlockItem> FOCAL_MANIPULATOR = REGISTRY.registerSimpleBlockItem(TCBlocks.FOCAL_MANIPULATOR);
     public static final DeferredItem<BlockItem> FLUX_SCRUBBER = REGISTRY.registerSimpleBlockItem(TCBlocks.FLUX_SCRUBBER);
+    public static final DeferredItem<BlockItem> FLUX_GOO = REGISTRY.registerSimpleBlockItem(TCBlocks.FLUX_GOO);
+    public static final DeferredItem<BlockItem> FLUX_GAS = REGISTRY.registerSimpleBlockItem(TCBlocks.FLUX_GAS);
     public static final DeferredItem<BlockItem> CRUCIBLE = REGISTRY.registerSimpleBlockItem(TCBlocks.CRUCIBLE);
     public static final DeferredItem<BlockItem> ARCANE_ALEMBIC = REGISTRY.registerSimpleBlockItem(TCBlocks.ARCANE_ALEMBIC);
     public static final DeferredItem<BlockItem> VIS_CHARGE_RELAY = REGISTRY.registerSimpleBlockItem(TCBlocks.VIS_CHARGE_RELAY);

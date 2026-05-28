@@ -23,6 +23,10 @@ public final class TCNetwork {
                 InfusionSourceFxPayload.STREAM_CODEC, InfusionSourceFxPayload::handle);
         registrar.playToClient(BlockZapFxPayload.TYPE,
                 BlockZapFxPayload.STREAM_CODEC, BlockZapFxPayload::handle);
+        registrar.playToClient(PedestalSparkleFxPayload.TYPE,
+                PedestalSparkleFxPayload.STREAM_CODEC, PedestalSparkleFxPayload::handle);
+        registrar.playToClient(WarpMessagePayload.TYPE,
+                WarpMessagePayload.STREAM_CODEC, WarpMessagePayload::handle);
         registrar.playToClient(ResearchCompleteNotificationPayload.TYPE,
                 ResearchCompleteNotificationPayload.STREAM_CODEC, ResearchCompleteNotificationPayload::handle);
     }

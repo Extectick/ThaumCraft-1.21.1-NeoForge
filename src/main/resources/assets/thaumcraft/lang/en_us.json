@@ -112,6 +112,8 @@
   "block.thaumcraft.node_transducer": "Node Transducer",
   "block.thaumcraft.focal_manipulator": "Focal Manipulator",
   "block.thaumcraft.flux_scrubber": "Flux Scrubber",
+  "block.thaumcraft.flux_goo": "Flux Goo",
+  "block.thaumcraft.flux_gas": "Flux Gas",
   "block.thaumcraft.crucible": "Crucible",
   "block.thaumcraft.arcane_alembic": "Arcane Alembic",
   "block.thaumcraft.vis_charge_relay": "Vis Charge Relay",
@@ -460,5 +462,11 @@
   "tc.research_page.WARP.3": "\u00a7nFlux\u00a7r\n\nIf Warp is the mental manifestation of magic gone wrong, then Flux is its physical manifestation.\n\nFlux can manifest in three ways: a liquid, a gas and a physical malady. The first two manifestations are considered annoyances by most thaumaturges and is often the result of wasteful use of magic. It is not particularly hard to clean up, but coming into contact with it often causes the third manifestation: Flux Flu\n\nFlux Flu is not particularly dangerous, but while a thaumaturge is suffering from it he finds it difficult to focus vis which often leads to increased vis usage to get something done.",
   "tc.research.CRIMSON.name": "The Crimson Cult",
   "tc.research.CRIMSON.text": "A Cautionary Tale",
-  "tc.research_page.CRIMSON.1": "Much of this book is written in a spidery and unintelligible script, but what you do understand offers some strange insights into the goals of the Crimson Cult.\n\nTheir origins are shrouded in mystery, but it seems their goal is the perfection of a ritual they refer to as \"Apertis Oculis\" - Opening the Eye. What it does is unclear, but you doubt it is anything good.\n\nInterestingly enough, you think thaumaturgy might offer the missing pieces they have so long sought. Obviously only a madman would pursue this line of study..."
+  "tc.research_page.CRIMSON.1": "Much of this book is written in a spidery and unintelligible script, but what you do understand offers some strange insights into the goals of the Crimson Cult.\n\nTheir origins are shrouded in mystery, but it seems their goal is the perfection of a ritual they refer to as \"Apertis Oculis\" - Opening the Eye. What it does is unclear, but you doubt it is anything good.\n\nInterestingly enough, you think thaumaturgy might offer the missing pieces they have so long sought. Obviously only a madman would pursue this line of study...",
+  "tc.addwarp": "You have gained Warp",
+  "tc.removewarp": "Warp has faded",
+  "tc.addwarpsticky": "You have gained Sticky Warp",
+  "tc.removewarpsticky": "Sticky Warp has faded",
+  "tc.addwarptemp": "You have gained temporary Warp",
+  "tc.removewarptemp": "Temporary Warp has faded"
 }

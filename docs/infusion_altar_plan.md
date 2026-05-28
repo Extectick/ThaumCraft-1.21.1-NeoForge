@@ -24,6 +24,8 @@
 - [x] Add first old-style instability event pass.
 - [x] Add old-style item absorption FX payload.
 - [x] Add fail/cancel behavior for missing catalyst and disrupted ingredients.
+- [x] Replace remaining temporary crafting particles with old infusion matrix FX paths.
+- [x] Add first old-style flux goo/gas and warp storage hooks for instability.
 - [ ] Add Thaumonomicon/JEI display for infusion recipes.
 
 ## Implemented
@@ -86,16 +88,27 @@
   - missing side ingredients no longer immediately fail the recipe; they can add a random remaining essentia requirement and increase instability, matching the old behavior.
 - Initial old instability events are implemented:
   - random pedestal item ejection/removal.
+  - pedestal ejection/removal now emits the old pedestal block-event sparkle burst above the affected pedestal, alongside the matrix-to-pedestal zap.
   - pedestal explosions.
-  - matrix-to-target zap FX and magic damage.
+  - matrix-to-target zap FX and magic damage. The zap now uses a modern port of the old `FXLightningBolt` path with the old `p_large.png` / `p_small.png` two-pass purple bolt textures, replacing the temporary vanilla electric-spark line.
   - harmful player/entity effects.
   - local warp stand-in effect until the old warp subsystem exists.
 - Old `PacketFXInfusionSource` behavior has a modern payload:
   - pedestal item absorption starts a 60 tick client effect.
   - the server removes the ingredient only after the old 5 craft-tick countdown.
   - the client renders old-style `FXBoreParticles`/`FXBoreSparkle` equivalents from the source pedestal toward the matrix: 1/3 purple sparkle pass, otherwise two 1/4 texture fragments from the item or block particle icon, using the old lifetime, pull strength, shrink, and speed clamp behavior.
-- Client crafting loop now emits a matrix-center rune particle pass while crafting, in addition to the old `infuserstart` / `infuser` loop sounds.
-- Not yet exact: flux goo/gas placement and true warp gain are blocked until those old subsystems/blocks are ported. Current instability effects use sound/particle/effect stand-ins for those two cases only.
+- Client crafting loop now emits old `FXBlockRunes`-style rune particles while crafting, using the old call from `TileInfusionMatrix.doEffects`: position `matrix.y - 2`, color range `0.5..0.7 / 0.1 / 0.7..1.0`, lifetime `3 * 25`, gravity `-0.03`, random rune index `224..239`, and the old `particles.png` rune UVs.
+- Active unstable crafting now emits the old random background `nodeBolt` around the matrix when `rand.nextInt(200) <= instability`, using the same 2 block random offset volume and the modern port of old `FXLightningBolt`.
+- Successful infusion completion now sends the old pedestal block event `12` equivalent on the central pedestal: nested `particleCount(10)` / `blockSparkle(..., -9999, 2)` random-color sparkle bursts above the pedestal.
+- Pedestal instability sparkle event `11` now follows the old nested particle count behavior instead of the earlier single-pass approximation.
+- Infusion instability now uses real ported flux/warp hooks instead of the previous stand-ins:
+  - ejection type `1/3` places `flux_goo` level `7` above the affected pedestal and plays the old `game.neutral.swim` equivalent.
+  - ejection type `2/4` places `flux_gas` level `7` above the affected pedestal and plays the old fizz sound path.
+  - `flux_goo`/`flux_gas` now use the old finite-fluid volume model: blockstate level maps to old metadata `0..7`, `metadata + 1` is the quanta volume, goo flows downward, gas flows upward, and horizontal neighbours are equalized like old Forge `BlockFluidFinite`.
+  - Goo keeps the old decay/emission hooks: low/full pools can consume themselves on open air, otherwise periodically lose metadata and may create level `0` flux gas above. Thaumic slime and taint-fibre conversion are still waiting on those old subsystems.
+  - warp instability chooses a player within the old 10 block area, then applies `sticky +1` with 25% chance or temporary `1..5` warp otherwise.
+  - player warp is stored as permanent/sticky/temporary/counter data, copied on death and synced to the client.
+- Not yet exact: downstream full warp event scheduling and the complete taint/flux ecology are broader old subsystems. The infusion-facing placement/storage hooks are now present.
 - Warded and void jars now participate in old-style essentia transport: jars pull from the tube above them, void jars accept overflow, labels lock jars to an aspect, filtered jars render the old label/aspect marker, and filled/labeled jar item stacks preserve their contents/filter when broken and placed again.
 - Initial test infusion recipes exist for `thaumium_wand_cap_infusion` and `void_wand_cap_infusion` so the start path can be tested in-game before completion logic is added.
 

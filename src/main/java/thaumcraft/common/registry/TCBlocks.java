@@ -22,6 +22,7 @@ import thaumcraft.common.blocks.ArcaneWorktableBlock;
 import thaumcraft.common.blocks.BrainInAJarBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock.TubeMode;
+import thaumcraft.common.blocks.FluxBlock;
 import thaumcraft.common.blocks.InfusionPillarBlock;
 import thaumcraft.common.blocks.ResearchTableBlock;
 import thaumcraft.common.blocks.RunicMatrixBlock;
@@ -97,6 +98,10 @@ public final class TCBlocks {
     public static final DeferredBlock<Block> NODE_TRANSDUCER = stoneDevice("node_transducer");
     public static final DeferredBlock<Block> FOCAL_MANIPULATOR = stoneDevice("focal_manipulator");
     public static final DeferredBlock<Block> FLUX_SCRUBBER = stoneDevice("flux_scrubber");
+    public static final DeferredBlock<FluxBlock> FLUX_GOO = REGISTRY.register("flux_goo",
+            () -> new FluxBlock(fluxProperties(), false));
+    public static final DeferredBlock<FluxBlock> FLUX_GAS = REGISTRY.register("flux_gas",
+            () -> new FluxBlock(fluxProperties(), true));
     public static final DeferredBlock<Block> CRUCIBLE = metalDevice("crucible");
     public static final DeferredBlock<ArcaneAlembicBlock> ARCANE_ALEMBIC = REGISTRY.register("arcane_alembic",
             () -> new ArcaneAlembicBlock(metalDeviceProperties()));
@@ -200,6 +205,8 @@ public final class TCBlocks {
             NODE_TRANSDUCER,
             FOCAL_MANIPULATOR,
             FLUX_SCRUBBER,
+            FLUX_GOO,
+            FLUX_GAS,
             CRUCIBLE,
             ARCANE_ALEMBIC,
             VIS_CHARGE_RELAY,
@@ -316,6 +323,14 @@ public final class TCBlocks {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
                 .strength(3.0F, 17.0F)
                 .requiresCorrectToolForDrops()
+                .noOcclusion();
+    }
+
+    private static BlockBehaviour.Properties fluxProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
+                .strength(100.0F)
+                .noLootTable()
+                .noCollission()
                 .noOcclusion();
     }
 
