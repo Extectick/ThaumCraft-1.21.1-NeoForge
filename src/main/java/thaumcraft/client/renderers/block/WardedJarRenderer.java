@@ -48,11 +48,11 @@ public class WardedJarRenderer implements BlockEntityRenderer<WardedJarBlockEnti
             Aspect aspect, int packedLight) {
         int light = Math.max(packedLight, LightTexture.FULL_BRIGHT);
         VertexConsumer label = bufferSource.getBuffer(RenderType.entityTranslucent(Thaumcraft.id("textures/models/label.png")));
-        renderSideQuad(poseStack, label, facing, 0.5F, 0.375F, 0.5F, 0.42F, 0.42F, 0.002F, light, 0xFFFFFFFF);
+        renderSideQuad(poseStack, label, facing, 0.5F, 0.375F, 0.5F, 0.56F, 0.56F, 0.002F, light, 0xFFFFFFFF);
 
         VertexConsumer icon = bufferSource.getBuffer(RenderType.entityTranslucent(Thaumcraft.id("textures/aspects/" + aspect.getTag() + ".png")));
-        renderSideQuad(poseStack, icon, facing, 0.5F, 0.375F, 0.5F, 0.18F, 0.18F, 0.004F, light,
-                0xFF000000 | aspect.getColor());
+        renderSideQuad(poseStack, icon, facing, 0.5F, 0.375F, 0.5F, 0.43F, 0.43F, 0.004F, light,
+                0xFF1A1A1A);
     }
 
     private static void renderSideQuad(PoseStack poseStack, VertexConsumer consumer, Direction facing, float centerX,

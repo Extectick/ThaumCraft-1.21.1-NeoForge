@@ -1,90 +1,13 @@
 {
-  "parent": "minecraft:block/block",
-  "render_type": "minecraft:translucent",
+  "parent": "builtin/entity",
   "textures": {
-    "particle": "thaumcraft:block/jar_side",
-    "top": "thaumcraft:block/jar_top",
-    "side": "thaumcraft:block/jar_side",
-    "bottom": "thaumcraft:block/jar_bottom",
-    "brine": "thaumcraft:block/jarbrine",
-    "brain": "thaumcraft:block/brain_item"
+    "particle": "thaumcraft:block/jar_side"
   },
-  "elements": [
-    {
-      "from": [3, 0, 3],
-      "to": [13, 12, 13],
-      "faces": {
-        "down": { "texture": "#bottom" },
-        "up": { "texture": "#top" },
-        "north": { "texture": "#side" },
-        "south": { "texture": "#side" },
-        "west": { "texture": "#side" },
-        "east": { "texture": "#side" }
-      }
-    },
-    {
-      "from": [5, 12, 5],
-      "to": [11, 14, 11],
-      "faces": {
-        "down": { "texture": "#bottom" },
-        "up": { "texture": "#top" },
-        "north": { "texture": "#side" },
-        "south": { "texture": "#side" },
-        "west": { "texture": "#side" },
-        "east": { "texture": "#side" }
-      }
-    },
-    {
-      "from": [4, 1, 4],
-      "to": [12, 10, 12],
-      "faces": {
-        "down": { "texture": "#brine", "uv": [0, 0, 16, 16] },
-        "up": { "texture": "#brine", "uv": [0, 0, 16, 16] },
-        "north": { "texture": "#brine", "uv": [0, 0, 16, 16] },
-        "south": { "texture": "#brine", "uv": [0, 0, 16, 16] },
-        "west": { "texture": "#brine", "uv": [0, 0, 16, 16] },
-        "east": { "texture": "#brine", "uv": [0, 0, 16, 16] }
-      }
-    },
-    {
-      "from": [6, 4.5, 5],
-      "to": [10, 8.5, 11],
-      "faces": {
-        "down": { "texture": "#brain", "uv": [0, 0, 16, 16], "rotation": 180 },
-        "up": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "north": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "south": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "west": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "east": { "texture": "#brain", "uv": [0, 0, 16, 16] }
-      }
-    },
-    {
-      "from": [6.5, 3.25, 7],
-      "to": [9.5, 4.5, 10],
-      "faces": {
-        "down": { "texture": "#brain", "uv": [0, 0, 16, 16], "rotation": 180 },
-        "up": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "north": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "south": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "west": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "east": { "texture": "#brain", "uv": [0, 0, 16, 16] }
-      }
-    },
-    {
-      "from": [7.6, 2, 6.75],
-      "to": [8.4, 4, 7.55],
-      "rotation": { "origin": [8, 4, 7.15], "axis": "x", "angle": 22.5 },
-      "faces": {
-        "down": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "up": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "north": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "south": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "west": { "texture": "#brain", "uv": [0, 0, 16, 16] },
-        "east": { "texture": "#brain", "uv": [0, 0, 16, 16] }
-      }
-    }
-  ],
   "display": {
+    "thirdperson_righthand": { "rotation": [75, 45, 0], "translation": [0, 2.5, 0], "scale": [0.36, 0.36, 0.36] },
+    "thirdperson_lefthand": { "rotation": [75, 45, 0], "translation": [0, 2.5, 0], "scale": [0.36, 0.36, 0.36] },
+    "firstperson_righthand": { "rotation": [0, 45, 0], "translation": [0, 2.5, 0], "scale": [0.42, 0.42, 0.42] },
+    "firstperson_lefthand": { "rotation": [0, 45, 0], "translation": [0, 2.5, 0], "scale": [0.42, 0.42, 0.42] },
     "gui": { "rotation": [30, 225, 0], "translation": [0, 1.5, 0], "scale": [0.82, 0.82, 0.82] },
     "ground": { "rotation": [0, 0, 0], "translation": [0, 3, 0], "scale": [0.45, 0.45, 0.45] },
     "fixed": { "rotation": [0, 0, 0], "translation": [0, 0, 0], "scale": [0.9, 0.9, 0.9] }

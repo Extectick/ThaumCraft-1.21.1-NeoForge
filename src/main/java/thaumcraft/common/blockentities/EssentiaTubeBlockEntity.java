@@ -590,10 +590,14 @@ public class EssentiaTubeBlockEntity extends BlockEntity implements IEssentiaCon
         if (this.wasPoweredLastTick && !powered && !this.allowFlow) {
             this.allowFlow = true;
             this.markStorageChanged();
+            level.playSound(null, this.worldPosition, TCSoundEvents.SQUEEK.get(), SoundSource.BLOCKS, 0.7F,
+                    0.9F + level.random.nextFloat() * 0.2F);
         }
         if (!this.wasPoweredLastTick && powered && this.allowFlow) {
             this.allowFlow = false;
             this.markStorageChanged();
+            level.playSound(null, this.worldPosition, TCSoundEvents.SQUEEK.get(), SoundSource.BLOCKS, 0.7F,
+                    0.9F + level.random.nextFloat() * 0.2F);
         }
         this.wasPoweredLastTick = powered;
     }
@@ -608,11 +612,29 @@ public class EssentiaTubeBlockEntity extends BlockEntity implements IEssentiaCon
     }
 
     private void rotateFacingToNextConnectable(Level level, BlockPos pos) {
+        if (this.getMode() == TubeMode.VALVE) {
+            rotateValveFacing(level, pos);
+            return;
+        }
+
         int start = this.facing.ordinal();
         for (int offset = 1; offset < 20; offset++) {
             Direction candidate = Direction.values()[(start + offset) % Direction.values().length];
             Direction opposite = candidate.getOpposite();
             if (this.canConnectSide(opposite) && this.isConnectable(opposite)) {
+                this.facing = candidate;
+                this.markStorageChanged();
+                updateTubeState(level, pos);
+                return;
+            }
+        }
+    }
+
+    private void rotateValveFacing(Level level, BlockPos pos) {
+        int start = this.facing.ordinal();
+        for (int offset = 1; offset < 20; offset++) {
+            Direction candidate = Direction.values()[(start + offset) % Direction.values().length];
+            if (!this.canConnectSide(candidate)) {
                 this.facing = candidate;
                 this.markStorageChanged();
                 updateTubeState(level, pos);

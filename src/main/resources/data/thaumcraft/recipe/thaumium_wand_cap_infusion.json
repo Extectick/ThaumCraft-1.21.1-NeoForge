@@ -16,6 +16,10 @@
     }
   ],
   "instability": 5,
+  "essentia": {
+    "potentia": 12,
+    "auram": 6
+  },
   "result": {
     "id": "thaumcraft:thaumium_wand_cap"
   }

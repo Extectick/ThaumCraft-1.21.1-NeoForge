@@ -13,6 +13,7 @@ import thaumcraft.api.aspects.PrimalVisStorage;
 import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.curios.TCSlots;
+import thaumcraft.common.items.JarBlockItem;
 import thaumcraft.common.items.ScribingToolsItem;
 import thaumcraft.common.items.ResearchNotesItem;
 import thaumcraft.common.items.ThaumonomiconItem;
@@ -93,10 +94,12 @@ public final class TCItems {
     public static final DeferredItem<BlockItem> RESTRICTED_ESSENTIA_TUBE = REGISTRY.registerSimpleBlockItem(TCBlocks.RESTRICTED_ESSENTIA_TUBE);
     public static final DeferredItem<BlockItem> DIRECTIONAL_ESSENTIA_TUBE = REGISTRY.registerSimpleBlockItem(TCBlocks.DIRECTIONAL_ESSENTIA_TUBE);
     public static final DeferredItem<BlockItem> ESSENTIA_CRYSTALLIZER = REGISTRY.registerSimpleBlockItem(TCBlocks.ESSENTIA_CRYSTALLIZER);
-    public static final DeferredItem<BlockItem> WARDED_JAR = REGISTRY.registerSimpleBlockItem(TCBlocks.WARDED_JAR);
+    public static final DeferredItem<JarBlockItem> WARDED_JAR = REGISTRY.registerItem("warded_jar",
+            properties -> new JarBlockItem(TCBlocks.WARDED_JAR.get(), properties));
     public static final DeferredItem<BlockItem> BRAIN_IN_A_JAR = REGISTRY.registerSimpleBlockItem(TCBlocks.BRAIN_IN_A_JAR);
     public static final DeferredItem<BlockItem> NODE_IN_A_JAR = REGISTRY.registerSimpleBlockItem(TCBlocks.NODE_IN_A_JAR);
-    public static final DeferredItem<BlockItem> VOID_JAR = REGISTRY.registerSimpleBlockItem(TCBlocks.VOID_JAR);
+    public static final DeferredItem<JarBlockItem> VOID_JAR = REGISTRY.registerItem("void_jar",
+            properties -> new JarBlockItem(TCBlocks.VOID_JAR.get(), properties));
     public static final DeferredItem<BlockItem> MAGIC_MIRROR = REGISTRY.registerSimpleBlockItem(TCBlocks.MAGIC_MIRROR);
     public static final DeferredItem<BlockItem> ESSENTIA_MIRROR = REGISTRY.registerSimpleBlockItem(TCBlocks.ESSENTIA_MIRROR);
     public static final DeferredItem<BlockItem> ARCANE_STONE_STAIRS = REGISTRY.registerSimpleBlockItem(TCBlocks.ARCANE_STONE_STAIRS);

@@ -16,7 +16,14 @@
 - [x] Add shared `AspectList` foundation for old-style essentia costs.
 - [x] Replace infusion recipe essentia placeholder with `AspectList`.
 - [x] Add first old-style essentia drain pass from nearby containers.
-- [ ] Add instability and symmetry checks.
+- [x] Preserve active infusion recipe state through world reloads.
+- [x] Port old delayed ingredient consumption cycle.
+- [x] Add first essentia source FX from source container to matrix.
+- [x] Replace first essentia FX with old-style client-side 15 tick source trail payload.
+- [x] Add old-style instability and symmetry checks.
+- [x] Add first old-style instability event pass.
+- [x] Add old-style item absorption FX payload.
+- [x] Add fail/cancel behavior for missing catalyst and disrupted ingredients.
 - [ ] Add Thaumonomicon/JEI display for infusion recipes.
 
 ## Implemented
@@ -63,7 +70,32 @@
 - `ObjectAspectRegistry` now provides old-style `getObjectTags(ItemStack)` and `getBonusTags(ItemStack, AspectList)` behavior. Item aspects are loaded from `data/*/thaumcraft/item_aspects/*.json`, with exact item ids and modern item tags supported, missing entries can be generated from crafting/arcane/infusion recipes, and dynamic bonuses are added for tools, armor, bows, enchantments, potion effects, and essentia-storing items.
 - Holding Shift over an item in inventory now renders assigned aspects as icons with amounts, using the bonus-aware item aspect registry.
 - `InfusionRecipe` and `RunicMatrixBlockEntity` now use `AspectList` for remaining recipe essentia instead of the temporary `PrimalVisStorage` placeholder.
-- During crafting the matrix now drains one required essentia at a time from nearby `IEssentiaContainer` block entities in radius 12 before it consumes pedestal items. This is the first drain pass and does not yet implement old tube suction/pathing.
+- During crafting the matrix now drains one required essentia at a time from nearby `IEssentiaContainer` block entities in radius 12 before it consumes pedestal items. The failed-drain instability growth now follows the old recipe-instability based chance and clamps at 25.
+- If a required ingredient is missing after the recipe essentia has been fully drained, the matrix now keeps the original recipe aspect set and periodically adds one random required aspect back into `recipeEssentia`, matching the old zero-amount `AspectList` behavior. If essentia is unavailable, the matrix tries the other required aspects before waiting and can still raise instability.
+- Active infusion crafting state now saves and reloads the catalyst, remaining ingredients, output, essentia, recipe id, player name, delay counters, and recipe instability like old `TileInfusionMatrix` did.
+- Pedestal ingredients now use the old delayed absorption behavior: the matrix starts the absorption cycle, waits several craft ticks, then removes the item or leaves its crafting remainder.
+- Successful essentia drain now emits a color-matched particle trail from the drained source to the matrix using the old `PacketFXEssentiaSource` timing model: the server sends a source FX payload, the client keeps a 15 tick entry, refreshes duplicate trails, spawns the trail each client tick, and shrinks the effect over the last 5 ticks. The old mechanic drained the jar and reduced `recipeEssentia` immediately; the trail was visual-only, so no delayed matrix fill was added.
+- Surrounding scan now includes old-style stabilizer symmetry:
+  - pedestals and their held items contribute instability when unpaired.
+  - mirrored pedestals/items reduce that penalty.
+  - candles and skulls are treated as stabilizers and apply the old `+0.1 / -0.2` mirrored stabilizer rule.
+- Crafting cycles now follow the old disruption order:
+  - the central catalyst is checked first.
+  - if the catalyst is missing/wrong, an instability event can fire before the craft fails.
+  - if instability rolls during a valid craft, the event fires and the cycle stops without progressing.
+  - missing side ingredients no longer immediately fail the recipe; they can add a random remaining essentia requirement and increase instability, matching the old behavior.
+- Initial old instability events are implemented:
+  - random pedestal item ejection/removal.
+  - pedestal explosions.
+  - matrix-to-target zap FX and magic damage.
+  - harmful player/entity effects.
+  - local warp stand-in effect until the old warp subsystem exists.
+- Old `PacketFXInfusionSource` behavior has a modern payload:
+  - pedestal item absorption starts a 60 tick client effect.
+  - the server removes the ingredient only after the old 5 craft-tick countdown.
+  - the client renders old-style `FXBoreParticles`/`FXBoreSparkle` equivalents from the source pedestal toward the matrix: 1/3 purple sparkle pass, otherwise two 1/4 texture fragments from the item or block particle icon, using the old lifetime, pull strength, shrink, and speed clamp behavior.
+- Client crafting loop now emits a matrix-center rune particle pass while crafting, in addition to the old `infuserstart` / `infuser` loop sounds.
+- Not yet exact: flux goo/gas placement and true warp gain are blocked until those old subsystems/blocks are ported. Current instability effects use sound/particle/effect stand-ins for those two cases only.
 - Warded and void jars now participate in old-style essentia transport: jars pull from the tube above them, void jars accept overflow, labels lock jars to an aspect, filtered jars render the old label/aspect marker, and filled/labeled jar item stacks preserve their contents/filter when broken and placed again.
 - Initial test infusion recipes exist for `thaumium_wand_cap_infusion` and `void_wand_cap_infusion` so the start path can be tested in-game before completion logic is added.
 
@@ -76,4 +108,4 @@
 - Breaking old pillar metadata dropped source decorative blocks, not a pillar item.
 
 ## Next Step
-Add explicit essentia costs to migrated infusion recipes once jar/tube filling is stable, then port source-to-matrix FX and the remaining instability/symmetry behavior. Continue expanding item aspect data from old `ConfigAspects` as new ported items/blocks appear. The detailed aspect/essentia port plan is tracked in `docs/essentia_aspect_port_plan.md`.
+Next infusion work should port the missing old subsystems that instability depends on: flux goo/gas blocks, warp gain/storage, and then the full recipe set. Continue expanding item aspect data from old `ConfigAspects` as new ported items/blocks appear. The detailed aspect/essentia port plan is tracked in `docs/essentia_aspect_port_plan.md`.

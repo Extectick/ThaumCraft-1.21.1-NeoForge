@@ -19,6 +19,12 @@
     }
   ],
   "instability": 8,
+  "essentia": {
+    "potentia": 18,
+    "vacuos": 18,
+    "alienis": 18,
+    "auram": 18
+  },
   "result": {
     "id": "thaumcraft:void_wand_cap"
   }

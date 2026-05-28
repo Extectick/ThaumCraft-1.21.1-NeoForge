@@ -5,6 +5,9 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractSkullBlock;
+import net.minecraft.world.level.block.CandleBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.common.blockentities.ArcanePedestalBlockEntity;
 import thaumcraft.common.registry.TCBlocks;
 
@@ -13,7 +16,8 @@ public record InfusionAltarScan(boolean valid, BlockPos matrixPos, BlockPos cent
     public static InfusionAltarScan scan(Level level, BlockPos matrixPos) {
         BlockPos centerPedestal = matrixPos.below(2);
         List<BlockPos> pedestals = findPedestals(level, matrixPos);
-        int symmetry = calculatePedestalSymmetry(level, matrixPos, pedestals);
+        List<BlockPos> stabilizers = findStabilizers(level, matrixPos);
+        int symmetry = calculateSymmetry(level, matrixPos, pedestals, stabilizers);
         return new InfusionAltarScan(isValidLocation(level, matrixPos, centerPedestal), matrixPos, centerPedestal,
                 List.copyOf(pedestals), symmetry);
     }
@@ -55,7 +59,26 @@ public record InfusionAltarScan(boolean valid, BlockPos matrixPos, BlockPos cent
         return pedestals;
     }
 
-    private static int calculatePedestalSymmetry(Level level, BlockPos matrixPos, List<BlockPos> pedestals) {
+    private static List<BlockPos> findStabilizers(Level level, BlockPos matrixPos) {
+        List<BlockPos> stabilizers = new ArrayList<>();
+        for (int xx = -12; xx <= 12; xx++) {
+            for (int zz = -12; zz <= 12; zz++) {
+                for (int yy = -5; yy <= 10; yy++) {
+                    if (xx == 0 && zz == 0) {
+                        continue;
+                    }
+                    BlockPos pos = matrixPos.offset(xx, -yy, zz);
+                    if (isStabilizer(level.getBlockState(pos))) {
+                        stabilizers.add(pos);
+                    }
+                }
+            }
+        }
+        return stabilizers;
+    }
+
+    private static int calculateSymmetry(Level level, BlockPos matrixPos, List<BlockPos> pedestals,
+            List<BlockPos> stabilizers) {
         int symmetry = 0;
         for (BlockPos pedestalPos : pedestals) {
             boolean hasItem = hasPedestalItem(level, pedestalPos);
@@ -76,7 +99,20 @@ public record InfusionAltarScan(boolean valid, BlockPos matrixPos, BlockPos cent
                 }
             }
         }
-        return symmetry;
+
+        float stabilizerSymmetry = 0.0F;
+        for (BlockPos stabilizerPos : stabilizers) {
+            int dx = matrixPos.getX() - stabilizerPos.getX();
+            int dz = matrixPos.getZ() - stabilizerPos.getZ();
+            stabilizerSymmetry += 0.1F;
+
+            BlockPos mirrorPos = new BlockPos(matrixPos.getX() + dx, stabilizerPos.getY(), matrixPos.getZ() + dz);
+            if (isStabilizer(level.getBlockState(mirrorPos))) {
+                stabilizerSymmetry -= 0.2F;
+            }
+        }
+
+        return (int)(symmetry + stabilizerSymmetry);
     }
 
     private static boolean isInfusionPillar(Level level, BlockPos pos) {
@@ -86,5 +122,9 @@ public record InfusionAltarScan(boolean valid, BlockPos matrixPos, BlockPos cent
     private static boolean hasPedestalItem(Level level, BlockPos pos) {
         return level.getBlockEntity(pos) instanceof ArcanePedestalBlockEntity pedestal
                 && !pedestal.getStoredItem().isEmpty();
+    }
+
+    private static boolean isStabilizer(BlockState state) {
+        return state.getBlock() instanceof CandleBlock || state.getBlock() instanceof AbstractSkullBlock;
     }
 }

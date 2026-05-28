@@ -8,8 +8,10 @@ import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.neoforge.common.util.DeferredSoundType;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
@@ -32,6 +34,8 @@ import thaumcraft.common.blocks.WardedJarBlock;
 
 public final class TCBlocks {
     public static final DeferredRegister.Blocks REGISTRY = DeferredRegister.createBlocks(Thaumcraft.MODID);
+    private static final SoundType JAR_SOUND = new DeferredSoundType(1.0F, 1.0F,
+            TCSoundEvents.JAR, TCSoundEvents.JAR, TCSoundEvents.JAR, TCSoundEvents.JAR, TCSoundEvents.JAR);
 
     public static final DeferredBlock<Block> CINNABAR_ORE = ore("cinnabar_ore");
     public static final DeferredBlock<Block> INFUSED_AIR_ORE = ore("infused_air_ore");
@@ -336,6 +340,7 @@ public final class TCBlocks {
     private static BlockBehaviour.Properties jarProperties() {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                 .strength(0.5F, 1.0F)
+                .sound(JAR_SOUND)
                 .noOcclusion();
     }
 

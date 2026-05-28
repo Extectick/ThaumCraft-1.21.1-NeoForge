@@ -26,5 +26,13 @@ public final class TCItemRenderers {
                 return this.renderer;
             }
         }, TCItems.ARCANE_ALEMBIC.get());
+        event.registerItem(new IClientItemExtensions() {
+            private final JarItemRenderer renderer = JarItemRenderer.create();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return this.renderer;
+            }
+        }, TCItems.WARDED_JAR.get(), TCItems.VOID_JAR.get(), TCItems.BRAIN_IN_A_JAR.get(), TCItems.NODE_IN_A_JAR.get());
     }
 }

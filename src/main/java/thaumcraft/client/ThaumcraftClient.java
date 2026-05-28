@@ -24,6 +24,8 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.client.hud.FocusSelectorOverlay;
 import thaumcraft.client.hud.ResearchNotificationOverlay;
 import thaumcraft.client.hud.WandVisHudOverlay;
+import thaumcraft.client.fx.EssentiaSourceFxHandler;
+import thaumcraft.client.fx.InfusionSourceFxHandler;
 import thaumcraft.client.input.TCKeyMappings;
 import thaumcraft.client.renderers.block.ArcanePedestalRenderer;
 import thaumcraft.client.renderers.block.ArcaneAlembicRenderer;
@@ -75,6 +77,8 @@ public class ThaumcraftClient {
         modEventBus.addListener(this::registerBlockColors);
         modEventBus.addListener(this::registerItemColors);
         NeoForge.EVENT_BUS.addListener(TCKeyMappings::onClientTick);
+        NeoForge.EVENT_BUS.addListener(EssentiaSourceFxHandler::onClientTick);
+        NeoForge.EVENT_BUS.addListener(InfusionSourceFxHandler::onClientTick);
         NeoForge.EVENT_BUS.addListener(AspectTooltipHandler::gatherComponents);
     }
 

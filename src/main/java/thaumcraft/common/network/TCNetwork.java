@@ -17,6 +17,12 @@ public final class TCNetwork {
                 ResearchTableCombineAspectPayload::handle);
         registrar.playToServer(ThaumonomiconCreateNotePayload.TYPE, ThaumonomiconCreateNotePayload.STREAM_CODEC,
                 ThaumonomiconCreateNotePayload::handle);
+        registrar.playToClient(EssentiaSourceFxPayload.TYPE,
+                EssentiaSourceFxPayload.STREAM_CODEC, EssentiaSourceFxPayload::handle);
+        registrar.playToClient(InfusionSourceFxPayload.TYPE,
+                InfusionSourceFxPayload.STREAM_CODEC, InfusionSourceFxPayload::handle);
+        registrar.playToClient(BlockZapFxPayload.TYPE,
+                BlockZapFxPayload.STREAM_CODEC, BlockZapFxPayload::handle);
         registrar.playToClient(ResearchCompleteNotificationPayload.TYPE,
                 ResearchCompleteNotificationPayload.STREAM_CODEC, ResearchCompleteNotificationPayload::handle);
     }

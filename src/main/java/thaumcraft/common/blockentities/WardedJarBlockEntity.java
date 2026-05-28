@@ -18,6 +18,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.EssentiaStorage;
+import thaumcraft.api.aspects.IAspectSource;
 import thaumcraft.api.aspects.IEssentiaContainer;
 import thaumcraft.api.aspects.IEssentiaTransport;
 import thaumcraft.api.wands.IWandable;
@@ -25,7 +26,7 @@ import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCSoundEvents;
 
-public class WardedJarBlockEntity extends BlockEntity implements IEssentiaContainer, IEssentiaTransport, IWandable {
+public class WardedJarBlockEntity extends BlockEntity implements IEssentiaContainer, IAspectSource, IEssentiaTransport, IWandable {
     public static final int CAPACITY = 64;
 
     private EssentiaStorage storage = EssentiaStorage.EMPTY;
