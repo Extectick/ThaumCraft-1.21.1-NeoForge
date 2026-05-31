@@ -10,24 +10,24 @@ public final class TCNetwork {
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
         registrar.playToServer(CycleWandFocusPayload.TYPE, CycleWandFocusPayload.STREAM_CODEC,
-                CycleWandFocusPayload::handle);
+                TCPayloadHandlerBridge::handleCycleWandFocus);
         registrar.playToServer(ResearchTablePlaceAspectPayload.TYPE, ResearchTablePlaceAspectPayload.STREAM_CODEC,
-                ResearchTablePlaceAspectPayload::handle);
+                TCPayloadHandlerBridge::handleResearchTablePlaceAspect);
         registrar.playToServer(ResearchTableCombineAspectPayload.TYPE, ResearchTableCombineAspectPayload.STREAM_CODEC,
-                ResearchTableCombineAspectPayload::handle);
+                TCPayloadHandlerBridge::handleResearchTableCombineAspect);
         registrar.playToServer(ThaumonomiconCreateNotePayload.TYPE, ThaumonomiconCreateNotePayload.STREAM_CODEC,
-                ThaumonomiconCreateNotePayload::handle);
+                TCPayloadHandlerBridge::handleThaumonomiconCreateNote);
         registrar.playToClient(EssentiaSourceFxPayload.TYPE,
-                EssentiaSourceFxPayload.STREAM_CODEC, EssentiaSourceFxPayload::handle);
+                EssentiaSourceFxPayload.STREAM_CODEC, TCPayloadHandlerBridge::handleEssentiaSourceFx);
         registrar.playToClient(InfusionSourceFxPayload.TYPE,
-                InfusionSourceFxPayload.STREAM_CODEC, InfusionSourceFxPayload::handle);
+                InfusionSourceFxPayload.STREAM_CODEC, TCPayloadHandlerBridge::handleInfusionSourceFx);
         registrar.playToClient(BlockZapFxPayload.TYPE,
-                BlockZapFxPayload.STREAM_CODEC, BlockZapFxPayload::handle);
+                BlockZapFxPayload.STREAM_CODEC, TCPayloadHandlerBridge::handleBlockZapFx);
         registrar.playToClient(PedestalSparkleFxPayload.TYPE,
-                PedestalSparkleFxPayload.STREAM_CODEC, PedestalSparkleFxPayload::handle);
+                PedestalSparkleFxPayload.STREAM_CODEC, TCPayloadHandlerBridge::handlePedestalSparkleFx);
         registrar.playToClient(WarpMessagePayload.TYPE,
-                WarpMessagePayload.STREAM_CODEC, WarpMessagePayload::handle);
+                WarpMessagePayload.STREAM_CODEC, TCPayloadHandlerBridge::handleWarpMessage);
         registrar.playToClient(ResearchCompleteNotificationPayload.TYPE,
-                ResearchCompleteNotificationPayload.STREAM_CODEC, ResearchCompleteNotificationPayload::handle);
+                ResearchCompleteNotificationPayload.STREAM_CODEC, TCPayloadHandlerBridge::handleResearchComplete);
     }
 }

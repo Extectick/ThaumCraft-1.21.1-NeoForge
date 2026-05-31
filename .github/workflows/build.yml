@@ -21,5 +21,54 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Check split architecture
+        run: >
+          ./gradlew
+          checkSplitArchitecture
+          :thaumcraft-api:build
+          :thaumcraft-common:build
+          :thaumcraft-client:build
+          :thaumcraft-server:build
+          :thaumcraft-universal:build
+          :thaumcraft-datagen:build
+          :thaumcraft-gametest:build
+          build
+          --no-daemon
+
+      - name: Dedicated server smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          log_file="build/run-server-smoke.log"
+          rm -f "$log_file"
+          ./gradlew runServer --no-daemon >"$log_file" 2>&1 &
+          server_pid=$!
+          cleanup() {
+            pkill -P "$server_pid" || true
+            kill "$server_pid" || true
+          }
+          trap cleanup EXIT
+          for _ in {1..180}; do
+            if grep -q "Done (.*)! For help" "$log_file"; then
+              grep "Done (.*)! For help" "$log_file" | tail -n 1
+              exit 0
+            fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then
+              tail -n 120 "$log_file"
+              exit 1
+            fi
+            sleep 1
+          done
+          tail -n 120 "$log_file"
+          exit 1
+
+      - name: Upload variant jars
+        uses: actions/upload-artifact@v4
+        with:
+          name: thaumcraft-variant-jars
+          path: |
+            build/libs/Thaumcraft-*-client.jar
+            build/libs/Thaumcraft-*-server.jar
+            build/libs/Thaumcraft-*-universal.jar
+            build/libs/Thaumcraft-*-api.jar
+            build/libs/Thaumcraft-*-common.jar

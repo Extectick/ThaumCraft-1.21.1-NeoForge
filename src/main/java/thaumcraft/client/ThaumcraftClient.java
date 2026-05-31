@@ -2,6 +2,7 @@ package thaumcraft.client;
 
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.level.FoliageColor;
@@ -37,6 +38,7 @@ import thaumcraft.client.renderers.item.TCItemRenderers;
 import thaumcraft.client.screens.AlchemicalFurnaceScreen;
 import thaumcraft.client.screens.ArcaneWorktableScreen;
 import thaumcraft.client.screens.ResearchTableScreen;
+import thaumcraft.client.screens.ThaumonomiconScreen;
 import thaumcraft.client.tooltip.AspectTooltipHandler;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
@@ -44,6 +46,8 @@ import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMenuTypes;
 import thaumcraft.common.research.ResearchNoteData;
+import thaumcraft.common.util.ClientInteractionState;
+import thaumcraft.common.util.ClientScreenHooks;
 
 @Mod(value = Thaumcraft.MODID, dist = Dist.CLIENT)
 public class ThaumcraftClient {
@@ -66,6 +70,8 @@ public class ThaumcraftClient {
     private static final int BLACK = 0x1E1B1B;
 
     public ThaumcraftClient(IEventBus modEventBus, ModContainer container) {
+        ClientInteractionState.registerShiftDown(Screen::hasShiftDown);
+        ClientScreenHooks.registerThaumonomiconOpener(ThaumonomiconScreen::open);
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         modEventBus.addListener(this::clientSetup);
         modEventBus.addListener(this::registerGuiLayers);

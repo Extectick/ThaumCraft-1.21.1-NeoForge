@@ -1,0 +1,11 @@
+plugins {
+    id 'base'
+}
+
+tasks.named('assemble') {
+    dependsOn rootProject.tasks.named('commonJar')
+}
+
+tasks.named('build') {
+    dependsOn rootProject.tasks.named('commonJar')
+}

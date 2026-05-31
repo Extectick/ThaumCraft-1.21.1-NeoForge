@@ -1,0 +1,12 @@
+plugins {
+    id 'base'
+}
+
+tasks.named('assemble') {
+    dependsOn rootProject.tasks.named('clientJar')
+}
+
+tasks.named('build') {
+    dependsOn rootProject.tasks.named('clientJar')
+    dependsOn rootProject.tasks.named('checkProtectedClientJar')
+}

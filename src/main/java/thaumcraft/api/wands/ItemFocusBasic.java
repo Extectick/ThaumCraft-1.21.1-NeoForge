@@ -14,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.PrimalVisStorage;
-import thaumcraft.common.registry.TCDataComponents;
 
 public class ItemFocusBasic extends Item {
     private final PrimalVisStorage visCost;
@@ -72,7 +71,7 @@ public class ItemFocusBasic extends Item {
     }
 
     public int getFrugalUpgrade(ItemStack focusStack) {
-        return Math.max(0, focusStack.getOrDefault(TCDataComponents.FOCUS_FRUGAL, 0));
+        return 0;
     }
 
     @Override

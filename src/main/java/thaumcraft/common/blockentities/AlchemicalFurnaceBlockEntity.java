@@ -22,11 +22,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.common.blocks.AlchemicalFurnaceBlock;
 import thaumcraft.common.lib.crafting.ObjectAspectRegistry;
 import thaumcraft.common.menus.AlchemicalFurnaceMenu;
 import thaumcraft.common.registry.TCBlockEntities;
-import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.util.ServerEssentiaTransportHooks;
 
 public class AlchemicalFurnaceBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
     public static final int INPUT_SLOT = 0;
@@ -83,52 +82,7 @@ public class AlchemicalFurnaceBlockEntity extends BlockEntity implements Worldly
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, AlchemicalFurnaceBlockEntity furnace) {
-        boolean wasBurning = furnace.isBurning();
-        int oldVis = furnace.vis;
-        boolean changed = false;
-        furnace.count++;
-
-        if (furnace.burnTime > 0) {
-            furnace.burnTime--;
-        }
-
-        if (furnace.count % (furnace.speedBoost ? 20 : 40) == 0 && furnace.aspects.size() > 0) {
-            changed |= furnace.transferEssentiaUp(level, pos);
-        }
-
-        if (furnace.burnTime == 0 && furnace.canSmelt()) {
-            ItemStack fuel = furnace.items.get(FUEL_SLOT);
-            furnace.currentBurnTime = furnace.burnTime = getBurnTime(fuel);
-            if (furnace.burnTime > 0) {
-                changed = true;
-                furnace.speedBoost = fuel.is(TCItems.ALUMENTUM.get());
-                furnace.consumeFuel();
-            }
-        }
-
-        if (furnace.isBurning() && furnace.canSmelt()) {
-            furnace.cookTime++;
-            if (furnace.cookTime >= furnace.smeltTime) {
-                furnace.cookTime = 0;
-                furnace.smeltItem();
-                changed = true;
-            }
-        } else {
-            furnace.cookTime = 0;
-        }
-
-        if (wasBurning != furnace.isBurning()) {
-            changed = true;
-        }
-
-        if (changed) {
-            furnace.setChanged();
-        }
-
-        if (wasBurning != furnace.isBurning() || (oldVis > 0) != (furnace.vis > 0)) {
-            level.setBlock(pos, state.setValue(AlchemicalFurnaceBlock.LIT, furnace.isBurning())
-                    .setValue(AlchemicalFurnaceBlock.FILLED, furnace.vis > 0), 3);
-        }
+        ServerEssentiaTransportHooks.tickAlchemicalFurnace(level, pos, state, furnace);
     }
 
     @Override
@@ -190,90 +144,7 @@ public class AlchemicalFurnaceBlockEntity extends BlockEntity implements Worldly
         return new AlchemicalFurnaceMenu(containerId, playerInventory, this, this.dataAccess);
     }
 
-    private boolean canSmelt() {
-        ItemStack input = this.items.get(INPUT_SLOT);
-        if (input.isEmpty()) {
-            return false;
-        }
-
-        AspectList inputAspects = ObjectAspectRegistry.getObjectTagsWithBonus(input);
-        if (inputAspects.isEmpty()) {
-            return false;
-        }
-
-        int aspectAmount = inputAspects.visSize();
-        if (aspectAmount > MAX_VIS - this.vis) {
-            return false;
-        }
-
-        this.smeltTime = Math.max(1, aspectAmount * 10);
-        return true;
-    }
-
-    private void smeltItem() {
-        if (!this.canSmelt()) {
-            return;
-        }
-
-        AspectList inputAspects = ObjectAspectRegistry.getObjectTagsWithBonus(this.items.get(INPUT_SLOT));
-        for (Aspect aspect : inputAspects.getAspects()) {
-            this.aspects.add(aspect, inputAspects.getAmount(aspect));
-        }
-        this.vis = this.aspects.visSize();
-        this.items.get(INPUT_SLOT).shrink(1);
-        if (this.items.get(INPUT_SLOT).isEmpty()) {
-            this.items.set(INPUT_SLOT, ItemStack.EMPTY);
-        }
-    }
-
-    private boolean transferEssentiaUp(Level level, BlockPos pos) {
-        boolean changed = false;
-        AspectList excluded = new AspectList();
-
-        for (int depth = 1; depth <= 5; depth++) {
-            if (!(level.getBlockEntity(pos.above(depth)) instanceof ArcaneAlembicBlockEntity alembic)) {
-                break;
-            }
-
-            if (!alembic.getEssentia().isEmpty()
-                    && alembic.getEssentia().amount() < alembic.getEssentiaCapacity()
-                    && this.aspects.getAmount(alembic.getEssentia().aspect()) > 0) {
-                Aspect aspect = alembic.getEssentia().aspect();
-                this.takeFromContainer(aspect, 1);
-                alembic.fillEssentia(aspect, 1, false);
-                excluded.merge(aspect, 1);
-                changed = true;
-            }
-        }
-
-        for (int depth = 1; depth <= 5; depth++) {
-            if (!(level.getBlockEntity(pos.above(depth)) instanceof ArcaneAlembicBlockEntity alembic)) {
-                break;
-            }
-
-            if (alembic.getEssentia().isEmpty()) {
-                Aspect aspect = null;
-                if (alembic.getFilterAspect() == null) {
-                    aspect = this.takeRandomAspect(level, excluded);
-                } else if (this.takeFromContainer(alembic.getFilterAspect(), 1)) {
-                    aspect = alembic.getFilterAspect();
-                }
-
-                if (aspect != null) {
-                    alembic.fillEssentia(aspect, 1, false);
-                    changed = true;
-                    break;
-                }
-            }
-        }
-
-        if (changed) {
-            level.sendBlockUpdated(pos, this.getBlockState(), this.getBlockState(), 3);
-        }
-        return changed;
-    }
-
-    private Aspect takeRandomAspect(Level level, AspectList excluded) {
+    public Aspect takeRandomAspect(Level level, AspectList excluded) {
         if (this.aspects.size() <= 0) {
             return null;
         }
@@ -293,7 +164,7 @@ public class AlchemicalFurnaceBlockEntity extends BlockEntity implements Worldly
         return aspect;
     }
 
-    private boolean takeFromContainer(Aspect aspect, int amount) {
+    public boolean takeFromContainer(Aspect aspect, int amount) {
         if (this.aspects.getAmount(aspect) < amount) {
             return false;
         }
@@ -302,7 +173,7 @@ public class AlchemicalFurnaceBlockEntity extends BlockEntity implements Worldly
         return true;
     }
 
-    private void consumeFuel() {
+    public void consumeFuel() {
         ItemStack fuel = this.items.get(FUEL_SLOT);
         if (fuel.isEmpty()) {
             return;
@@ -311,6 +182,72 @@ public class AlchemicalFurnaceBlockEntity extends BlockEntity implements Worldly
         ItemStack remainder = fuel.getCraftingRemainingItem();
         fuel.shrink(1);
         this.items.set(FUEL_SLOT, fuel.isEmpty() ? remainder : fuel);
+    }
+
+    public int incrementCount() {
+        return ++this.count;
+    }
+
+    public boolean hasStoredAspects() {
+        return this.aspects.size() > 0;
+    }
+
+    public boolean hasStoredVis() {
+        return this.vis > 0;
+    }
+
+    public boolean isSpeedBoosted() {
+        return this.speedBoost;
+    }
+
+    public void setSpeedBoost(boolean speedBoost) {
+        this.speedBoost = speedBoost;
+    }
+
+    public void decrementBurnTime() {
+        if (this.burnTime > 0) {
+            this.burnTime--;
+        }
+    }
+
+    public void setBurnFromFuel(int burnTime) {
+        this.currentBurnTime = burnTime;
+        this.burnTime = burnTime;
+    }
+
+    public void setCookTime(int cookTime) {
+        this.cookTime = Math.max(0, cookTime);
+    }
+
+    public void setSmeltTime(int smeltTime) {
+        this.smeltTime = Math.max(1, smeltTime);
+    }
+
+    public int getRemainingVisCapacity() {
+        return MAX_VIS - this.vis;
+    }
+
+    public void addAspects(AspectList inputAspects) {
+        for (Aspect aspect : inputAspects.getAspects()) {
+            this.aspects.add(aspect, inputAspects.getAmount(aspect));
+        }
+        this.vis = this.aspects.visSize();
+    }
+
+    public void shrinkInput() {
+        this.items.get(INPUT_SLOT).shrink(1);
+        if (this.items.get(INPUT_SLOT).isEmpty()) {
+            this.items.set(INPUT_SLOT, ItemStack.EMPTY);
+        }
+    }
+
+    public int getAspectAmount(Aspect aspect) {
+        return this.aspects.getAmount(aspect);
+    }
+
+    public void markStorageChanged(Level level, BlockPos pos) {
+        this.setChanged();
+        level.sendBlockUpdated(pos, this.getBlockState(), this.getBlockState(), 3);
     }
 
     public static boolean isItemFuel(ItemStack stack) {

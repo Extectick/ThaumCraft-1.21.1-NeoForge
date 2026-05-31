@@ -4,8 +4,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thaumcraft.Thaumcraft;
 
 public record WarpMessagePayload(byte warpType, int amount) implements CustomPacketPayload {
@@ -16,21 +14,6 @@ public record WarpMessagePayload(byte warpType, int amount) implements CustomPac
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
-    }
-
-    public static void handle(WarpMessagePayload payload, IPayloadContext context) {
-        if (FMLEnvironment.dist.isClient()) {
-            handleClient(payload);
-        }
-    }
-
-    private static void handleClient(WarpMessagePayload payload) {
-        try {
-            Class<?> handler = Class.forName("thaumcraft.client.network.TCClientPayloadHandler");
-            handler.getMethod("handleWarpMessage", WarpMessagePayload.class).invoke(null, payload);
-        } catch (ReflectiveOperationException exception) {
-            Thaumcraft.LOGGER.warn("Unable to handle warp message", exception);
-        }
     }
 
     private static void encode(RegistryFriendlyByteBuf buffer, WarpMessagePayload payload) {

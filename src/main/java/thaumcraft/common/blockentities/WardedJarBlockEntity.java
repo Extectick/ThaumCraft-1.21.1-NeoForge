@@ -15,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.EssentiaStorage;
 import thaumcraft.api.aspects.IAspectSource;
@@ -25,6 +24,7 @@ import thaumcraft.api.wands.IWandable;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCSoundEvents;
+import thaumcraft.common.util.ServerEssentiaTransportHooks;
 
 public class WardedJarBlockEntity extends BlockEntity implements IEssentiaContainer, IAspectSource, IEssentiaTransport, IWandable {
     public static final int CAPACITY = 64;
@@ -40,9 +40,7 @@ public class WardedJarBlockEntity extends BlockEntity implements IEssentiaContai
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, WardedJarBlockEntity jar) {
-        if (++jar.count % 5 == 0 && (jar.isVoidJar() || jar.storage.amount() < jar.getEssentiaCapacity())) {
-            jar.fillJar(level, pos);
-        }
+        ServerEssentiaTransportHooks.tickWardedJar(level, pos, state, jar);
     }
 
     @Override
@@ -262,26 +260,11 @@ public class WardedJarBlockEntity extends BlockEntity implements IEssentiaContai
         return true;
     }
 
-    private void fillJar(Level level, BlockPos pos) {
-        IEssentiaTransport transport = ThaumcraftApiHelper.getConnectableTransport(level, pos, Direction.UP);
-        if (transport == null || !transport.canOutputTo(Direction.DOWN)) {
-            return;
-        }
-
-        Aspect targetAspect = this.filterAspect != null ? this.filterAspect
-                : this.storage.isEmpty() ? null : this.storage.aspect();
-        if (targetAspect == null && transport.getEssentiaAmount(Direction.DOWN) > 0
-                && transport.getSuctionAmount(Direction.DOWN) < this.getSuctionAmount(Direction.UP)
-                && this.getSuctionAmount(Direction.UP) >= transport.getMinimumSuction()) {
-            targetAspect = transport.getEssentiaType(Direction.DOWN);
-        }
-        if (targetAspect != null && this.canAccept(targetAspect)
-                && transport.getSuctionAmount(Direction.DOWN) < this.getSuctionAmount(Direction.UP)) {
-            this.fillEssentia(targetAspect, transport.takeEssentia(targetAspect, 1, Direction.DOWN), false);
-        }
+    public int incrementCount() {
+        return ++this.count;
     }
 
-    private boolean isVoidJar() {
+    public boolean isVoidJar() {
         return this.getBlockState().is(TCBlocks.VOID_JAR.get());
     }
 

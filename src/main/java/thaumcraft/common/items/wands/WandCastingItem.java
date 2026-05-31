@@ -4,43 +4,29 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
-import thaumcraft.common.blocks.SimpleTableBlock;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.PrimalVisStorage;
 import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.api.wands.IWandable;
-import thaumcraft.common.items.curios.FocusPouchCurioItem;
-import thaumcraft.common.lib.crafting.InfusionAltarBuilder;
-import thaumcraft.common.lib.crafting.InfusionCrafting;
-import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCDataComponents;
-import thaumcraft.common.registry.TCItems;
-import thaumcraft.common.registry.TCSoundEvents;
+import thaumcraft.common.util.ClientInteractionState;
+import thaumcraft.common.util.ServerWandHooks;
 
 public class WandCastingItem extends Item {
     public static final String ROD_WOOD = "wood";
@@ -165,7 +151,7 @@ public class WandCastingItem extends Item {
 
     public int getFocusFrugal(ItemStack stack) {
         ItemStack focus = getFocusItem(stack);
-        return focus.getItem() instanceof ItemFocusBasic focusItem ? focusItem.getFrugalUpgrade(focus) : 0;
+        return focus.getItem() instanceof ItemFocusBasic ? Math.max(0, focus.getOrDefault(TCDataComponents.FOCUS_FRUGAL, 0)) : 0;
     }
 
     public void setFocus(ItemStack stack, ItemStack focus) {
@@ -214,7 +200,7 @@ public class WandCastingItem extends Item {
         tooltipComponents.add(Component.translatable("item.thaumcraft.wand.capacity", formatVis(maxVis))
                 .withStyle(ChatFormatting.GOLD));
 
-        if (Screen.hasShiftDown()) {
+        if (ClientInteractionState.isShiftDown()) {
             for (Aspect aspect : Aspect.getPrimalAspects()) {
                 tooltipComponents.add(detailedVisLine(stack, aspect));
             }
@@ -232,43 +218,14 @@ public class WandCastingItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack wand = player.getItemInHand(hand);
-        InteractionHand otherHand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-        ItemStack other = player.getItemInHand(otherHand);
-
-        if (WandFocusHelper.isFocus(other) && !WandFocusHelper.hasFocus(wand)) {
-            if (!level.isClientSide) {
-                WandFocusHelper.setFocus(wand, other);
-                if (!player.getAbilities().instabuild) {
-                    other.shrink(1);
-                }
-                player.displayClientMessage(Component.translatable("item.thaumcraft.wand.focus.set",
-                        WandFocusHelper.getFocusItem(wand).getHoverName()), true);
-                level.playSound(null, player.blockPosition(), TCSoundEvents.HHON.get(), SoundSource.PLAYERS, 0.35F, 1.0F);
-            }
-            return InteractionResultHolder.sidedSuccess(wand, level.isClientSide);
-        }
-
-        if (player.isShiftKeyDown() && WandFocusHelper.hasFocus(wand)) {
-            if (!level.isClientSide) {
-                ItemStack focus = WandFocusHelper.removeFocus(wand);
-                if (!FocusPouchCurioItem.addFocusToEquipped(player, focus) && !player.getInventory().add(focus)) {
-                    player.drop(focus, false);
-                }
-                player.displayClientMessage(Component.translatable("item.thaumcraft.wand.focus.removed"), true);
-                level.playSound(null, player.blockPosition(), TCSoundEvents.HHOFF.get(), SoundSource.PLAYERS, 0.35F, 1.0F);
-            }
-            return InteractionResultHolder.sidedSuccess(wand, level.isClientSide);
-        }
-
-        return InteractionResultHolder.pass(wand);
+        return ServerWandHooks.use(this, level, player, hand, wand);
     }
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
         ItemStack wand = context.getItemInHand();
-        BlockState state = level.getBlockState(pos);
+        var pos = context.getClickedPos();
         Player player = context.getPlayer();
 
         BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -282,56 +239,7 @@ public class WandCastingItem extends Item {
             }
         }
 
-        InteractionResult infusionCraftingResult = InfusionCrafting.tryStart(level, pos, player);
-        if (infusionCraftingResult != InteractionResult.PASS) {
-            return infusionCraftingResult;
-        }
-
-        InteractionResult infusionAltarResult = InfusionAltarBuilder.tryCreate(level, pos, wand, player);
-        if (infusionAltarResult != InteractionResult.PASS) {
-            return infusionAltarResult;
-        }
-
-        if (state.is(TCBlocks.TABLE.get())) {
-            if (!level.isClientSide) {
-                BlockState worktableState = TCBlocks.ARCANE_WORKTABLE.get().defaultBlockState()
-                        .setValue(SimpleTableBlock.FACING, state.getValue(SimpleTableBlock.FACING));
-                level.setBlock(pos, worktableState, 3);
-
-                if (player == null || !player.getAbilities().instabuild) {
-                    if (level.getBlockEntity(pos) instanceof ArcaneWorktableBlockEntity worktable) {
-                        worktable.setWand(wand.copyWithCount(1));
-                        worktable.setChanged();
-                    }
-                    wand.shrink(1);
-                }
-
-                level.playSound(null, pos, TCSoundEvents.WAND.get(), SoundSource.BLOCKS, 0.8F, 1.0F);
-                level.playSound(null, pos, TCSoundEvents.CRAFTSTART.get(), SoundSource.BLOCKS, 0.35F, 1.0F);
-            }
-            return InteractionResult.sidedSuccess(level.isClientSide);
-        }
-
-        if (!state.is(Blocks.BOOKSHELF)) {
-            return InteractionResult.PASS;
-        }
-
-        if (level instanceof ServerLevel serverLevel) {
-            level.removeBlock(pos, false);
-
-            ItemEntity entity = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 0.3D, pos.getZ() + 0.5D,
-                    new ItemStack(TCItems.THAUMONOMICON.get()));
-            entity.setDeltaMovement(0.0D, 0.0D, 0.0D);
-            entity.setNoGravity(true);
-            serverLevel.addFreshEntity(entity);
-
-            serverLevel.sendParticles(ParticleTypes.ENCHANT, pos.getX() + 0.5D, pos.getY() + 0.5D,
-                    pos.getZ() + 0.5D, 32, 0.55D, 0.55D, 0.55D, 0.35D);
-            level.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
-                    TCSoundEvents.WAND.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
-
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return ServerWandHooks.useOnAfterWandable(this, context);
     }
 
     private static String formatVis(int amount) {

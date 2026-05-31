@@ -8,3 +8,11 @@ pluginManagement {
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
+
+include "thaumcraft-api"
+include "thaumcraft-common"
+include "thaumcraft-client"
+include "thaumcraft-server"
+include "thaumcraft-universal"
+include "thaumcraft-datagen"
+include "thaumcraft-gametest"

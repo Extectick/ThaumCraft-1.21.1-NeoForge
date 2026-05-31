@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.EssentiaStorage;
@@ -27,6 +26,7 @@ import thaumcraft.common.blocks.EssentiaTubeBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock.TubeMode;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCSoundEvents;
+import thaumcraft.common.util.ServerEssentiaTransportHooks;
 
 public class EssentiaTubeBlockEntity extends BlockEntity implements IEssentiaContainer, IEssentiaTransport, IWandable {
     private static final int BUFFER_CAPACITY = 8;
@@ -57,37 +57,7 @@ public class EssentiaTubeBlockEntity extends BlockEntity implements IEssentiaCon
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, EssentiaTubeBlockEntity tube) {
-        if (tube.venting > 0) {
-            tube.venting--;
-        }
-        if (tube.count == 0) {
-            tube.count = level.random.nextInt(10);
-        }
-        tube.tickValvePower(level);
-
-        if (tube.venting > 0) {
-            return;
-        }
-
-        if (tube.getMode() == TubeMode.BUFFER) {
-            if (++tube.count % 5 == 0 && tube.bufferAspects.visSize() < BUFFER_CAPACITY) {
-                tube.fillBuffer();
-            }
-            return;
-        }
-
-        if (++tube.count % 2 == 0) {
-            tube.calculateSuction(tube.getMode() == TubeMode.FILTERED ? tube.filterAspect : null,
-                    tube.getMode() == TubeMode.RESTRICTED, tube.getMode() == TubeMode.DIRECTIONAL);
-            tube.checkVenting();
-            if (tube.essentiaAmount == 0) {
-                tube.essentiaType = null;
-            }
-        }
-
-        if (tube.count % 5 == 0 && tube.suction > 0) {
-            tube.equalizeWithNeighbours(tube.getMode() == TubeMode.DIRECTIONAL);
-        }
+        ServerEssentiaTransportHooks.tickTube(level, pos, state, tube);
     }
 
     @Override
@@ -286,7 +256,7 @@ public class EssentiaTubeBlockEntity extends BlockEntity implements IEssentiaCon
     @Override
     public int takeEssentia(Aspect aspect, int amount, Direction face) {
         if (this.getMode() == TubeMode.BUFFER) {
-            return this.takeBufferEssentia(aspect, amount, face);
+            return ServerEssentiaTransportHooks.takeBufferEssentia(this, aspect, amount, face);
         }
 
         if (this.canOutputTo(face) && this.essentiaType == aspect && this.essentiaAmount > 0 && amount > 0) {
@@ -403,108 +373,6 @@ public class EssentiaTubeBlockEntity extends BlockEntity implements IEssentiaCon
         this.markStorageChanged();
     }
 
-    private void calculateSuction(@Nullable Aspect filter, boolean restrict, boolean directional) {
-        this.suction = 0;
-        this.suctionType = null;
-        if (this.level == null) {
-            return;
-        }
-
-        for (Direction direction : Direction.values()) {
-            if ((directional && this.facing != direction.getOpposite()) || !this.isConnectable(direction)) {
-                continue;
-            }
-
-            IEssentiaTransport neighbor = ThaumcraftApiHelper.getConnectableTransport(this.level, this.worldPosition,
-                    direction);
-            if (neighbor == null) {
-                continue;
-            }
-
-            Direction opposite = direction.getOpposite();
-            Aspect neighborSuctionType = neighbor.getSuctionType(opposite);
-            if ((filter == null || neighborSuctionType == null || neighborSuctionType == filter)
-                    && (filter != null || this.getEssentiaAmount(direction) <= 0 || neighborSuctionType == null
-                            || this.getEssentiaType(direction) == neighborSuctionType)
-                    && (filter == null || this.getEssentiaAmount(direction) <= 0
-                            || this.getEssentiaType(direction) == null || neighborSuctionType == null
-                            || this.getEssentiaType(direction) == neighborSuctionType)) {
-                int neighborSuction = neighbor.getSuctionAmount(opposite);
-                if (neighborSuction > 0 && neighborSuction > this.suction + 1) {
-                    Aspect newSuctionType = neighborSuctionType == null ? filter : neighborSuctionType;
-                    this.setSuction(newSuctionType, restrict ? neighborSuction / 2 : neighborSuction - 1);
-                }
-            }
-        }
-    }
-
-    private void checkVenting() {
-        if (this.level == null) {
-            return;
-        }
-
-        for (Direction direction : Direction.values()) {
-            if (!this.isConnectable(direction)) {
-                continue;
-            }
-            IEssentiaTransport neighbor = ThaumcraftApiHelper.getConnectableTransport(this.level, this.worldPosition,
-                    direction);
-            if (neighbor == null) {
-                continue;
-            }
-            Direction opposite = direction.getOpposite();
-            int neighborSuction = neighbor.getSuctionAmount(opposite);
-            if (this.suction > 0 && (neighborSuction == this.suction || neighborSuction == this.suction - 1)
-                    && this.suctionType != neighbor.getSuctionType(opposite)) {
-                this.venting = 40;
-                this.markStorageChanged();
-                return;
-            }
-        }
-    }
-
-    private void equalizeWithNeighbours(boolean directional) {
-        if (this.level == null || this.essentiaAmount > 0) {
-            return;
-        }
-
-        for (Direction direction : Direction.values()) {
-            if ((directional && this.facing == direction.getOpposite()) || !this.isConnectable(direction)) {
-                continue;
-            }
-            IEssentiaTransport neighbor = ThaumcraftApiHelper.getConnectableTransport(this.level, this.worldPosition,
-                    direction);
-            if (neighbor == null) {
-                continue;
-            }
-
-            Direction opposite = direction.getOpposite();
-            if (!neighbor.canOutputTo(opposite)
-                    || (this.getSuctionType(null) != null && this.getSuctionType(null) != neighbor.getEssentiaType(opposite)
-                            && neighbor.getEssentiaType(opposite) != null)
-                    || this.getSuctionAmount(null) <= neighbor.getSuctionAmount(opposite)
-                    || this.getSuctionAmount(null) < neighbor.getMinimumSuction()) {
-                continue;
-            }
-
-            Aspect aspect = this.getSuctionType(null);
-            if (aspect == null) {
-                aspect = neighbor.getEssentiaType(opposite);
-            }
-            if (aspect == null) {
-                aspect = neighbor.getEssentiaType(null);
-            }
-            if (aspect == null) {
-                continue;
-            }
-
-            int moved = this.addEssentia(aspect, neighbor.takeEssentia(aspect, 1, opposite), direction);
-            if (moved > 0) {
-                return;
-            }
-        }
-    }
-
     private int addToBuffer(Aspect aspect, int amount) {
         if (amount != 1 || this.bufferAspects.visSize() >= BUFFER_CAPACITY) {
             return amount;
@@ -512,65 +380,6 @@ public class EssentiaTubeBlockEntity extends BlockEntity implements IEssentiaCon
         this.bufferAspects.add(aspect, 1);
         this.markStorageChanged();
         return 0;
-    }
-
-    private int takeBufferEssentia(Aspect aspect, int amount, Direction face) {
-        if (!this.canOutputTo(face)) {
-            return 0;
-        }
-
-        int suction = 0;
-        IEssentiaTransport requestingTransport = ThaumcraftApiHelper.getConnectableTransport(this.level,
-                this.worldPosition, face);
-        if (requestingTransport != null) {
-            suction = requestingTransport.getSuctionAmount(face.getOpposite());
-        }
-
-        for (Direction direction : Direction.values()) {
-            if (!this.canOutputTo(direction) || direction == face) {
-                continue;
-            }
-
-            IEssentiaTransport transport = ThaumcraftApiHelper.getConnectableTransport(this.level, this.worldPosition,
-                    direction);
-            if (transport == null) {
-                continue;
-            }
-
-            Direction opposite = direction.getOpposite();
-            int sideSuction = transport.getSuctionAmount(opposite);
-            Aspect sideSuctionType = transport.getSuctionType(opposite);
-            if ((sideSuctionType == aspect || sideSuctionType == null) && suction < sideSuction
-                    && this.getSuctionAmount(direction) < sideSuction) {
-                return 0;
-            }
-        }
-
-        int drained = Math.min(amount, this.bufferAspects.getAmount(aspect));
-        return drained > 0 && this.drainEssentia(aspect, drained, false) == drained ? drained : 0;
-    }
-
-    private void fillBuffer() {
-        if (this.level == null) {
-            return;
-        }
-
-        for (Direction direction : Direction.values()) {
-            IEssentiaTransport transport = ThaumcraftApiHelper.getConnectableTransport(this.level, this.worldPosition,
-                    direction);
-            if (transport == null) {
-                continue;
-            }
-
-            Direction opposite = direction.getOpposite();
-            if (transport.getEssentiaAmount(opposite) > 0
-                    && transport.getSuctionAmount(opposite) < this.getSuctionAmount(direction)
-                    && this.getSuctionAmount(direction) >= transport.getMinimumSuction()) {
-                Aspect aspect = transport.getEssentiaType(opposite);
-                this.addToBuffer(aspect, transport.takeEssentia(aspect, 1, opposite));
-                return;
-            }
-        }
     }
 
     @Nullable
@@ -582,27 +391,64 @@ public class EssentiaTubeBlockEntity extends BlockEntity implements IEssentiaCon
         return aspects.get(this.level.random.nextInt(aspects.size()));
     }
 
-    private void tickValvePower(Level level) {
-        if (this.getMode() != TubeMode.VALVE || this.count % 5 != 0) {
-            return;
+    public int decrementVenting() {
+        if (this.venting > 0) {
+            this.venting--;
         }
-        boolean powered = level.hasNeighborSignal(this.worldPosition);
-        if (this.wasPoweredLastTick && !powered && !this.allowFlow) {
-            this.allowFlow = true;
-            this.markStorageChanged();
-            level.playSound(null, this.worldPosition, TCSoundEvents.SQUEEK.get(), SoundSource.BLOCKS, 0.7F,
-                    0.9F + level.random.nextFloat() * 0.2F);
-        }
-        if (!this.wasPoweredLastTick && powered && this.allowFlow) {
-            this.allowFlow = false;
-            this.markStorageChanged();
-            level.playSound(null, this.worldPosition, TCSoundEvents.SQUEEK.get(), SoundSource.BLOCKS, 0.7F,
-                    0.9F + level.random.nextFloat() * 0.2F);
-        }
-        this.wasPoweredLastTick = powered;
+        return this.venting;
     }
 
-    private TubeMode getMode() {
+    public void setVenting(int venting) {
+        this.venting = Math.max(0, venting);
+        this.markStorageChanged();
+    }
+
+    public int getCount() {
+        return this.count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int incrementCount() {
+        return ++this.count;
+    }
+
+    public int getBufferVisSize() {
+        return this.bufferAspects.visSize();
+    }
+
+    @Nullable
+    public Aspect getFilterAspect() {
+        return this.filterAspect;
+    }
+
+    public Direction getFacing() {
+        return this.facing;
+    }
+
+    public boolean wasPoweredLastTick() {
+        return this.wasPoweredLastTick;
+    }
+
+    public void setWasPoweredLastTick(boolean wasPoweredLastTick) {
+        this.wasPoweredLastTick = wasPoweredLastTick;
+    }
+
+    public void setAllowFlow(boolean allowFlow) {
+        this.allowFlow = allowFlow;
+        this.markStorageChanged();
+    }
+
+    public void clearEmptyEssentiaType() {
+        if (this.essentiaAmount <= 0) {
+            this.essentiaType = null;
+            this.essentiaAmount = 0;
+        }
+    }
+
+    public TubeMode getMode() {
         return this.getBlockState().getBlock() instanceof EssentiaTubeBlock tube ? tube.getMode() : TubeMode.NORMAL;
     }
 
@@ -743,7 +589,7 @@ public class EssentiaTubeBlockEntity extends BlockEntity implements IEssentiaCon
         };
     }
 
-    private void markStorageChanged() {
+    public void markStorageChanged() {
         this.setChanged();
         if (this.level != null) {
             this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);

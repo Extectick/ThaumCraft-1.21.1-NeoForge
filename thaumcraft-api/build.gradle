@@ -1,0 +1,11 @@
+plugins {
+    id 'base'
+}
+
+tasks.named('assemble') {
+    dependsOn rootProject.tasks.named('apiJar')
+}
+
+tasks.named('build') {
+    dependsOn rootProject.tasks.named('apiJar')
+}

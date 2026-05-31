@@ -38,3 +38,13 @@ run/
 **/src/generated/**/.cache/
 repo/
 !**/src/**/repo/
+
+### Local diagnostics / smoke runs ###
+/run_client*.log
+/run_client*.err.log
+/thread_dump*.txt
+/game_thread_dump*.txt
+/hs_err_pid*.log
+/replay_pid*.log
+/debug.log
+/latest.log

@@ -3,11 +3,8 @@ package thaumcraft.common.network;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
-import thaumcraft.common.menus.ResearchTableMenu;
 
 public record ResearchTableCombineAspectPayload(Aspect first, Aspect second) implements CustomPacketPayload {
     public static final Type<ResearchTableCombineAspectPayload> TYPE =
@@ -18,12 +15,6 @@ public record ResearchTableCombineAspectPayload(Aspect first, Aspect second) imp
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
-    }
-
-    public static void handle(ResearchTableCombineAspectPayload payload, IPayloadContext context) {
-        if (context.player() instanceof ServerPlayer player && player.containerMenu instanceof ResearchTableMenu menu) {
-            menu.combineAspects(player, payload.first, payload.second);
-        }
     }
 
     private static void encode(RegistryFriendlyByteBuf buffer, ResearchTableCombineAspectPayload payload) {

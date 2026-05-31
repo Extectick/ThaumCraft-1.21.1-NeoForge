@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,16 +19,14 @@ import thaumcraft.common.crafting.DynamicArcaneRecipe;
 import thaumcraft.common.items.wands.WandCastingItem;
 import thaumcraft.common.items.wands.WandVisHelper;
 import thaumcraft.common.registry.TCRecipeTypes;
+import thaumcraft.common.util.ServerArcaneWorktableHooks;
 
 public final class ArcaneWorktableRecipes {
     private ArcaneWorktableRecipes() {
     }
 
     public static boolean tryCraft(Level level, ArcaneWorktableBlockEntity worktable, ItemStack wand, Player player) {
-        WorktableInput worktableInput = createInput(worktable);
-        Optional<RecipeHolder<ArcaneWorktableRecipe>> recipeHolder = findRecipe(level, worktableInput.input());
-        return recipeHolder.isPresent() && tryCraft(level, worktableInput.input(), worktable, wand, player,
-                recipeHolder.get().value());
+        return ServerArcaneWorktableHooks.tryCraft(level, worktable, wand, player);
     }
 
     public static Optional<RecipeHolder<ArcaneWorktableRecipe>> findRecipe(Level level, CraftingInput input) {
@@ -42,52 +39,17 @@ public final class ArcaneWorktableRecipes {
 
     public static boolean tryCraft(Level level, CraftingInput input, Container worktable, ItemStack wand, Player player,
             ArcaneWorktableRecipe recipe) {
-        if (!tryConsumeArcaneCraft(level, input, worktable, wand, player, recipe)) {
-            return false;
-        }
-
-        ItemStack result = recipe.assemble(input, level.registryAccess());
-        if (!player.getInventory().add(result)) {
-            player.drop(result, false);
-        }
-        return true;
+        return ServerArcaneWorktableHooks.tryCraft(level, input, worktable, wand, player, recipe);
     }
 
     public static boolean tryConsumeArcaneCraft(Level level, CraftingInput input, Container worktable, ItemStack wand,
             Player player, ArcaneWorktableRecipe recipe) {
-        WorktableInput worktableInput = createInput(worktable);
-        if (!worktableInput.input().equals(input)) {
-            return false;
-        }
-
-        Optional<RecipeHolder<ArcaneWorktableRecipe>> recipeHolder = level.getRecipeManager()
-                .getRecipeFor(TCRecipeTypes.ARCANE_WORKTABLE.get(), worktableInput.input(), level);
-        if (recipeHolder.isEmpty() || recipeHolder.get().value() != recipe
-                || !hasPrimalCost(wand, player, recipe, worktableInput.input())) {
-            return false;
-        }
-
-        consumePrimalCost(wand, player, recipe, worktableInput.input());
-        consumeIngredients(worktable, worktableInput, recipe, player);
-        worktable.setChanged();
-        return true;
+        return ServerArcaneWorktableHooks.tryConsumeArcaneCraft(level, input, worktable, wand, player, recipe);
     }
 
     public static boolean tryConsumeVanillaCraft(Level level, CraftingInput input, Container worktable, Player player,
             CraftingRecipe recipe) {
-        WorktableInput worktableInput = createInput(worktable);
-        if (!worktableInput.input().equals(input)) {
-            return false;
-        }
-
-        Optional<RecipeHolder<CraftingRecipe>> recipeHolder = findVanillaRecipe(level, worktableInput.input());
-        if (recipeHolder.isEmpty() || recipeHolder.get().value() != recipe) {
-            return false;
-        }
-
-        consumeIngredients(worktable, worktableInput, recipe, player);
-        worktable.setChanged();
-        return true;
+        return ServerArcaneWorktableHooks.tryConsumeVanillaCraft(level, input, worktable, player, recipe);
     }
 
     public static WorktableInput createInput(Container worktable) {
@@ -133,40 +95,11 @@ public final class ArcaneWorktableRecipes {
         return Math.max(0, (int)(cost * modifier));
     }
 
-    private static void consumePrimalCost(ItemStack wand, Player player, ArcaneWorktableRecipe recipe,
-            CraftingInput input) {
-        for (Aspect aspect : Aspect.getPrimalAspects()) {
-            WandVisHelper.consumeVis(wand, aspect, effectivePrimalCost(wand, player, recipe, input, aspect));
-        }
-    }
-
-    private static thaumcraft.api.aspects.PrimalVisStorage getVisCost(ArcaneWorktableRecipe recipe, CraftingInput input) {
+    public static thaumcraft.api.aspects.PrimalVisStorage getVisCost(ArcaneWorktableRecipe recipe, CraftingInput input) {
         if (input != null && recipe instanceof DynamicArcaneRecipe dynamicRecipe) {
             return dynamicRecipe.getVisCost(input);
         }
         return recipe.getVisCost();
-    }
-
-    private static void consumeIngredients(Container worktable, WorktableInput worktableInput,
-            net.minecraft.world.item.crafting.Recipe<CraftingInput> recipe, Player player) {
-        CraftingInput input = worktableInput.input();
-        NonNullList<ItemStack> remainingItems = recipe.getRemainingItems(input);
-        for (int y = 0; y < input.height(); y++) {
-            for (int x = 0; x < input.width(); x++) {
-                int inputSlot = x + y * input.width();
-                int worktableSlot = x + worktableInput.left() + (y + worktableInput.top()) * 3;
-                worktable.removeItem(worktableSlot, 1);
-                ItemStack remaining = remainingItems.get(inputSlot);
-                if (!remaining.isEmpty()) {
-                    ItemStack current = worktable.getItem(worktableSlot);
-                    if (current.isEmpty()) {
-                        worktable.setItem(worktableSlot, remaining);
-                    } else if (!player.getInventory().add(remaining)) {
-                        player.drop(remaining, false);
-                    }
-                }
-            }
-        }
     }
 
     public record WorktableInput(CraftingInput input, int left, int top) {
