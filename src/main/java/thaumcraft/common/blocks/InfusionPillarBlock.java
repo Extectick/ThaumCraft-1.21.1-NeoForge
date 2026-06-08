@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thaumcraft.common.blockentities.InfusionPillarBlockEntity;
 import thaumcraft.common.blockentities.RunicMatrixBlockEntity;
@@ -33,8 +32,7 @@ public class InfusionPillarBlock extends Block implements EntityBlock {
     public static final MapCodec<InfusionPillarBlock> CODEC = simpleCodec(InfusionPillarBlock::new);
     public static final EnumProperty<Corner> CORNER = EnumProperty.create("corner", Corner.class);
     public static final BooleanProperty TOP = BooleanProperty.create("top");
-    private static final VoxelShape LOWER_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-    private static final VoxelShape UPPER_SHAPE = Shapes.empty();
+    private static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     private static boolean restoringAltar;
 
     public InfusionPillarBlock(BlockBehaviour.Properties properties) {
@@ -90,7 +88,7 @@ public class InfusionPillarBlock extends Block implements EntityBlock {
     }
 
     private static VoxelShape shapeForState(BlockState state) {
-        return state.getValue(TOP) ? UPPER_SHAPE : LOWER_SHAPE;
+        return SHAPE;
     }
 
     public static void restoreAltarFromMatrix(Level level, BlockPos matrixPos) {

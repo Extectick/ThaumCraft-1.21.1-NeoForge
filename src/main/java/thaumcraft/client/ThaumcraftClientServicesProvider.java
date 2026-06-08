@@ -1,16 +1,25 @@
 package thaumcraft.client;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.client.fx.CrucibleClientFx;
 import thaumcraft.client.fx.InfusionMatrixClientFx;
+import thaumcraft.client.fx.InfusionBoreParticle;
+import thaumcraft.common.blockentities.CrucibleBlockEntity;
 import thaumcraft.client.network.TCClientPayloadHandler;
 import thaumcraft.common.network.BlockZapFxPayload;
 import thaumcraft.common.network.EssentiaSourceFxPayload;
 import thaumcraft.common.network.InfusionSourceFxPayload;
 import thaumcraft.common.network.PedestalSparkleFxPayload;
 import thaumcraft.common.network.ResearchCompleteNotificationPayload;
+import thaumcraft.common.network.ThaumometerScanMessagePayload;
+import thaumcraft.common.network.ThaumometerScanFxPayload;
 import thaumcraft.common.network.WarpMessagePayload;
 import thaumcraft.common.services.ThaumcraftClientServices;
+import thaumcraft.common.registry.TCDataAttachments;
 
 public final class ThaumcraftClientServicesProvider implements ThaumcraftClientServices {
     @Override
@@ -39,8 +48,35 @@ public final class ThaumcraftClientServicesProvider implements ThaumcraftClientS
     }
 
     @Override
+    public void handleThaumometerScanFx(ThaumometerScanFxPayload payload) {
+        TCClientPayloadHandler.handleThaumometerScanFx(payload);
+    }
+
+    @Override
+    public void handleThaumometerScanMessage(ThaumometerScanMessagePayload payload) {
+        TCClientPayloadHandler.handleThaumometerScanMessage(payload);
+    }
+
+    @Override
     public void handleWarpMessage(WarpMessagePayload payload) {
         TCClientPayloadHandler.handleWarpMessage(payload);
+    }
+
+    @Override
+    public void hungryNodeBlockFx(Level level, BlockPos source, BlockPos target, BlockState state) {
+        if (Minecraft.getInstance().particleEngine == null
+                || !(level instanceof net.minecraft.client.multiplayer.ClientLevel clientLevel)) {
+            return;
+        }
+        Minecraft.getInstance().particleEngine.add(InfusionBoreParticle.block(clientLevel,
+                source.getX() + level.random.nextFloat(),
+                source.getY() + level.random.nextFloat(),
+                source.getZ() + level.random.nextFloat(),
+                target.getX() + 0.5D,
+                target.getY() + 0.5D,
+                target.getZ() + 0.5D,
+                state,
+                source));
     }
 
     @Override
@@ -51,5 +87,21 @@ public final class ThaumcraftClientServicesProvider implements ThaumcraftClientS
     @Override
     public void instabilityBolt(Level level, BlockPos pos, int instability) {
         InfusionMatrixClientFx.instabilityBolt(level, pos, instability);
+    }
+
+    @Override
+    public void tickCrucible(CrucibleBlockEntity crucible) {
+        CrucibleClientFx.tick(crucible);
+    }
+
+    @Override
+    public void crucibleBlockEvent(CrucibleBlockEntity crucible, int eventId, int eventParam) {
+        CrucibleClientFx.blockEvent(crucible, eventId, eventParam);
+    }
+
+    @Override
+    public boolean isAspectDiscovered(Aspect aspect) {
+        return Minecraft.getInstance().player != null
+                && Minecraft.getInstance().player.getData(TCDataAttachments.ASPECT_POOL).isDiscovered(aspect);
     }
 }

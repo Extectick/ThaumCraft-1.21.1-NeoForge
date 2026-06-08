@@ -54,6 +54,7 @@ public final class TCSoundEvents {
     public static final DeferredHolder<SoundEvent, SoundEvent> PECH_IDLE = register("pech_idle");
     public static final DeferredHolder<SoundEvent, SoundEvent> PECH_TRADE = register("pech_trade");
     public static final DeferredHolder<SoundEvent, SoundEvent> PUMP = register("pump");
+    public static final DeferredHolder<SoundEvent, SoundEvent> RANDOM_POP = register("random_pop");
     public static final DeferredHolder<SoundEvent, SoundEvent> ROOTS = register("roots");
     public static final DeferredHolder<SoundEvent, SoundEvent> RUMBLE = register("rumble");
     public static final DeferredHolder<SoundEvent, SoundEvent> RUNIC_SHIELD_CHARGE = register("runic_shield_charge");

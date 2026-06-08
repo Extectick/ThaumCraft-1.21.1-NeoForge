@@ -26,7 +26,8 @@
 - [x] Add fail/cancel behavior for missing catalyst and disrupted ingredients.
 - [x] Replace remaining temporary crafting particles with old infusion matrix FX paths.
 - [x] Add first old-style flux goo/gas and warp storage hooks for instability.
-- [ ] Add Thaumonomicon/JEI display for infusion recipes.
+- [x] Add JEI display for infusion recipes.
+- [ ] Add Thaumonomicon research pages for infusion recipes.
 
 ## Implemented
 - `arcane_pedestal` is no longer a passive simple block.
@@ -36,7 +37,7 @@
   - with empty hand and occupied pedestal: take stored item.
   - stored item drops when the pedestal is broken.
 - Client renderer draws the stored item above the pedestal.
-- `runic_matrix` world rendering is now a safe block entity renderer using the existing item model, with active rotation and a small crafting ramp. The old full cube jitter/halo pass is still pending.
+- `runic_matrix` world rendering is handled by a block entity renderer with active rotation, startup/crafting ramps, glowing runes, internal glow, and the current infusion FX layers.
 - `runic_matrix` keeps a separate static 8-cube item model because the placed block model is intentionally invisible for the renderer.
 - `runic_matrix` renderer is registered client-side, uses old-style gradual `startUp`, and suppresses the placed block's static model so the animated block entity renderer owns world rendering.
 - `runic_matrix` has a client ticker for old-style active spin/tilt ramping and `craftCount` ramp state.
@@ -92,7 +93,7 @@
   - pedestal explosions.
   - matrix-to-target zap FX and magic damage. The zap now uses a modern port of the old `FXLightningBolt` path with the old `p_large.png` / `p_small.png` two-pass purple bolt textures, replacing the temporary vanilla electric-spark line.
   - harmful player/entity effects.
-  - local warp stand-in effect until the old warp subsystem exists.
+  - player warp through the ported permanent/sticky/temporary warp storage.
 - Old `PacketFXInfusionSource` behavior has a modern payload:
   - pedestal item absorption starts a 60 tick client effect.
   - the server removes the ingredient only after the old 5 craft-tick countdown.
@@ -121,4 +122,8 @@
 - Breaking old pillar metadata dropped source decorative blocks, not a pillar item.
 
 ## Next Step
-Next infusion work should port the missing old subsystems that instability depends on: flux goo/gas blocks, warp gain/storage, and then the full recipe set. Continue expanding item aspect data from old `ConfigAspects` as new ported items/blocks appear. The detailed aspect/essentia port plan is tracked in `docs/essentia_aspect_port_plan.md`.
+Next infusion work should expand the original recipe/research set and replace
+the remaining direct-radius essentia lookup with the exact old tube-aware
+source pathing. Continue expanding item aspect data from old `ConfigAspects`
+as new ported items and blocks appear. The detailed aspect/essentia port plan
+is tracked in `docs/essentia_aspect_port_plan.md`.

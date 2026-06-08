@@ -29,6 +29,30 @@ public final class ThaumcraftConfig {
             .comment("Maximum number of Thaumcraft HUD notifications visible at once. Matches Thaumcraft 4's notificationMax default.")
             .defineInRange("client.notifications.max", 15, 1, 20);
 
+    public static final ModConfigSpec.BooleanValue GENERATE_CINNABAR = BUILDER
+            .comment("Generate cinnabar ore. Matches Thaumcraft 4's genCinnibar option.")
+            .define("worldgen.cinnabar", true);
+
+    public static final ModConfigSpec.BooleanValue GENERATE_AMBER = BUILDER
+            .comment("Generate amber ore. Matches Thaumcraft 4's genAmber option.")
+            .define("worldgen.amber", true);
+
+    public static final ModConfigSpec.BooleanValue GENERATE_INFUSED_STONE = BUILDER
+            .comment("Generate elemental infused stone. Matches Thaumcraft 4's genInfusedStone option.")
+            .define("worldgen.infusedStone", true);
+
+    public static final ModConfigSpec.BooleanValue GENERATE_AURA_NODES = BUILDER
+            .comment("Generate natural aura nodes. Matches Thaumcraft 4's genAura option.")
+            .define("worldgen.auraNodes", true);
+
+    public static final ModConfigSpec.IntValue AURA_NODE_RARITY = BUILDER
+            .comment("Average number of chunks per natural aura node. Matches Thaumcraft 4's node_rarity default.")
+            .defineInRange("worldgen.nodeRarity", 36, 1, Integer.MAX_VALUE);
+
+    public static final ModConfigSpec.IntValue SPECIAL_AURA_NODE_RARITY = BUILDER
+            .comment("Rarity used for special node types, modifiers, and compound aspects.")
+            .defineInRange("worldgen.specialNodeRarity", 18, 3, Integer.MAX_VALUE);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private ThaumcraftConfig() {

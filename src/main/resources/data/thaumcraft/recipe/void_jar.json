@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "JARVOID",
+  "pattern": [
+    "O",
+    "J",
+    "P"
+  ],
+  "key": {
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "J": {
+      "item": "thaumcraft:warded_jar"
+    },
+    "P": {
+      "item": "minecraft:blaze_powder"
+    }
+  },
+  "vis": {
+    "water": 500,
+    "entropy": 1500
+  },
+  "result": {
+    "id": "thaumcraft:void_jar"
+  }
+}

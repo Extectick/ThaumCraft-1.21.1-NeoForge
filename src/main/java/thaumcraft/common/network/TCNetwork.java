@@ -25,6 +25,10 @@ public final class TCNetwork {
                 BlockZapFxPayload.STREAM_CODEC, TCPayloadHandlerBridge::handleBlockZapFx);
         registrar.playToClient(PedestalSparkleFxPayload.TYPE,
                 PedestalSparkleFxPayload.STREAM_CODEC, TCPayloadHandlerBridge::handlePedestalSparkleFx);
+        registrar.playToClient(ThaumometerScanFxPayload.TYPE,
+                ThaumometerScanFxPayload.STREAM_CODEC, TCPayloadHandlerBridge::handleThaumometerScanFx);
+        registrar.playToClient(ThaumometerScanMessagePayload.TYPE,
+                ThaumometerScanMessagePayload.STREAM_CODEC, TCPayloadHandlerBridge::handleThaumometerScanMessage);
         registrar.playToClient(WarpMessagePayload.TYPE,
                 WarpMessagePayload.STREAM_CODEC, TCPayloadHandlerBridge::handleWarpMessage);
         registrar.playToClient(ResearchCompleteNotificationPayload.TYPE,

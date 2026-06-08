@@ -36,4 +36,8 @@ public final class ObjectAspectRegistry {
     public static int generatedEntryCount() {
         return ServerServices.get().generatedAspectEntryCount();
     }
+
+    public static String source(ItemStack stack) {
+        return ServerServices.get().objectAspectSource(stack);
+    }
 }

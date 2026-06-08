@@ -1,0 +1,30 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "DISTILESSENTIA",
+  "pattern": [
+    "FIG",
+    "IBI",
+    "I I"
+  ],
+  "key": {
+    "F": {
+      "item": "thaumcraft:vis_filter"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "B": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "vis": {
+    "air": 500,
+    "water": 500
+  },
+  "result": {
+    "id": "thaumcraft:arcane_alembic"
+  }
+}

@@ -9,9 +9,13 @@ import thaumcraft.common.blockentities.AlchemicalFurnaceBlockEntity;
 import thaumcraft.common.blockentities.ArcaneAlembicBlockEntity;
 import thaumcraft.common.blockentities.ArcanePedestalBlockEntity;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
+import thaumcraft.common.blockentities.AuraNodeBlockEntity;
 import thaumcraft.common.blockentities.BrainInAJarBlockEntity;
+import thaumcraft.common.blockentities.CrucibleBlockEntity;
 import thaumcraft.common.blockentities.EssentiaTubeBlockEntity;
 import thaumcraft.common.blockentities.InfusionPillarBlockEntity;
+import thaumcraft.common.blockentities.NodeJarBlockEntity;
+import thaumcraft.common.blockentities.NodeStabilizerBlockEntity;
 import thaumcraft.common.blockentities.ResearchTableBlockEntity;
 import thaumcraft.common.blockentities.RunicMatrixBlockEntity;
 import thaumcraft.common.blockentities.WardedJarBlockEntity;
@@ -38,6 +42,15 @@ public final class TCBlockEntities {
             REGISTRY.register("runic_matrix", () -> BlockEntityType.Builder
                     .of(RunicMatrixBlockEntity::new, TCBlocks.RUNIC_MATRIX.get())
                     .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AuraNodeBlockEntity>> AURA_NODE =
+            REGISTRY.register("aura_node", () -> BlockEntityType.Builder
+                    .of(AuraNodeBlockEntity::new, TCBlocks.AURA_NODE.get(), TCBlocks.SILVERWOOD_KNOT.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NodeStabilizerBlockEntity>> NODE_STABILIZER =
+            REGISTRY.register("node_stabilizer", () -> BlockEntityType.Builder
+                    .of(NodeStabilizerBlockEntity::new,
+                            TCBlocks.NODE_STABILIZER.get(), TCBlocks.ADVANCED_NODE_STABILIZER.get())
+                    .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionPillarBlockEntity>> INFUSION_PILLAR =
             REGISTRY.register("infusion_pillar", () -> BlockEntityType.Builder
                     .of(InfusionPillarBlockEntity::new, TCBlocks.INFUSION_PILLAR.get())
@@ -53,6 +66,14 @@ public final class TCBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BrainInAJarBlockEntity>> BRAIN_IN_A_JAR =
             REGISTRY.register("brain_in_a_jar", () -> BlockEntityType.Builder
                     .of(BrainInAJarBlockEntity::new, TCBlocks.BRAIN_IN_A_JAR.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NodeJarBlockEntity>> NODE_IN_A_JAR =
+            REGISTRY.register("node_in_a_jar", () -> BlockEntityType.Builder
+                    .of(NodeJarBlockEntity::new, TCBlocks.NODE_IN_A_JAR.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CrucibleBlockEntity>> CRUCIBLE =
+            REGISTRY.register("crucible", () -> BlockEntityType.Builder
+                    .of(CrucibleBlockEntity::new, TCBlocks.CRUCIBLE.get())
                     .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EssentiaTubeBlockEntity>> ESSENTIA_TUBE =
             REGISTRY.register("essentia_tube", () -> BlockEntityType.Builder

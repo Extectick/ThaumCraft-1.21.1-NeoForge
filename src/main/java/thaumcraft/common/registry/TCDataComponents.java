@@ -12,6 +12,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.EssentiaStorage;
 import thaumcraft.api.aspects.PrimalVisStorage;
+import thaumcraft.api.nodes.NodeJarData;
 import thaumcraft.common.items.wands.FocusPouchContents;
 import thaumcraft.common.research.ResearchNoteData;
 
@@ -67,6 +68,12 @@ public final class TCDataComponents {
                     .persistent(ResearchNoteData.CODEC)
                     .networkSynchronized(ResearchNoteData.STREAM_CODEC)
                     .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<NodeJarData>> NODE_JAR_DATA =
+            REGISTRY.register("node_jar_data",
+                    () -> DataComponentType.<NodeJarData>builder()
+                            .persistent(NodeJarData.CODEC)
+                            .networkSynchronized(NodeJarData.STREAM_CODEC)
+                            .build());
 
     private TCDataComponents() {
     }

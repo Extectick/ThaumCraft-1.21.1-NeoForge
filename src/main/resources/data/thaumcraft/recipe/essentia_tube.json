@@ -1,0 +1,31 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "TUBES",
+  "pattern": [
+    " Q ",
+    "IGI",
+    " B "
+  ],
+  "key": {
+    "Q": {
+      "item": "thaumcraft:quicksilver_drop"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "B": {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "vis": {
+    "water": 500,
+    "order": 500
+  },
+  "result": {
+    "id": "thaumcraft:essentia_tube",
+    "count": 8
+  }
+}

@@ -92,7 +92,7 @@ public final class ResearchNotificationOverlay {
             }
 
             if (entry == notifications.size() - 1 && notification.created() > time) {
-                renderEntryFlash(guiGraphics, minecraft, width, y, textWidth, notifications.size(), entry, time,
+                renderEntryFlash(guiGraphics, minecraft, width, y, textWidth / 2, notifications.size(), entry, time,
                         notification.created(), alpha);
             }
 
@@ -101,11 +101,12 @@ public final class ResearchNotificationOverlay {
     }
 
     private static void renderEntryFlash(GuiGraphics guiGraphics, Minecraft minecraft, int width, float y,
-            int textWidth, int notificationCount, int entry, long time, long created, int alpha) {
+            int textHalfWidth, int notificationCount, int entry, long time, long created, int alpha) {
         float scale = (created - time) / (float) PlayerNotifications.notificationFadeInMs();
         scale = Mth.clamp(scale, 0.0F, 1.0F);
         int particleX = 16 * ((minecraft.player.tickCount + entry * 3) % 16);
-        float x = width - 5.0F - 8.0F * scale - (1.0F - scale) * (1.0F - scale) * (1.0F - scale) * textWidth * 3.0F;
+        float x = width - 5.0F - 8.0F * scale
+                - (1.0F - scale) * (1.0F - scale) * (1.0F - scale) * textHalfWidth * 3.0F;
         float flashY = y - 2.0F - 8.0F * scale;
 
         RenderSystem.blendFunc(com.mojang.blaze3d.platform.GlStateManager.SourceFactor.SRC_ALPHA,

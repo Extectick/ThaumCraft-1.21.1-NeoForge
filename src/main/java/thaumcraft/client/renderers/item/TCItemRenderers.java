@@ -27,6 +27,22 @@ public final class TCItemRenderers {
             }
         }, TCItems.ARCANE_ALEMBIC.get());
         event.registerItem(new IClientItemExtensions() {
+            private final ThaumometerItemRenderer renderer = ThaumometerItemRenderer.create();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return this.renderer;
+            }
+        }, TCItems.THAUMOMETER.get());
+        event.registerItem(new IClientItemExtensions() {
+            private final AuraNodeItemRenderer renderer = AuraNodeItemRenderer.create();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return this.renderer;
+            }
+        }, TCItems.AURA_NODE.get());
+        event.registerItem(new IClientItemExtensions() {
             private final JarItemRenderer renderer = JarItemRenderer.create();
 
             @Override
@@ -34,5 +50,13 @@ public final class TCItemRenderers {
                 return this.renderer;
             }
         }, TCItems.WARDED_JAR.get(), TCItems.VOID_JAR.get(), TCItems.BRAIN_IN_A_JAR.get(), TCItems.NODE_IN_A_JAR.get());
+        event.registerItem(new IClientItemExtensions() {
+            private final NodeStabilizerItemRenderer renderer = NodeStabilizerItemRenderer.create();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return this.renderer;
+            }
+        }, TCItems.NODE_STABILIZER.get(), TCItems.ADVANCED_NODE_STABILIZER.get());
     }
 }

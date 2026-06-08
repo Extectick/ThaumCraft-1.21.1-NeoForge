@@ -12,10 +12,13 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -27,11 +30,14 @@ import thaumcraft.api.wands.IWandable;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.util.ClientInteractionState;
 import thaumcraft.common.util.ServerWandHooks;
+import thaumcraft.common.services.ServerServices;
 
 public class WandCastingItem extends Item {
     public static final String ROD_WOOD = "wood";
+    public static final String ROD_SILVERWOOD = "silverwood";
     public static final String ROD_GREATWOOD_STAFF = "greatwood_staff";
     public static final String CAP_IRON = "iron";
+    public static final String CAP_THAUMIUM = "thaumium";
 
     public WandCastingItem(Properties properties) {
         super(properties.stacksTo(1));
@@ -240,6 +246,35 @@ public class WandCastingItem extends Item {
         }
 
         return ServerWandHooks.useOnAfterWandable(this, context);
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.NONE;
+    }
+
+    @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return slotChanged || !newStack.is(oldStack.getItem());
+    }
+
+    @Override
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        if (!level.isClientSide && livingEntity instanceof ServerPlayer player) {
+            ServerServices.get().tickAuraNodeTap(player, stack, remainingUseDuration);
+        }
+    }
+
+    @Override
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity livingEntity, int timeCharged) {
+        if (!level.isClientSide && livingEntity instanceof ServerPlayer player) {
+            ServerServices.get().stopAuraNodeTap(player);
+        }
     }
 
     private static String formatVis(int amount) {

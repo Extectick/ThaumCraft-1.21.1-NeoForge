@@ -1,7 +1,7 @@
 package thaumcraft.api.aspects;
 
 import java.util.Collections;
-import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class AspectList {
     public static final StreamCodec<ByteBuf, AspectList> STREAM_CODEC = StreamCodec.of(
             AspectList::toNetwork, AspectList::fromNetwork);
 
-    private final EnumMap<Aspect, Integer> aspects = new EnumMap<>(Aspect.class);
+    private final LinkedHashMap<Aspect, Integer> aspects = new LinkedHashMap<>();
 
     public AspectList() {
     }
@@ -76,6 +76,13 @@ public class AspectList {
 
     public int getAmount(Aspect aspect) {
         return this.aspects.getOrDefault(aspect, 0);
+    }
+
+    public AspectList setAmount(Aspect aspect, int amount) {
+        if (aspect != null) {
+            this.aspects.put(aspect, Math.max(0, amount));
+        }
+        return this;
     }
 
     public boolean reduce(Aspect aspect, int amount) {
@@ -157,7 +164,7 @@ public class AspectList {
         for (int i = 0; i < list.size(); i++) {
             CompoundTag aspectTag = list.getCompound(i);
             Aspect.byTag(aspectTag.getString("key"))
-                    .ifPresent(aspect -> this.add(aspect, aspectTag.getInt("amount")));
+                    .ifPresent(aspect -> this.setAmount(aspect, aspectTag.getInt("amount")));
         }
     }
 
@@ -194,7 +201,7 @@ public class AspectList {
         for (int i = 0; i < size; i++) {
             Aspect aspect = Aspect.STREAM_CODEC.decode(buffer);
             int amount = ByteBufCodecs.VAR_INT.decode(buffer);
-            aspects.add(aspect, amount);
+            aspects.setAmount(aspect, amount);
         }
         return aspects;
     }

@@ -1,3 +1,6 @@
 {
-  "parent": "thaumcraft:block/advanced_node_stabilizer"
+  "parent": "builtin/entity",
+  "textures": {
+    "particle": "thaumcraft:block/runeborder"
+  }
 }

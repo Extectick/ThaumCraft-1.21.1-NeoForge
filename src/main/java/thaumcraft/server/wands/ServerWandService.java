@@ -15,6 +15,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
 import thaumcraft.common.blocks.SimpleTableBlock;
 import thaumcraft.common.items.curios.FocusPouchCurioItem;
@@ -25,6 +26,7 @@ import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCSoundEvents;
 import thaumcraft.server.infusion.InfusionAltarBuilder;
 import thaumcraft.server.infusion.InfusionCrafting;
+import thaumcraft.server.aura.ServerNodeJarService;
 
 public final class ServerWandService {
     private ServerWandService() {
@@ -73,6 +75,11 @@ public final class ServerWandService {
         BlockState state = level.getBlockState(pos);
         Player player = context.getPlayer();
 
+        InteractionResult nodeJarResult = ServerNodeJarService.tryCapture(level, pos, wand, player);
+        if (nodeJarResult != InteractionResult.PASS) {
+            return nodeJarResult;
+        }
+
         InteractionResult infusionCraftingResult = InfusionCrafting.tryStart(level, pos, player);
         if (infusionCraftingResult != InteractionResult.PASS) {
             return infusionCraftingResult;
@@ -85,6 +92,10 @@ public final class ServerWandService {
 
         if (state.is(TCBlocks.TABLE.get())) {
             return createArcaneWorktable(level, pos, state, wand, player);
+        }
+
+        if (state.is(Blocks.CAULDRON) || state.is(Blocks.WATER_CAULDRON)) {
+            return createCrucible(level, pos);
         }
 
         if (state.is(Blocks.BOOKSHELF)) {
@@ -131,6 +142,22 @@ public final class ServerWandService {
                     TCSoundEvents.WAND.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
 
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    private static InteractionResult createCrucible(Level level, BlockPos pos) {
+        if (!level.isClientSide) {
+            BlockState oldState = level.getBlockState(pos);
+            int waterAmount = oldState.is(Blocks.WATER_CAULDRON)
+                    ? oldState.getValue(LayeredCauldronBlock.LEVEL) * 1000 / 3
+                    : 0;
+            level.setBlock(pos, TCBlocks.CRUCIBLE.get().defaultBlockState(), 3);
+            if (waterAmount > 0 && level.getBlockEntity(pos) instanceof thaumcraft.common.blockentities.CrucibleBlockEntity crucible) {
+                crucible.addWater(waterAmount);
+            }
+            level.blockEvent(pos, TCBlocks.CRUCIBLE.get(), 1, 1);
+            level.playSound(null, pos, TCSoundEvents.WAND.get(), SoundSource.BLOCKS, 0.8F, 1.0F);
+        }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 }

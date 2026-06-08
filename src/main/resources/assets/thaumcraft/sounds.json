@@ -291,6 +291,12 @@
       "thaumcraft:pump3"
     ]
   },
+  "random_pop": {
+    "category": "master",
+    "sounds": [
+      "thaumcraft:random_pop"
+    ]
+  },
   "roots": {
     "category": "master",
     "sounds": [

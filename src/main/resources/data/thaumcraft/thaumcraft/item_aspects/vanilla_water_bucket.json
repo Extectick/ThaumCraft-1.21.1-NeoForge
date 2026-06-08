@@ -1,0 +1,8 @@
+{
+  "item": "minecraft:water_bucket",
+  "aspects": {
+    "metallum": 7,
+    "vacuos": 1,
+    "aqua": 4
+  }
+}

@@ -1,0 +1,81 @@
+package thaumcraft.common.blocks;
+
+import javax.annotation.Nullable;
+
+import com.mojang.serialization.MapCodec;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import thaumcraft.common.blockentities.AuraNodeBlockEntity;
+import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.world.AuraNodeGenerator;
+
+public class AuraNodeBlock extends Block implements EntityBlock {
+    public static final MapCodec<AuraNodeBlock> CODEC = simpleCodec(AuraNodeBlock::new);
+    private static final VoxelShape SELECTION_SHAPE = Block.box(4.8D, 4.8D, 4.8D, 11.2D, 11.2D, 11.2D);
+
+    public AuraNodeBlock(BlockBehaviour.Properties properties) {
+        super(properties);
+    }
+
+    @Override
+    protected MapCodec<? extends AuraNodeBlock> codec() {
+        return CODEC;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new AuraNodeBlockEntity(pos, state);
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer,
+            ItemStack stack) {
+        if (!level.isClientSide && stack.is(TCItems.AURA_NODE.get())) {
+            AuraNodeGenerator.configureRandomNode(level, pos, level.random);
+        }
+        super.setPlacedBy(level, pos, state, placer, stack);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
+            BlockEntityType<T> blockEntityType) {
+        return blockEntityType == TCBlockEntities.AURA_NODE.get()
+                ? (tickLevel, pos, tickState, blockEntity) -> AuraNodeBlockEntity.tick(tickLevel, pos, tickState,
+                        (AuraNodeBlockEntity) blockEntity)
+                : null;
+    }
+
+    @Override
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.INVISIBLE;
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SELECTION_SHAPE;
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
+            CollisionContext context) {
+        return Shapes.empty();
+    }
+}

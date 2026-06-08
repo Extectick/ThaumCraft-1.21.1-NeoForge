@@ -23,10 +23,12 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.blockentities.AlchemicalFurnaceBlockEntity;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
+import thaumcraft.common.blockentities.CrucibleBlockEntity;
 import thaumcraft.common.blockentities.EssentiaTubeBlockEntity;
 import thaumcraft.common.blockentities.ResearchTableBlockEntity;
 import thaumcraft.common.blockentities.RunicMatrixBlockEntity;
 import thaumcraft.common.blockentities.WardedJarBlockEntity;
+import thaumcraft.common.blockentities.AuraNodeBlockEntity;
 import thaumcraft.common.blocks.FluxBlock;
 import thaumcraft.common.crafting.ArcaneWorktableRecipe;
 import thaumcraft.common.items.wands.WandCastingItem;
@@ -34,6 +36,7 @@ import thaumcraft.common.network.CycleWandFocusPayload;
 import thaumcraft.common.network.ResearchTableCombineAspectPayload;
 import thaumcraft.common.network.ResearchTablePlaceAspectPayload;
 import thaumcraft.common.network.ThaumonomiconCreateNotePayload;
+import net.minecraft.world.phys.BlockHitResult;
 
 public interface ThaumcraftServerServices {
     final class Empty implements ThaumcraftServerServices {
@@ -49,6 +52,24 @@ public interface ThaumcraftServerServices {
 
     default InteractionResult useWandOnAfterWandable(WandCastingItem wandItem, UseOnContext context) {
         return InteractionResult.PASS;
+    }
+
+    default void startAuraNodeTap(ServerPlayer player, InteractionHand hand, BlockPos nodePos) {
+    }
+
+    default void tickAuraNodeTap(ServerPlayer player, ItemStack wand, int remainingUseDuration) {
+    }
+
+    default void stopAuraNodeTap(ServerPlayer player) {
+    }
+
+    default InteractionResult startThaumometerScan(Player player, InteractionHand hand) {
+        return InteractionResult.CONSUME;
+    }
+
+    default InteractionResult startThaumometerBlockScan(Player player, InteractionHand hand,
+            BlockHitResult hitResult) {
+        return InteractionResult.CONSUME;
     }
 
     default void addWarpToPlayer(Player player, int amount, boolean temporary) {
@@ -118,6 +139,16 @@ public interface ThaumcraftServerServices {
             AlchemicalFurnaceBlockEntity furnace) {
     }
 
+    default void tickCrucible(Level level, BlockPos pos, BlockState state, CrucibleBlockEntity crucible) {
+    }
+
+    default void crucibleEntityInside(Level level, BlockPos pos, BlockState state, CrucibleBlockEntity crucible,
+            Entity entity) {
+    }
+
+    default void spillCrucibleRemnants(Level level, BlockPos pos, CrucibleBlockEntity crucible) {
+    }
+
     default void tickWardedJar(Level level, BlockPos pos, BlockState state, WardedJarBlockEntity jar) {
     }
 
@@ -182,5 +213,9 @@ public interface ThaumcraftServerServices {
 
     default int generatedAspectEntryCount() {
         return 0;
+    }
+
+    default String objectAspectSource(ItemStack stack) {
+        return "none";
     }
 }

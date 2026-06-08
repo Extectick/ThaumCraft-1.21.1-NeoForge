@@ -6,7 +6,7 @@
   ],
   "key": {
     "N": {
-      "item": "thaumcraft:thaumium_nugget"
+      "tag": "c:nuggets/thaumium"
     }
   },
   "vis": {

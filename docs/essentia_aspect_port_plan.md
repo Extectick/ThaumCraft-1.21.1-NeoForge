@@ -37,11 +37,12 @@
   - scan valid source containers;
   - respect tube suction/pathing and blocked tube sides;
   - preserve missing-source delay behavior.
-- [ ] Add source-to-matrix FX and sound pass for essentia drain.
+- [x] Add the original source-to-matrix essentia trail FX.
+- [x] Preserve the original silent essentia-drain behavior; no replacement sound was invented.
 - [ ] Port bellows:
   - furnace smelting speed modifier;
   - essentia buffer suction/choke modifier.
-- [ ] Start crucible mechanics on top of the same `ObjectAspectRegistry`.
+- [x] Start crucible mechanics on top of the same `ObjectAspectRegistry`.
 
 - [x] Replace `PrimalVisStorage essentia` in `InfusionRecipe` with `AspectList`.
 - [x] Update the infusion recipe serializer.
@@ -74,7 +75,7 @@
   - missing-source delay;
   - mirror exclusion;
   - tube pathing/suction fidelity;
-  - source-to-matrix FX.
+  - exact tube-aware source pathing remains; source-to-matrix FX is complete.
 
 ### 4. Align Jars With Old Behavior
 - [x] `WardedJarBlockEntity` stores one `Aspect + amount` with capacity 64.

@@ -1,0 +1,26 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "INFUSION",
+  "pattern": [
+    "SBS",
+    "BEB",
+    "SBS"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumcraft:arcane_stone"
+    },
+    "B": {
+      "tag": "c:shards"
+    },
+    "E": {
+      "item": "minecraft:ender_pearl"
+    }
+  },
+  "vis": {
+    "order": 4000
+  },
+  "result": {
+    "id": "thaumcraft:runic_matrix"
+  }
+}

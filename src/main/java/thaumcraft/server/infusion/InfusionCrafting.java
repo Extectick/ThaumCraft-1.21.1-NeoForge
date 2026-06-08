@@ -19,6 +19,7 @@ import thaumcraft.common.crafting.InfusionRecipe;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCRecipeTypes;
 import thaumcraft.common.registry.TCSoundEvents;
+import thaumcraft.common.util.ServerEssentiaHooks;
 
 public final class InfusionCrafting {
     private InfusionCrafting() {
@@ -81,6 +82,7 @@ public final class InfusionCrafting {
         }
 
         matrix.startCrafting(player, recipe.get(), input);
+        ServerEssentiaHooks.refreshSources(level, pos);
         level.playSound(null, pos, TCSoundEvents.CRAFTSTART.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
         return InteractionResult.CONSUME;
     }

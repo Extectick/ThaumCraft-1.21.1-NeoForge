@@ -26,6 +26,8 @@ import net.minecraft.world.item.ItemStack;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.EssentiaStorage;
+import thaumcraft.api.nodes.NodeJarData;
+import thaumcraft.client.renderers.block.AuraNodeRenderer;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 
@@ -65,7 +67,7 @@ public class JarItemRenderer extends BlockEntityWithoutLevelRenderer {
             renderBrine(poseStack, buffer, packedLight);
             renderBrain(poseStack, buffer, packedLight);
         } else if (stack.is(TCItems.NODE_IN_A_JAR.get())) {
-            renderBrine(poseStack, buffer, packedLight);
+            renderNode(stack, poseStack, buffer);
         } else {
             EssentiaStorage essentia = stack.getOrDefault(TCDataComponents.ESSENTIA, EssentiaStorage.EMPTY);
             if (!essentia.isEmpty()) {
@@ -103,6 +105,26 @@ public class JarItemRenderer extends BlockEntityWithoutLevelRenderer {
         this.brainLower.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, -1);
         this.brainStem.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, -1);
 
+        poseStack.popPose();
+    }
+
+    private static void renderNode(ItemStack stack, PoseStack poseStack, MultiBufferSource buffer) {
+        NodeJarData data = stack.getOrDefault(TCDataComponents.NODE_JAR_DATA, NodeJarData.EMPTY);
+        if (data.isEmpty()) {
+            return;
+        }
+
+        poseStack.pushPose();
+        poseStack.translate(0.0F, -0.42F, 0.0F);
+        poseStack.scale(0.52F, 0.52F, 0.52F);
+        AuraNodeRenderer.renderNodeLayers(poseStack, buffer, data.aspects(), data.nodeType(), data.nodeModifier(),
+                0.85F, 1.0F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+        AuraNodeRenderer.renderNodeLayers(poseStack, buffer, data.aspects(), data.nodeType(), data.nodeModifier(),
+                0.85F, 1.0F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+        AuraNodeRenderer.renderNodeLayers(poseStack, buffer, data.aspects(), data.nodeType(), data.nodeModifier(),
+                0.85F, 1.0F);
         poseStack.popPose();
     }
 

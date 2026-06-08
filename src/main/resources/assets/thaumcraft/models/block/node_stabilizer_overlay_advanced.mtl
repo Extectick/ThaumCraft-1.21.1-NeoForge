@@ -1,0 +1,5 @@
+newmtl stabilizer_overlay_advanced
+Ka 1.0 1.0 1.0
+Kd 1.0 1.0 1.0
+Ks 0.0 0.0 0.0
+map_Kd thaumcraft:models/node_stabilizer_over_advanced

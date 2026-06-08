@@ -9,6 +9,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -17,6 +18,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import thaumcraft.Thaumcraft;
@@ -68,6 +71,7 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
             MultiBufferSource buffer, int packedLight, int packedOverlay) {
         poseStack.pushPose();
         centerModelInItemSpace(poseStack);
+        applyUseAnimation(stack, displayContext, poseStack);
 
         boolean staff = isStaff(stack);
         boolean sceptre = isSceptre(stack);
@@ -78,6 +82,7 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
         if (staff) {
             poseStack.translate(0.0F, 0.2F, 0.0F);
         }
+        ItemFocusBasic focusItem = WandFocusHelper.getFocus(stack);
 
         poseStack.pushPose();
         if (staff) {
@@ -106,7 +111,6 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
         renderPart(this.capBottom, capTexture, poseStack, buffer, packedLight, packedOverlay, 0xFFFFFFFF);
         poseStack.popPose();
 
-        ItemFocusBasic focusItem = WandFocusHelper.getFocus(stack);
         if (focusItem != null) {
             ItemStack focusStack = WandFocusHelper.getFocusItem(stack);
             renderFocus(focusItem, focusStack, poseStack, buffer, packedOverlay);
@@ -115,6 +119,45 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
         renderRunes(stack, staff, sceptre, poseStack, buffer, packedOverlay);
 
         poseStack.popPose();
+    }
+
+    private static void applyUseAnimation(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null || !player.isUsingItem()
+                || !ItemStack.isSameItemSameComponents(player.getUseItem(), stack)
+                || !isUsedHandContext(player, displayContext)) {
+            return;
+        }
+
+        float partialTick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
+        float useTicks = player.getTicksUsingItem() + partialTick;
+        float raiseTicks = Math.min(useTicks, 3.0F);
+        boolean firstPerson = displayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND
+                || displayContext == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND;
+
+        // Exact Thaumcraft 4 WAVE transform used while a wand drains an aura node.
+        poseStack.translate(0.0F, 1.0F, 0.0F);
+        if (firstPerson) {
+            poseStack.mulPose(Axis.XP.rotationDegrees(10.0F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(10.0F));
+        } else {
+            poseStack.mulPose(Axis.ZP.rotationDegrees(33.0F));
+        }
+        poseStack.mulPose(Axis.XP.rotationDegrees(-60.0F * (raiseTicks / 3.0F)));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(useTicks / 10.0F) * 10.0F));
+        poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(useTicks / 15.0F) * 10.0F));
+        poseStack.translate(0.0F, -1.0F, 0.0F);
+    }
+
+    private static boolean isUsedHandContext(LocalPlayer player, ItemDisplayContext displayContext) {
+        HumanoidArm usedArm = player.getUsedItemHand() == net.minecraft.world.InteractionHand.MAIN_HAND
+                ? player.getMainArm()
+                : player.getMainArm().getOpposite();
+        return switch (displayContext) {
+            case FIRST_PERSON_RIGHT_HAND, THIRD_PERSON_RIGHT_HAND -> usedArm == HumanoidArm.RIGHT;
+            case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND -> usedArm == HumanoidArm.LEFT;
+            default -> false;
+        };
     }
 
     private void renderTopCap(ResourceLocation capTexture, boolean sceptre, PoseStack poseStack,
@@ -325,7 +368,7 @@ public class WandItemRenderer extends BlockEntityWithoutLevelRenderer {
                 0.0F,
                 0.0F,
                 0.0F,
-                false,
+                true,
                 textureWidth,
                 textureHeight,
                 Set.of(Direction.values())

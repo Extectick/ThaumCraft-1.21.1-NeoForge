@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.research.AspectPoolData;
 import thaumcraft.common.research.ResearchKnowledgeData;
+import thaumcraft.common.research.ScannedKnowledgeData;
 import thaumcraft.common.research.WarpData;
 
 public final class TCDataAttachments {
@@ -25,6 +26,13 @@ public final class TCDataAttachments {
                     .serialize(ResearchKnowledgeData.CODEC, knowledge -> !knowledge.completed().isEmpty())
                     .copyOnDeath()
                     .sync(ResearchKnowledgeData.STREAM_CODEC)
+                    .build());
+
+    public static final DeferredHolder<AttachmentType<?>, AttachmentType<ScannedKnowledgeData>> SCANNED_KNOWLEDGE =
+            REGISTRY.register("scanned_knowledge", () -> AttachmentType.builder(() -> ScannedKnowledgeData.EMPTY)
+                    .serialize(ScannedKnowledgeData.CODEC, knowledge -> !knowledge.isEmpty())
+                    .copyOnDeath()
+                    .sync(ScannedKnowledgeData.STREAM_CODEC)
                     .build());
 
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<WarpData>> WARP =

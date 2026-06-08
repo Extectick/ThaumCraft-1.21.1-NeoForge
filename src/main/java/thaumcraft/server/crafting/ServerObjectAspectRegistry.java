@@ -48,6 +48,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -61,15 +62,29 @@ public final class ServerObjectAspectRegistry {
     private static final String DIRECTORY = "thaumcraft/item_aspects";
     private static final int MAX_GENERATION_PASSES = 12;
     private static final Map<Item, AspectList> ITEM_ASPECTS = new LinkedHashMap<>();
+    private static final Map<Item, AspectList> COMPLEX_ITEM_ASPECTS = new LinkedHashMap<>();
     private static final Map<Item, AspectList> GENERATED_ASPECTS = new LinkedHashMap<>();
     private static final Map<Item, AspectList> TAG_ITEM_ASPECTS = new LinkedHashMap<>();
     private static final List<TagEntry> TAG_ASPECTS = new ArrayList<>();
+    private static RecipeManager lastRecipeManager;
+    private static HolderLookup.Provider lastRegistries;
 
     private ServerObjectAspectRegistry() {
     }
 
     public static void registerReloadListener(AddReloadListenerEvent event) {
         event.addListener(new ReloadListener(event.getServerResources().getRecipeManager(), event.getRegistryAccess()));
+    }
+
+    public static void onTagsUpdated(TagsUpdatedEvent event) {
+        if (!event.shouldUpdateStaticData() || lastRecipeManager == null || lastRegistries == null) {
+            return;
+        }
+
+        rebuildTagItemCache();
+        regenerateFromRecipes(lastRecipeManager, lastRegistries);
+        Thaumcraft.LOGGER.info("Rebuilt object aspect tag cache after tag update: {} cached tagged items",
+                TAG_ITEM_ASPECTS.size());
     }
 
     public static AspectList getObjectTags(ItemStack stack) {
@@ -88,7 +103,11 @@ public final class ServerObjectAspectRegistry {
         }
 
         AspectList generatedAspects = GENERATED_ASPECTS.get(stack.getItem());
-        AspectList aspects = generatedAspects != null ? generatedAspects.copy() : AspectList.EMPTY;
+        AspectList aspects = generatedAspects != null ? stripGeneratedMagic(generatedAspects) : new AspectList();
+        AspectList complexAspects = COMPLEX_ITEM_ASPECTS.get(stack.getItem());
+        if (complexAspects != null) {
+            aspects.add(complexAspects);
+        }
         return withPotionAspects(stack, aspects);
     }
 
@@ -140,8 +159,34 @@ public final class ServerObjectAspectRegistry {
         return GENERATED_ASPECTS.size();
     }
 
+    public static String describeSource(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return "empty";
+        }
+        if (ITEM_ASPECTS.containsKey(stack.getItem())) {
+            return "item";
+        }
+        if (TAG_ITEM_ASPECTS.containsKey(stack.getItem())) {
+            return "tag";
+        }
+
+        boolean generated = GENERATED_ASPECTS.containsKey(stack.getItem());
+        boolean complex = COMPLEX_ITEM_ASPECTS.containsKey(stack.getItem());
+        if (generated && complex) {
+            return "generated+complex";
+        }
+        if (generated) {
+            return "generated";
+        }
+        if (complex) {
+            return "complex";
+        }
+        return "none";
+    }
+
     private static void reload(Map<ResourceLocation, JsonElement> entries) {
         Map<Item, AspectList> itemAspects = new LinkedHashMap<>();
+        Map<Item, AspectList> complexItemAspects = new LinkedHashMap<>();
         List<TagEntry> tagAspects = new ArrayList<>();
 
         entries.forEach((id, element) -> {
@@ -159,6 +204,11 @@ public final class ServerObjectAspectRegistry {
                     throw new JsonParseException("Expected exactly one of 'item' or 'tag'");
                 }
 
+                boolean mergeGenerated = GsonHelper.getAsBoolean(json, "merge_generated", false);
+                if (mergeGenerated && json.has("tag")) {
+                    throw new JsonParseException("'merge_generated' entries must target an item");
+                }
+
                 if (json.has("item")) {
                     ResourceLocation itemId = ResourceLocation.parse(GsonHelper.getAsString(json, "item"));
                     Optional<Item> item = BuiltInRegistries.ITEM.getOptional(itemId);
@@ -167,7 +217,11 @@ public final class ServerObjectAspectRegistry {
                                 itemId);
                         return;
                     }
-                    itemAspects.put(item.get(), aspects);
+                    if (mergeGenerated) {
+                        complexItemAspects.put(item.get(), aspects);
+                    } else {
+                        itemAspects.put(item.get(), aspects);
+                    }
                 } else {
                     ResourceLocation tagId = ResourceLocation.parse(GsonHelper.getAsString(json, "tag"));
                     tagAspects.add(new TagEntry(TagKey.create(Registries.ITEM, tagId), aspects));
@@ -179,11 +233,15 @@ public final class ServerObjectAspectRegistry {
 
         ITEM_ASPECTS.clear();
         ITEM_ASPECTS.putAll(itemAspects);
+        COMPLEX_ITEM_ASPECTS.clear();
+        COMPLEX_ITEM_ASPECTS.putAll(complexItemAspects);
         TAG_ASPECTS.clear();
         TAG_ASPECTS.addAll(tagAspects);
+        GENERATED_ASPECTS.clear();
         rebuildTagItemCache();
-        Thaumcraft.LOGGER.info("Loaded {} item aspect entries, {} item tag aspect entries, {} cached tagged items",
-                ITEM_ASPECTS.size(), TAG_ASPECTS.size(), TAG_ITEM_ASPECTS.size());
+        Thaumcraft.LOGGER.info(
+                "Loaded {} item aspect entries, {} generated-merge item aspect entries, {} item tag aspect entries, {} cached tagged items",
+                ITEM_ASPECTS.size(), COMPLEX_ITEM_ASPECTS.size(), TAG_ASPECTS.size(), TAG_ITEM_ASPECTS.size());
     }
 
     private static void regenerateFromRecipes(RecipeManager recipeManager, HolderLookup.Provider registries) {
@@ -197,21 +255,27 @@ public final class ServerObjectAspectRegistry {
             Map<Ingredient, AspectList> ingredientCache = new IdentityHashMap<>();
             passes++;
             int before = generated.size();
+            boolean changed = false;
             for (RecipeHolder<?> holder : recipes) {
                 checkedRecipes++;
                 Recipe<?> recipe = holder.value();
                 ItemStack result = recipe.getResultItem(registries).copy();
-                if (result.isEmpty() || hasExplicitAspects(result) || generated.containsKey(result.getItem())) {
+                if (result.isEmpty() || hasExplicitAspects(result)) {
                     continue;
                 }
 
                 AspectList generatedAspects = generateRecipeAspects(recipe, result, generated, ingredientCache,
                         new HashSet<>());
                 if (!generatedAspects.isEmpty()) {
-                    generated.put(result.getItem(), capAspects(generatedAspects, 64));
+                    AspectList capped = capAspects(generatedAspects, 64);
+                    AspectList previous = generated.get(result.getItem());
+                    if (previous == null || capped.visSize() < previous.visSize()) {
+                        generated.put(result.getItem(), capped);
+                        changed = true;
+                    }
                 }
             }
-            if (generated.size() == before) {
+            if (!changed && generated.size() == before) {
                 break;
             }
         }
@@ -294,7 +358,21 @@ public final class ServerObjectAspectRegistry {
         }
 
         AspectList generatedAspects = generated.get(stack.getItem());
-        return generatedAspects != null ? generatedAspects.copy() : AspectList.EMPTY;
+        AspectList aspects = generatedAspects != null ? stripGeneratedMagic(generatedAspects) : new AspectList();
+        AspectList complexAspects = COMPLEX_ITEM_ASPECTS.get(stack.getItem());
+        if (complexAspects != null) {
+            aspects.add(complexAspects);
+        }
+        return aspects;
+    }
+
+    private static AspectList stripGeneratedMagic(AspectList aspects) {
+        AspectList output = aspects.copy();
+        output.remove(Aspect.AURA);
+        output.remove(Aspect.MAGIC);
+        output.remove(Aspect.TAINT);
+        output.remove(Aspect.ELDRITCH);
+        return output;
     }
 
     private static boolean hasExplicitAspects(ItemStack stack) {
@@ -310,20 +388,15 @@ public final class ServerObjectAspectRegistry {
             return;
         }
 
-        for (Item item : BuiltInRegistries.ITEM) {
-            ItemStack stack = item.getDefaultInstance();
-            if (stack.isEmpty()) {
-                continue;
-            }
-
-            AspectList merged = new AspectList();
-            for (TagEntry entry : TAG_ASPECTS) {
-                if (stack.is(entry.tag())) {
-                    merged.merge(entry.aspects());
+        for (TagEntry entry : TAG_ASPECTS) {
+            for (net.minecraft.core.Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(entry.tag())) {
+                Item item = holder.value();
+                if (item.getDefaultInstance().isEmpty()) {
+                    continue;
                 }
-            }
-            if (!merged.isEmpty()) {
-                TAG_ITEM_ASPECTS.put(item, merged);
+
+                AspectList merged = TAG_ITEM_ASPECTS.computeIfAbsent(item, ignored -> new AspectList());
+                merged.merge(entry.aspects());
             }
         }
     }
@@ -602,8 +675,9 @@ public final class ServerObjectAspectRegistry {
         protected void apply(Map<ResourceLocation, JsonElement> entries, net.minecraft.server.packs.resources.ResourceManager resourceManager,
                 ProfilerFiller profiler) {
             long start = System.nanoTime();
+            ServerObjectAspectRegistry.lastRecipeManager = this.recipeManager;
+            ServerObjectAspectRegistry.lastRegistries = this.registries;
             ServerObjectAspectRegistry.reload(entries);
-            ServerObjectAspectRegistry.regenerateFromRecipes(recipeManager, this.registries);
             Thaumcraft.LOGGER.info("Object aspect reload finished in {} ms", (System.nanoTime() - start) / 1_000_000L);
         }
     }

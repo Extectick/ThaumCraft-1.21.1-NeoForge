@@ -38,7 +38,7 @@ public final class ServerEssentiaService {
         for (SourceKey sourceKey : SOURCES.get(target)) {
             BlockEntity source = level.getBlockEntity(sourceKey.pos());
             if (!(source instanceof IAspectSource aspectSource)) {
-                break;
+                continue;
             }
 
             if (aspectSource.takeFromContainer(aspect, 1)) {
@@ -66,7 +66,7 @@ public final class ServerEssentiaService {
         for (SourceKey sourceKey : SOURCES.get(target)) {
             BlockEntity source = level.getBlockEntity(sourceKey.pos());
             if (!(source instanceof IAspectSource aspectSource)) {
-                break;
+                continue;
             }
 
             if (aspectSource.doesContainerContainAmount(aspect, 1)) {

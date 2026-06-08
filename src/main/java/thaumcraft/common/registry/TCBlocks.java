@@ -19,11 +19,17 @@ import thaumcraft.common.blocks.AlchemicalFurnaceBlock;
 import thaumcraft.common.blocks.ArcaneAlembicBlock;
 import thaumcraft.common.blocks.ArcanePedestalBlock;
 import thaumcraft.common.blocks.ArcaneWorktableBlock;
+import thaumcraft.common.blocks.AuraNodeBlock;
 import thaumcraft.common.blocks.BrainInAJarBlock;
+import thaumcraft.common.blocks.CrucibleBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock;
 import thaumcraft.common.blocks.EssentiaTubeBlock.TubeMode;
 import thaumcraft.common.blocks.FluxBlock;
 import thaumcraft.common.blocks.InfusionPillarBlock;
+import thaumcraft.common.blocks.MagicSaplingBlock;
+import thaumcraft.common.blocks.MagicSaplingBlock.TreeKind;
+import thaumcraft.common.blocks.NodeJarBlock;
+import thaumcraft.common.blocks.NodeStabilizerBlock;
 import thaumcraft.common.blocks.ResearchTableBlock;
 import thaumcraft.common.blocks.RunicMatrixBlock;
 import thaumcraft.common.blocks.SimpleJarBlock;
@@ -31,6 +37,9 @@ import thaumcraft.common.blocks.SimpleMirrorBlock;
 import thaumcraft.common.blocks.SimplePlantBlock;
 import thaumcraft.common.blocks.SimpleTableBlock;
 import thaumcraft.common.blocks.SimpleTubeBlock;
+import thaumcraft.common.blocks.SilverwoodKnotBlock;
+import thaumcraft.common.blocks.ThaumcraftOreBlock;
+import thaumcraft.common.blocks.ThaumcraftOreBlock.OreType;
 import thaumcraft.common.blocks.WardedJarBlock;
 
 public final class TCBlocks {
@@ -38,14 +47,14 @@ public final class TCBlocks {
     private static final SoundType JAR_SOUND = new DeferredSoundType(1.0F, 1.0F,
             TCSoundEvents.JAR, TCSoundEvents.JAR, TCSoundEvents.JAR, TCSoundEvents.JAR, TCSoundEvents.JAR);
 
-    public static final DeferredBlock<Block> CINNABAR_ORE = ore("cinnabar_ore");
-    public static final DeferredBlock<Block> INFUSED_AIR_ORE = ore("infused_air_ore");
-    public static final DeferredBlock<Block> INFUSED_FIRE_ORE = ore("infused_fire_ore");
-    public static final DeferredBlock<Block> INFUSED_WATER_ORE = ore("infused_water_ore");
-    public static final DeferredBlock<Block> INFUSED_EARTH_ORE = ore("infused_earth_ore");
-    public static final DeferredBlock<Block> INFUSED_ORDER_ORE = ore("infused_order_ore");
-    public static final DeferredBlock<Block> INFUSED_ENTROPY_ORE = ore("infused_entropy_ore");
-    public static final DeferredBlock<Block> AMBER_ORE = ore("amber_ore");
+    public static final DeferredBlock<ThaumcraftOreBlock> CINNABAR_ORE = ore("cinnabar_ore", OreType.CINNABAR);
+    public static final DeferredBlock<ThaumcraftOreBlock> INFUSED_AIR_ORE = glowingOre("infused_air_ore", OreType.AIR);
+    public static final DeferredBlock<ThaumcraftOreBlock> INFUSED_FIRE_ORE = glowingOre("infused_fire_ore", OreType.FIRE);
+    public static final DeferredBlock<ThaumcraftOreBlock> INFUSED_WATER_ORE = glowingOre("infused_water_ore", OreType.WATER);
+    public static final DeferredBlock<ThaumcraftOreBlock> INFUSED_EARTH_ORE = glowingOre("infused_earth_ore", OreType.EARTH);
+    public static final DeferredBlock<ThaumcraftOreBlock> INFUSED_ORDER_ORE = glowingOre("infused_order_ore", OreType.ORDER);
+    public static final DeferredBlock<ThaumcraftOreBlock> INFUSED_ENTROPY_ORE = glowingOre("infused_entropy_ore", OreType.ENTROPY);
+    public static final DeferredBlock<ThaumcraftOreBlock> AMBER_ORE = ore("amber_ore", OreType.AMBER);
     public static final DeferredBlock<Block> AMBER_BLOCK = REGISTRY.registerSimpleBlock("amber_block",
             BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                     .strength(1.5F, 5.0F)
@@ -65,13 +74,17 @@ public final class TCBlocks {
     public static final DeferredBlock<Block> CRUSTED_STONE = stone("crusted_stone");
     public static final DeferredBlock<RotatedPillarBlock> GREATWOOD_LOG = log("greatwood_log");
     public static final DeferredBlock<RotatedPillarBlock> SILVERWOOD_LOG = log("silverwood_log");
+    public static final DeferredBlock<SilverwoodKnotBlock> SILVERWOOD_KNOT = REGISTRY.register("silverwood_knot",
+            () -> new SilverwoodKnotBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)
+                    .strength(2.5F)
+                    .lightLevel(state -> 7)));
     public static final DeferredBlock<Block> ARCANE_WOOD = planks("arcane_wood");
     public static final DeferredBlock<Block> GREATWOOD_PLANKS = planks("greatwood_planks");
     public static final DeferredBlock<Block> SILVERWOOD_PLANKS = planks("silverwood_planks");
     public static final DeferredBlock<LeavesBlock> GREATWOOD_LEAVES = leaves("greatwood_leaves", 0);
     public static final DeferredBlock<LeavesBlock> SILVERWOOD_LEAVES = leaves("silverwood_leaves", 7);
-    public static final DeferredBlock<SimplePlantBlock> GREATWOOD_SAPLING = plant("greatwood_sapling", 0);
-    public static final DeferredBlock<SimplePlantBlock> SILVERWOOD_SAPLING = plant("silverwood_sapling", 8);
+    public static final DeferredBlock<MagicSaplingBlock> GREATWOOD_SAPLING = magicSapling("greatwood_sapling", 0, TreeKind.GREATWOOD);
+    public static final DeferredBlock<MagicSaplingBlock> SILVERWOOD_SAPLING = magicSapling("silverwood_sapling", 8, TreeKind.SILVERWOOD);
     public static final DeferredBlock<SimplePlantBlock> SHIMMERLEAF = plant("shimmerleaf", 8);
     public static final DeferredBlock<SimplePlantBlock> CINDERPEARL = plant("cinderpearl", 8);
     public static final DeferredBlock<SimplePlantBlock> VISHROOM = plant("vishroom", 8);
@@ -91,10 +104,20 @@ public final class TCBlocks {
     public static final DeferredBlock<Block> ARCANE_SPA = stoneDevice("arcane_spa");
     public static final DeferredBlock<RunicMatrixBlock> RUNIC_MATRIX = REGISTRY.register("runic_matrix",
             () -> new RunicMatrixBlock(stoneDeviceProperties().lightLevel(state -> 10)));
+    public static final DeferredBlock<AuraNodeBlock> AURA_NODE = REGISTRY.register("aura_node",
+            () -> new AuraNodeBlock(BlockBehaviour.Properties.of()
+                    .strength(2.0F, 200.0F)
+                    .lightLevel(state -> 8)
+                    .sound(SoundType.EMPTY)
+                    .noOcclusion()
+                    .noCollission()));
     public static final DeferredBlock<InfusionPillarBlock> INFUSION_PILLAR = REGISTRY.register("infusion_pillar",
             () -> new InfusionPillarBlock(stoneDeviceProperties()));
-    public static final DeferredBlock<Block> NODE_STABILIZER = stoneDevice("node_stabilizer");
-    public static final DeferredBlock<Block> ADVANCED_NODE_STABILIZER = stoneDevice("advanced_node_stabilizer");
+    public static final DeferredBlock<NodeStabilizerBlock> NODE_STABILIZER = REGISTRY.register("node_stabilizer",
+            () -> new NodeStabilizerBlock(stoneDeviceProperties(), false));
+    public static final DeferredBlock<NodeStabilizerBlock> ADVANCED_NODE_STABILIZER =
+            REGISTRY.register("advanced_node_stabilizer",
+                    () -> new NodeStabilizerBlock(stoneDeviceProperties(), true));
     public static final DeferredBlock<Block> NODE_TRANSDUCER = stoneDevice("node_transducer");
     public static final DeferredBlock<Block> FOCAL_MANIPULATOR = stoneDevice("focal_manipulator");
     public static final DeferredBlock<Block> FLUX_SCRUBBER = stoneDevice("flux_scrubber");
@@ -102,7 +125,8 @@ public final class TCBlocks {
             () -> new FluxBlock(fluxProperties(), false));
     public static final DeferredBlock<FluxBlock> FLUX_GAS = REGISTRY.register("flux_gas",
             () -> new FluxBlock(fluxProperties(), true));
-    public static final DeferredBlock<Block> CRUCIBLE = metalDevice("crucible");
+    public static final DeferredBlock<CrucibleBlock> CRUCIBLE = REGISTRY.register("crucible",
+            () -> new CrucibleBlock(metalDeviceProperties()));
     public static final DeferredBlock<ArcaneAlembicBlock> ARCANE_ALEMBIC = REGISTRY.register("arcane_alembic",
             () -> new ArcaneAlembicBlock(metalDeviceProperties()));
     public static final DeferredBlock<Block> VIS_CHARGE_RELAY = metalDevice("vis_charge_relay");
@@ -131,7 +155,8 @@ public final class TCBlocks {
             () -> new WardedJarBlock(jarProperties()));
     public static final DeferredBlock<BrainInAJarBlock> BRAIN_IN_A_JAR = REGISTRY.register("brain_in_a_jar",
             () -> new BrainInAJarBlock(jarProperties()));
-    public static final DeferredBlock<SimpleJarBlock> NODE_IN_A_JAR = jar("node_in_a_jar");
+    public static final DeferredBlock<NodeJarBlock> NODE_IN_A_JAR = REGISTRY.register("node_in_a_jar",
+            () -> new NodeJarBlock(jarProperties()));
     public static final DeferredBlock<WardedJarBlock> VOID_JAR = REGISTRY.register("void_jar",
             () -> new WardedJarBlock(jarProperties()));
     public static final DeferredBlock<SimpleMirrorBlock> MAGIC_MIRROR = mirror("magic_mirror");
@@ -256,10 +281,22 @@ public final class TCBlocks {
             RED_TALLOW_CANDLE,
             BLACK_TALLOW_CANDLE);
 
-    private static DeferredBlock<Block> ore(String name) {
-        return REGISTRY.registerSimpleBlock(name, BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
-                .strength(1.5F, 5.0F)
-                .requiresCorrectToolForDrops());
+    private static DeferredBlock<ThaumcraftOreBlock> ore(String name, OreType oreType) {
+        return ore(name, oreType, 0);
+    }
+
+    private static DeferredBlock<ThaumcraftOreBlock> glowingOre(String name, OreType oreType) {
+        return ore(name, oreType, 7);
+    }
+
+    private static DeferredBlock<ThaumcraftOreBlock> ore(String name, OreType oreType, int lightLevel) {
+        return REGISTRY.register(name, () -> new ThaumcraftOreBlock(
+                BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                        .strength(1.5F, 5.0F)
+                        .requiresCorrectToolForDrops()
+                        .lightLevel(state -> lightLevel)
+                        .randomTicks(),
+                oreType));
     }
 
     private static DeferredBlock<Block> stone(String name) {
@@ -292,6 +329,11 @@ public final class TCBlocks {
     private static DeferredBlock<SimplePlantBlock> plant(String name, int lightLevel) {
         return REGISTRY.register(name, () -> new SimplePlantBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)
                 .lightLevel(state -> lightLevel)));
+    }
+
+    private static DeferredBlock<MagicSaplingBlock> magicSapling(String name, int lightLevel, TreeKind treeKind) {
+        return REGISTRY.register(name, () -> new MagicSaplingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)
+                .lightLevel(state -> lightLevel), treeKind));
     }
 
     private static DeferredBlock<SimpleTableBlock> table(String name) {

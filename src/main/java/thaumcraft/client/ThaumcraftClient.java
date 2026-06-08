@@ -24,17 +24,23 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.hud.FocusSelectorOverlay;
 import thaumcraft.client.hud.ResearchNotificationOverlay;
+import thaumcraft.client.hud.ThaumometerTargetOverlay;
 import thaumcraft.client.hud.WandVisHudOverlay;
 import thaumcraft.client.fx.EssentiaSourceFxHandler;
 import thaumcraft.client.fx.InfusionSourceFxHandler;
 import thaumcraft.client.input.TCKeyMappings;
 import thaumcraft.client.renderers.block.ArcanePedestalRenderer;
 import thaumcraft.client.renderers.block.ArcaneAlembicRenderer;
+import thaumcraft.client.renderers.block.AuraNodeRenderer;
 import thaumcraft.client.renderers.block.BrainInAJarRenderer;
+import thaumcraft.client.renderers.block.CrucibleRenderer;
 import thaumcraft.client.renderers.block.InfusionPillarRenderer;
+import thaumcraft.client.renderers.block.NodeJarRenderer;
+import thaumcraft.client.renderers.block.NodeStabilizerRenderer;
 import thaumcraft.client.renderers.block.RunicMatrixRenderer;
 import thaumcraft.client.renderers.block.WardedJarRenderer;
 import thaumcraft.client.renderers.item.TCItemRenderers;
+import thaumcraft.client.renderers.item.ThaumometerFirstPersonHandler;
 import thaumcraft.client.screens.AlchemicalFurnaceScreen;
 import thaumcraft.client.screens.ArcaneWorktableScreen;
 import thaumcraft.client.screens.ResearchTableScreen;
@@ -86,6 +92,9 @@ public class ThaumcraftClient {
         NeoForge.EVENT_BUS.addListener(EssentiaSourceFxHandler::onClientTick);
         NeoForge.EVENT_BUS.addListener(InfusionSourceFxHandler::onClientTick);
         NeoForge.EVENT_BUS.addListener(AspectTooltipHandler::gatherComponents);
+        NeoForge.EVENT_BUS.addListener(ThaumometerFirstPersonHandler::onRenderHand);
+        NeoForge.EVENT_BUS.addListener(ThaumometerFirstPersonHandler::onInteractionKey);
+        NeoForge.EVENT_BUS.addListener(AuraNodeHighlightHandler::onBlockHighlight);
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
@@ -110,6 +119,7 @@ public class ThaumcraftClient {
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.BRAIN_IN_A_JAR.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.NODE_IN_A_JAR.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.VOID_JAR.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(TCBlocks.CRUCIBLE.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.FLUX_GOO.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.FLUX_GAS.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(TCBlocks.MAGIC_MIRROR.get(), RenderType.translucent());
@@ -135,6 +145,8 @@ public class ThaumcraftClient {
                 FocusSelectorOverlay.render(guiGraphics));
         event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("research_notifications"), (guiGraphics, deltaTracker) ->
                 ResearchNotificationOverlay.render(guiGraphics));
+        event.registerAbove(VanillaGuiLayers.HOTBAR, Thaumcraft.id("thaumometer_target"), (guiGraphics, deltaTracker) ->
+                ThaumometerTargetOverlay.render(guiGraphics));
     }
 
     private void registerKeyMappings(RegisterKeyMappingsEvent event) {
@@ -143,15 +155,23 @@ public class ThaumcraftClient {
 
     private void registerClientExtensions(RegisterClientExtensionsEvent event) {
         TCItemRenderers.register(event);
+        event.registerBlock(AuraNodeClientExtensions.INSTANCE, TCBlocks.AURA_NODE, TCBlocks.SILVERWOOD_KNOT);
+        event.registerBlock(InfusedOreClientExtensions.INSTANCE,
+                TCBlocks.INFUSED_AIR_ORE, TCBlocks.INFUSED_FIRE_ORE, TCBlocks.INFUSED_WATER_ORE,
+                TCBlocks.INFUSED_EARTH_ORE, TCBlocks.INFUSED_ORDER_ORE, TCBlocks.INFUSED_ENTROPY_ORE);
     }
 
     private void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(TCBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.RUNIC_MATRIX.get(), RunicMatrixRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.AURA_NODE.get(), AuraNodeRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.INFUSION_PILLAR.get(), InfusionPillarRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.BRAIN_IN_A_JAR.get(), BrainInAJarRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.NODE_IN_A_JAR.get(), NodeJarRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.WARDED_JAR.get(), WardedJarRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.ARCANE_ALEMBIC.get(), ArcaneAlembicRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
     }
 
     private void registerBlockColors(RegisterColorHandlersEvent.Block event) {

@@ -2,7 +2,7 @@
   "item": "thaumcraft:infused_water_ore",
   "aspects": {
     "terra": 1,
-    "aqua": 2,
+    "aqua": 3,
     "vitreus": 2
   }
 }

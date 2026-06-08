@@ -12,9 +12,12 @@ import thaumcraft.common.network.EssentiaSourceFxPayload;
 import thaumcraft.common.network.InfusionSourceFxPayload;
 import thaumcraft.common.network.PedestalSparkleFxPayload;
 import thaumcraft.common.network.ResearchCompleteNotificationPayload;
+import thaumcraft.common.network.ThaumometerScanMessagePayload;
+import thaumcraft.common.network.ThaumometerScanFxPayload;
 import thaumcraft.common.network.WarpMessagePayload;
 import thaumcraft.common.research.ResearchRegistry;
 import thaumcraft.common.registry.TCSoundEvents;
+import thaumcraft.client.fx.BlockRunesParticle;
 
 public final class TCClientPayloadHandler {
     private TCClientPayloadHandler() {
@@ -41,6 +44,34 @@ public final class TCClientPayloadHandler {
 
     public static void handlePedestalSparkleFx(PedestalSparkleFxPayload payload) {
         PedestalSparkleFxHandler.add(payload.pos(), payload.eventId());
+    }
+
+    public static void handleThaumometerScanFx(ThaumometerScanFxPayload payload) {
+        net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
+        if (minecraft.level == null || minecraft.particleEngine == null) {
+            return;
+        }
+        minecraft.particleEngine.add(new BlockRunesParticle(minecraft.level, payload.x() + 0.5D,
+                payload.y() + 0.5D, payload.z() + 0.5D, payload.red(), payload.green(), payload.blue(),
+                payload.duration(), payload.gravity()));
+    }
+
+    public static void handleThaumometerScanMessage(ThaumometerScanMessagePayload payload) {
+        if (payload.kind() == ThaumometerScanMessagePayload.COMPLETE) {
+            PlayerNotifications.addNotification(Component.translatable("tc.scan.complete", payload.targetName()));
+            payload.discoveries().getAspectsSorted().forEach(PlayerNotifications::addDiscovery);
+            payload.gains().getAspectsSortedAmount().forEach(aspect ->
+                    PlayerNotifications.addResearchPoints(aspect, payload.gains().getAmount(aspect)));
+        } else if (payload.kind() == ThaumometerScanMessagePayload.DISCOVERY_ERROR) {
+            if (payload.targetName().isBlank()) {
+                PlayerNotifications.addNotification(Component.translatable("tc.discoveryerror"));
+            } else {
+                PlayerNotifications.addNotification(Component.translatable("tc.discoveryerror",
+                        Component.translatable("tc.aspect.help." + payload.targetName())));
+            }
+        } else if (payload.kind() == ThaumometerScanMessagePayload.UNKNOWN_OBJECT) {
+            PlayerNotifications.addNotification(Component.translatable("tc.unknownobject"));
+        }
     }
 
     public static void handleWarpMessage(WarpMessagePayload payload) {

@@ -1,0 +1,7 @@
+{
+  "item": "minecraft:chest",
+  "merge_generated": true,
+  "aspects": {
+    "vacuos": 4
+  }
+}

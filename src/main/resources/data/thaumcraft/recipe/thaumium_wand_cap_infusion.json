@@ -6,13 +6,13 @@
   },
   "components": [
     {
-      "item": "thaumcraft:ethereal_essence"
+      "item": "thaumcraft:salis_mundus"
     },
     {
-      "item": "thaumcraft:ethereal_essence"
+      "item": "thaumcraft:salis_mundus"
     },
     {
-      "item": "thaumcraft:ethereal_essence"
+      "item": "thaumcraft:salis_mundus"
     }
   ],
   "instability": 5,

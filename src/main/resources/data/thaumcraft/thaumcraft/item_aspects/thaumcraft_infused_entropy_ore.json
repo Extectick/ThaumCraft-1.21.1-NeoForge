@@ -2,7 +2,7 @@
   "item": "thaumcraft:infused_entropy_ore",
   "aspects": {
     "terra": 1,
-    "perditio": 2,
+    "perditio": 3,
     "vitreus": 2
   }
 }

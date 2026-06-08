@@ -26,6 +26,8 @@ public final class TCCreativeTabs {
                         WandCastingItem.ROD_WOOD, WandCastingItem.CAP_IRON, true)));
                 output.accept(WandVisHelper.fillAllVis(WandCastingItem.createVariant(TCItems.WAND_CASTING.get(),
                         WandCastingItem.ROD_GREATWOOD_STAFF, WandCastingItem.CAP_IRON, false)));
+                output.accept(WandVisHelper.fillAllVis(WandCastingItem.createVariant(TCItems.WAND_CASTING.get(),
+                        WandCastingItem.ROD_SILVERWOOD, WandCastingItem.CAP_THAUMIUM, false)));
                 output.accept(TCItems.RUNIC_RING_LESSER.get());
                 output.accept(TCItems.RUNIC_RING.get());
                 output.accept(TCItems.RUNIC_RING_CHARGED.get());

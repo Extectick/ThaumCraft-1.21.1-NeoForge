@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "#c:shards/air",
+    "#c:shards/fire",
+    "#c:shards/water",
+    "#c:shards/earth",
+    "#c:shards/order",
+    "#c:shards/entropy",
+    "#c:shards/balanced"
+  ]
+}

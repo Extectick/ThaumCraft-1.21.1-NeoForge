@@ -1,3 +1,6 @@
 {
-  "parent": "thaumcraft:block/node_stabilizer"
+  "parent": "builtin/entity",
+  "textures": {
+    "particle": "thaumcraft:block/redstone_ring"
+  }
 }

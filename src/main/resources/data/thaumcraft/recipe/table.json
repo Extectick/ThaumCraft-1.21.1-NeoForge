@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "tag": "minecraft:planks"
-    },
     "S": {
-      "item": "minecraft:stick"
+      "tag": "c:slabs/wooden"
+    },
+    "W": {
+      "tag": "minecraft:planks"
     }
   },
   "pattern": [
-    "###",
-    "S S"
+    "SSS",
+    "W W"
   ],
   "result": {
     "count": 1,

@@ -85,7 +85,10 @@ public class ArcaneWorktableMenu extends AbstractContainerMenu {
 
     @Override
     public boolean canDragTo(Slot slot) {
-        return slot.container != this.worktable && super.canDragTo(slot);
+        if (slot.container == this.worktable) {
+            return slot.index >= 0 && slot.index < ArcaneWorktableBlockEntity.GRID_SIZE && super.canDragTo(slot);
+        }
+        return super.canDragTo(slot);
     }
 
     @Override

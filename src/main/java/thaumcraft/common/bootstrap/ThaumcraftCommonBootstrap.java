@@ -11,6 +11,7 @@ import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCDataAttachments;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCEntityTypes;
+import thaumcraft.common.registry.TCFeatures;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMenuTypes;
 import thaumcraft.common.registry.TCParticleTypes;
@@ -27,6 +28,7 @@ public final class ThaumcraftCommonBootstrap {
         TCItems.REGISTRY.register(modEventBus);
         TCBlockEntities.REGISTRY.register(modEventBus);
         TCEntityTypes.REGISTRY.register(modEventBus);
+        TCFeatures.REGISTRY.register(modEventBus);
         TCMenuTypes.REGISTRY.register(modEventBus);
         TCRecipeTypes.REGISTRY.register(modEventBus);
         TCRecipeSerializers.REGISTRY.register(modEventBus);

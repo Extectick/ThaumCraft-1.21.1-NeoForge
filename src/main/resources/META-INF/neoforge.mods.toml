@@ -32,3 +32,10 @@ Adding a touch of magic to Minecraft.
     versionRange="[${curios_version},)"
     ordering="AFTER"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="jei"
+    type="optional"
+    versionRange="[19.27.0,)"
+    ordering="AFTER"
+    side="CLIENT"

@@ -1,0 +1,30 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "CENTRIFUGE",
+  "pattern": [
+    "PVP",
+    "T T",
+    "PRP"
+  ],
+  "key": {
+    "P": {
+      "item": "thaumcraft:ethereal_essence"
+    },
+    "V": {
+      "item": "thaumcraft:essentia_valve"
+    },
+    "T": {
+      "item": "thaumcraft:essentia_tube"
+    },
+    "R": {
+      "item": "thaumcraft:restricted_essentia_tube"
+    }
+  },
+  "vis": {
+    "water": 500,
+    "order": 500
+  },
+  "result": {
+    "id": "thaumcraft:essentia_buffer"
+  }
+}

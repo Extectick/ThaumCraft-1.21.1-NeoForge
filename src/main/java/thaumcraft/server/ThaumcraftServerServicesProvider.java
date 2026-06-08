@@ -23,6 +23,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.blockentities.AlchemicalFurnaceBlockEntity;
 import thaumcraft.common.blockentities.ArcaneWorktableBlockEntity;
+import thaumcraft.common.blockentities.CrucibleBlockEntity;
 import thaumcraft.common.blockentities.EssentiaTubeBlockEntity;
 import thaumcraft.common.blockentities.ResearchTableBlockEntity;
 import thaumcraft.common.blockentities.RunicMatrixBlockEntity;
@@ -35,6 +36,7 @@ import thaumcraft.common.network.ResearchTableCombineAspectPayload;
 import thaumcraft.common.network.ResearchTablePlaceAspectPayload;
 import thaumcraft.common.network.ThaumonomiconCreateNotePayload;
 import thaumcraft.common.services.ThaumcraftServerServices;
+import thaumcraft.server.alchemy.ServerCrucibleService;
 import thaumcraft.server.crafting.ServerArcaneWorktableService;
 import thaumcraft.server.crafting.ServerObjectAspectRegistry;
 import thaumcraft.server.essentia.ServerEssentiaService;
@@ -45,14 +47,20 @@ import thaumcraft.server.events.RunicShieldEvents;
 import thaumcraft.server.events.TCCommands;
 import thaumcraft.server.network.TCServerPayloadHandler;
 import thaumcraft.server.research.ServerResearchService;
+import thaumcraft.server.research.ServerThaumometerScanService;
+import thaumcraft.server.aura.ServerAuraNodeTappingService;
 import thaumcraft.server.wands.ServerWandService;
 import thaumcraft.server.warp.ServerWarpService;
+import net.minecraft.world.phys.BlockHitResult;
 
 public final class ThaumcraftServerServicesProvider implements ThaumcraftServerServices {
     @Override
     public void registerServerEventHandlers(IEventBus gameEventBus) {
         gameEventBus.addListener(ServerObjectAspectRegistry::registerReloadListener);
+        gameEventBus.addListener(ServerObjectAspectRegistry::onTagsUpdated);
         gameEventBus.addListener(TCCommands::register);
+        gameEventBus.addListener(ServerThaumometerScanService::onPlayerTick);
+        gameEventBus.addListener(ServerAuraNodeTappingService::onPlayerLoggedOut);
         gameEventBus.register(new RunicShieldEvents());
     }
 
@@ -65,6 +73,32 @@ public final class ThaumcraftServerServicesProvider implements ThaumcraftServerS
     @Override
     public InteractionResult useWandOnAfterWandable(WandCastingItem wandItem, UseOnContext context) {
         return ServerWandService.useOnAfterWandable(wandItem, context);
+    }
+
+    @Override
+    public void startAuraNodeTap(ServerPlayer player, InteractionHand hand, BlockPos nodePos) {
+        ServerAuraNodeTappingService.start(player, hand, nodePos);
+    }
+
+    @Override
+    public void tickAuraNodeTap(ServerPlayer player, ItemStack wand, int remainingUseDuration) {
+        ServerAuraNodeTappingService.tick(player, wand, remainingUseDuration);
+    }
+
+    @Override
+    public void stopAuraNodeTap(ServerPlayer player) {
+        ServerAuraNodeTappingService.stop(player);
+    }
+
+    @Override
+    public InteractionResult startThaumometerScan(Player player, InteractionHand hand) {
+        return ServerThaumometerScanService.startScan(player, hand);
+    }
+
+    @Override
+    public InteractionResult startThaumometerBlockScan(Player player, InteractionHand hand,
+            BlockHitResult hitResult) {
+        return ServerThaumometerScanService.startBlockScan(player, hand, hitResult);
     }
 
     @Override
@@ -164,6 +198,22 @@ public final class ThaumcraftServerServicesProvider implements ThaumcraftServerS
     }
 
     @Override
+    public void tickCrucible(Level level, BlockPos pos, BlockState state, CrucibleBlockEntity crucible) {
+        ServerCrucibleService.tick(level, pos, state, crucible);
+    }
+
+    @Override
+    public void crucibleEntityInside(Level level, BlockPos pos, BlockState state, CrucibleBlockEntity crucible,
+            Entity entity) {
+        ServerCrucibleService.entityInside(level, pos, state, crucible, entity);
+    }
+
+    @Override
+    public void spillCrucibleRemnants(Level level, BlockPos pos, CrucibleBlockEntity crucible) {
+        ServerCrucibleService.spillRemnants(level, pos, crucible);
+    }
+
+    @Override
     public void tickWardedJar(Level level, BlockPos pos, BlockState state, WardedJarBlockEntity jar) {
         ServerEssentiaTransportService.tickWardedJar(level, pos, state, jar);
     }
@@ -250,5 +300,10 @@ public final class ThaumcraftServerServicesProvider implements ThaumcraftServerS
     @Override
     public int generatedAspectEntryCount() {
         return ServerObjectAspectRegistry.generatedEntryCount();
+    }
+
+    @Override
+    public String objectAspectSource(ItemStack stack) {
+        return ServerObjectAspectRegistry.describeSource(stack);
     }
 }

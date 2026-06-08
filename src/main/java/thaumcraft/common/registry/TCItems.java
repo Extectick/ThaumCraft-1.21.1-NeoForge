@@ -14,8 +14,11 @@ import thaumcraft.api.wands.ItemFocusBasic;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.curios.TCSlots;
 import thaumcraft.common.items.JarBlockItem;
+import thaumcraft.common.items.NodeJarBlockItem;
+import thaumcraft.common.items.AuraNodeItem;
 import thaumcraft.common.items.ScribingToolsItem;
 import thaumcraft.common.items.ResearchNotesItem;
+import thaumcraft.common.items.ThaumometerItem;
 import thaumcraft.common.items.ThaumonomiconItem;
 import thaumcraft.common.items.EssentiaPhialItem;
 import thaumcraft.common.items.curios.FocusPouchCurioItem;
@@ -69,6 +72,8 @@ public final class TCItems {
     public static final DeferredItem<BlockItem> COMPOUND_RECHARGE_FOCUS = REGISTRY.registerSimpleBlockItem(TCBlocks.COMPOUND_RECHARGE_FOCUS);
     public static final DeferredItem<BlockItem> ARCANE_SPA = REGISTRY.registerSimpleBlockItem(TCBlocks.ARCANE_SPA);
     public static final DeferredItem<BlockItem> RUNIC_MATRIX = REGISTRY.registerSimpleBlockItem(TCBlocks.RUNIC_MATRIX);
+    public static final DeferredItem<AuraNodeItem> AURA_NODE = REGISTRY.registerItem("aura_node",
+            properties -> new AuraNodeItem(TCBlocks.AURA_NODE.get(), properties));
     public static final DeferredItem<BlockItem> NODE_STABILIZER = REGISTRY.registerSimpleBlockItem(TCBlocks.NODE_STABILIZER);
     public static final DeferredItem<BlockItem> ADVANCED_NODE_STABILIZER = REGISTRY.registerSimpleBlockItem(TCBlocks.ADVANCED_NODE_STABILIZER);
     public static final DeferredItem<BlockItem> NODE_TRANSDUCER = REGISTRY.registerSimpleBlockItem(TCBlocks.NODE_TRANSDUCER);
@@ -99,7 +104,8 @@ public final class TCItems {
     public static final DeferredItem<JarBlockItem> WARDED_JAR = REGISTRY.registerItem("warded_jar",
             properties -> new JarBlockItem(TCBlocks.WARDED_JAR.get(), properties));
     public static final DeferredItem<BlockItem> BRAIN_IN_A_JAR = REGISTRY.registerSimpleBlockItem(TCBlocks.BRAIN_IN_A_JAR);
-    public static final DeferredItem<BlockItem> NODE_IN_A_JAR = REGISTRY.registerSimpleBlockItem(TCBlocks.NODE_IN_A_JAR);
+    public static final DeferredItem<NodeJarBlockItem> NODE_IN_A_JAR = REGISTRY.registerItem("node_in_a_jar",
+            properties -> new NodeJarBlockItem(TCBlocks.NODE_IN_A_JAR.get(), properties));
     public static final DeferredItem<JarBlockItem> VOID_JAR = REGISTRY.registerItem("void_jar",
             properties -> new JarBlockItem(TCBlocks.VOID_JAR.get(), properties));
     public static final DeferredItem<BlockItem> MAGIC_MIRROR = REGISTRY.registerSimpleBlockItem(TCBlocks.MAGIC_MIRROR);
@@ -154,6 +160,7 @@ public final class TCItems {
     public static final DeferredItem<WandPartItem> PRIMAL_STAFF_CORE = wandRod("primal_staff_core", "primal_staff");
     public static final DeferredItem<Item> WAND_CASTING = REGISTRY.registerItem("wand_casting", WandCastingItem::new);
     public static final DeferredItem<Item> THAUMONOMICON = REGISTRY.registerItem("thaumonomicon", ThaumonomiconItem::new);
+    public static final DeferredItem<Item> THAUMOMETER = REGISTRY.registerItem("thaumometer", ThaumometerItem::new);
     public static final DeferredItem<Item> ALUMENTUM = simple("alumentum");
     public static final DeferredItem<Item> NITOR = simple("nitor");
     public static final DeferredItem<Item> THAUMIUM_INGOT = simple("thaumium_ingot");
@@ -317,6 +324,7 @@ public final class TCItems {
             COMPOUND_RECHARGE_FOCUS,
             ARCANE_SPA,
             RUNIC_MATRIX,
+            AURA_NODE,
             NODE_STABILIZER,
             ADVANCED_NODE_STABILIZER,
             NODE_TRANSDUCER,
@@ -398,6 +406,7 @@ public final class TCItems {
             PRIMAL_STAFF_CORE,
             WAND_CASTING,
             THAUMONOMICON,
+            THAUMOMETER,
             ALUMENTUM,
             NITOR,
             THAUMIUM_INGOT,

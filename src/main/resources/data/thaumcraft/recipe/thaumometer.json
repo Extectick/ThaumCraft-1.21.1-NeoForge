@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "GAG",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "tag": "c:shards"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "A": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:thaumometer"
+  }
+}

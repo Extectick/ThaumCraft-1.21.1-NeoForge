@@ -55,6 +55,14 @@ public final class TCPayloadHandlerBridge {
         ClientServices.get().handlePedestalSparkleFx(payload);
     }
 
+    public static void handleThaumometerScanFx(ThaumometerScanFxPayload payload, IPayloadContext context) {
+        ClientServices.get().handleThaumometerScanFx(payload);
+    }
+
+    public static void handleThaumometerScanMessage(ThaumometerScanMessagePayload payload, IPayloadContext context) {
+        ClientServices.get().handleThaumometerScanMessage(payload);
+    }
+
     public static void handleWarpMessage(WarpMessagePayload payload, IPayloadContext context) {
         ClientServices.get().handleWarpMessage(payload);
     }

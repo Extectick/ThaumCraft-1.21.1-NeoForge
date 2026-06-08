@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "DISTILESSENTIA",
+  "pattern": [
+    "SCS",
+    "SFS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumcraft:arcane_stone"
+    },
+    "C": {
+      "item": "thaumcraft:crucible"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "vis": {
+    "fire": 500,
+    "water": 500
+  },
+  "result": {
+    "id": "thaumcraft:alchemical_furnace"
+  }
+}

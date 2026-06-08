@@ -1,0 +1,9 @@
+{
+  "item": "minecraft:lava_bucket",
+  "aspects": {
+    "metallum": 7,
+    "vacuos": 1,
+    "ignis": 4,
+    "terra": 1
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "NODESTABILIZER",
+  "pattern": [
+    " G ",
+    "QPQ",
+    "SNS"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "Q": {
+      "item": "minecraft:quartz_block"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "S": {
+      "item": "thaumcraft:arcane_stone_bricks"
+    },
+    "N": {
+      "item": "thaumcraft:nitor"
+    }
+  },
+  "vis": {
+    "water": 3200,
+    "earth": 3200,
+    "order": 3200
+  },
+  "result": {
+    "id": "thaumcraft:node_stabilizer"
+  }
+}

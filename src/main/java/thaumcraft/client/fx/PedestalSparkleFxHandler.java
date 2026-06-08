@@ -15,11 +15,35 @@ public final class PedestalSparkleFxHandler {
         if (level == null) {
             return;
         }
+        if (eventId == 13) {
+            nodeJarSparkle(level, pos);
+            return;
+        }
 
         int outerCount = particleCount(level, eventId == 12 ? 10 : 5);
         int color = eventId == 12 ? -9999 : EJECT_COLOR;
         for (int i = 0; i < outerCount; i++) {
             blockSparkle(level, pos, color, 2);
+        }
+    }
+
+    private static void nodeJarSparkle(ClientLevel level, BlockPos pos) {
+        int count = particleCount(level, 5);
+        for (int i = 0; i < count; i++) {
+            float red = 0.13F + level.random.nextFloat() * 0.87F;
+            float green = 0.13F + level.random.nextFloat() * 0.87F;
+            float blue = 0.13F + level.random.nextFloat() * 0.87F;
+            Minecraft.getInstance().particleEngine.add(new PedestalSparkleParticle(level,
+                    pos.getX() - 0.1D + level.random.nextFloat() * 1.2D,
+                    pos.getY() - 0.1D + level.random.nextFloat() * 1.2D,
+                    pos.getZ() - 0.1D + level.random.nextFloat() * 1.2D,
+                    0.0D,
+                    level.random.nextFloat() * 0.02D,
+                    0.0D,
+                    red, green, blue,
+                    5 + level.random.nextInt(8),
+                    level.random.nextInt(10),
+                    0.7F + level.random.nextFloat() * 0.4F));
         }
     }
 
