@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.haste": "急迫",
   "enchantment.repair": "修复",
   "enchantment.special.sapless": "次级削弱",
@@ -1595,8 +1595,8 @@
   "block.thaumcraft.infused_water_ore": "水之蕴魔石",
   "block.thaumcraft.infusion_pillar": "注魔桩",
   "block.thaumcraft.item_grate": "物品格栅",
-  "block.thaumcraft.lamp_of_fertility": "育种灯 ",
-  "block.thaumcraft.lamp_of_growth": "催生灯",
+  "block.thaumcraft.arcane_lamp_fertility": "育种灯 ",
+  "block.thaumcraft.arcane_lamp_growth": "催生灯",
   "block.thaumcraft.light_blue_tallow_candle": "浅蓝色油脂蜡烛",
   "block.thaumcraft.light_gray_tallow_candle": "浅灰色油脂蜡烛",
   "block.thaumcraft.lime_tallow_candle": "柠檬色油脂蜡烛",

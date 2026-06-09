@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.potency": "파워",
   "enchantment.frugal": "절약",
   "enchantment.charging": "결계",
@@ -1409,8 +1409,8 @@
   "block.thaumcraft.infused_water_ore": "물의 힘이 깃든 돌",
   "block.thaumcraft.infusion_pillar": "인퓨전 기둥",
   "block.thaumcraft.item_grate": "받침쇠",
-  "block.thaumcraft.lamp_of_fertility": "번영의 램프",
-  "block.thaumcraft.lamp_of_growth": "성장의 램프",
+  "block.thaumcraft.arcane_lamp_fertility": "번영의 램프",
+  "block.thaumcraft.arcane_lamp_growth": "성장의 램프",
   "block.thaumcraft.light_blue_tallow_candle": "밝은 파랑색 수지 양초",
   "block.thaumcraft.light_gray_tallow_candle": "밝은 회색 수지 양초",
   "block.thaumcraft.lime_tallow_candle": "라임색 수지 양초",

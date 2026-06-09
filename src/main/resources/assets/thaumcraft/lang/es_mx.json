@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.haste": "Prisa",
   "enchantment.repair": "Reparación Mágica",
   "enchantment.special.sapgreat": "Drenado de Vida Mayor",
@@ -1600,8 +1600,8 @@
   "block.thaumcraft.infused_water_ore": "Piedra Imbuida de Aqua",
   "block.thaumcraft.infusion_pillar": "Pilar de Infusión",
   "block.thaumcraft.item_grate": "Filtro",
-  "block.thaumcraft.lamp_of_fertility": "Lámpara de Fertilidad",
-  "block.thaumcraft.lamp_of_growth": "Lámpara del Crecimiento",
+  "block.thaumcraft.arcane_lamp_fertility": "Lámpara de Fertilidad",
+  "block.thaumcraft.arcane_lamp_growth": "Lámpara del Crecimiento",
   "block.thaumcraft.light_blue_tallow_candle": "Vela de Sebo Azul Claro",
   "block.thaumcraft.light_gray_tallow_candle": "Vela de Sebo Gris Claro",
   "block.thaumcraft.lime_tallow_candle": "Vela de Sebo Lima",

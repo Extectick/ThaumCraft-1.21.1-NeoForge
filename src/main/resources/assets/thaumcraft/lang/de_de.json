@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.haste": "Hast",
   "enchantment.repair": "Reparieren",
   "enchantment.special.sapless": "Leichtes Zehren",
@@ -1601,8 +1601,8 @@
   "block.thaumcraft.infused_water_ore": "Wasser-Durchzogener Stein",
   "block.thaumcraft.infusion_pillar": "Infusionssäule",
   "block.thaumcraft.item_grate": "Itemgitter",
-  "block.thaumcraft.lamp_of_fertility": "Lampe der Fruchtbarkeit",
-  "block.thaumcraft.lamp_of_growth": "Lampe des Wachstums",
+  "block.thaumcraft.arcane_lamp_fertility": "Lampe der Fruchtbarkeit",
+  "block.thaumcraft.arcane_lamp_growth": "Lampe des Wachstums",
   "block.thaumcraft.light_blue_tallow_candle": "Hellblaue Talgkerze",
   "block.thaumcraft.light_gray_tallow_candle": "Hellgraue Talgkerze",
   "block.thaumcraft.lime_tallow_candle": "Hellgrüne Talgkerze",

@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.potency": "Potenza",
   "enchantment.frugal": "Frugale",
   "enchantment.charging": "Carica",
@@ -1423,8 +1423,8 @@
   "block.thaumcraft.infused_water_ore": "Roccia infusa d'acqua",
   "block.thaumcraft.infusion_pillar": "Pilastro dell'infusione",
   "block.thaumcraft.item_grate": "Griglia per gli oggetti",
-  "block.thaumcraft.lamp_of_fertility": "Lampada della fertilità",
-  "block.thaumcraft.lamp_of_growth": "Lampada della crescita",
+  "block.thaumcraft.arcane_lamp_fertility": "Lampada della fertilità",
+  "block.thaumcraft.arcane_lamp_growth": "Lampada della crescita",
   "block.thaumcraft.light_blue_tallow_candle": "Candela di sego azzurra",
   "block.thaumcraft.light_gray_tallow_candle": "Candela di sego grigio chiaro",
   "block.thaumcraft.lime_tallow_candle": "Candela di sego lime",

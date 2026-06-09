@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.haste": "迅速",
   "enchantment.repair": "自己修復",
   "enchantment.special.sapless": "Lesser Sapping",
@@ -1248,8 +1248,8 @@
   "block.thaumcraft.infused_water_ore": "水の染み込んだ石",
   "block.thaumcraft.infusion_pillar": "祭壇の柱",
   "block.thaumcraft.item_grate": "Item Grate",
-  "block.thaumcraft.lamp_of_fertility": "繁殖のランプ",
-  "block.thaumcraft.lamp_of_growth": "Lamp of Growth",
+  "block.thaumcraft.arcane_lamp_fertility": "繁殖のランプ",
+  "block.thaumcraft.arcane_lamp_growth": "Lamp of Growth",
   "block.thaumcraft.light_blue_tallow_candle": "空色の獣脂ろうそく",
   "block.thaumcraft.light_gray_tallow_candle": "薄灰色の獣脂ろうそく",
   "block.thaumcraft.lime_tallow_candle": "黄緑の獣脂ろうそく",
