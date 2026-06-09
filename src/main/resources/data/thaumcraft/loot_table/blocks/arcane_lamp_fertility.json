@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thaumcraft:lamp_of_growth"
+          "name": "thaumcraft:arcane_lamp_fertility"
         }
       ],
       "conditions": [

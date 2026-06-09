@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.potency": "Potència",
   "enchantment.frugal": "Econòmic",
   "enchantment.charging": "Càrrega",
@@ -1248,8 +1248,8 @@
   "block.thaumcraft.infused_water_ore": "Pedra Imbuïda d'Aigua",
   "block.thaumcraft.infusion_pillar": "Pilar de Infusió",
   "block.thaumcraft.item_grate": "Parrilla",
-  "block.thaumcraft.lamp_of_fertility": "Llàntia de Fertilitat",
-  "block.thaumcraft.lamp_of_growth": "Lámpara del Crecimiento",
+  "block.thaumcraft.arcane_lamp_fertility": "Llàntia de Fertilitat",
+  "block.thaumcraft.arcane_lamp_growth": "Lámpara del Crecimiento",
   "block.thaumcraft.light_blue_tallow_candle": "Vela de Sèu Blau Clar",
   "block.thaumcraft.light_gray_tallow_candle": "Vela de Sèu Gris Clar",
   "block.thaumcraft.lime_tallow_candle": "Vela de Sèu Llima",

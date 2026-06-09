@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.haste": "Hâte",
   "enchantment.repair": "Réparation",
   "enchantment.special.sapless": "Faible Absorption",
@@ -1600,8 +1600,8 @@
   "block.thaumcraft.infused_water_ore": "Roche Infusée d'eau",
   "block.thaumcraft.infusion_pillar": "Pilier d'Infusion",
   "block.thaumcraft.item_grate": "La Grille à objets",
-  "block.thaumcraft.lamp_of_fertility": "Lampe de la fertilité",
-  "block.thaumcraft.lamp_of_growth": "Lampe de croissance",
+  "block.thaumcraft.arcane_lamp_fertility": "Lampe de la fertilité",
+  "block.thaumcraft.arcane_lamp_growth": "Lampe de croissance",
   "block.thaumcraft.light_blue_tallow_candle": "Chandelle de suif bleu clair",
   "block.thaumcraft.light_gray_tallow_candle": "Chandelle de suif gris clair",
   "block.thaumcraft.lime_tallow_candle": "Chandelle de suif vert clair",

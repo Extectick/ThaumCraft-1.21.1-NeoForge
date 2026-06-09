@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.haste": "Haste",
   "enchantment.repair": "Repair",
   "enchantment.special.sapless": "Lesser Sapping",
@@ -1614,11 +1614,11 @@
   "block.thaumcraft.advanced_alchemical_construct": "Advanced Alchemical Construct",
   "block.thaumcraft.item_grate": "Item Grate",
   "block.thaumcraft.arcane_lamp": "Arcane Lamp",
-  "block.thaumcraft.lamp_of_growth": "Lamp of Growth",
+  "block.thaumcraft.arcane_lamp_growth": "Lamp of Growth",
   "block.thaumcraft.alchemical_construct": "Alchemical Construct",
   "block.thaumcraft.thaumatorium": "Thaumatorium",
   "block.thaumcraft.mnemonic_matrix": "Mnemonic Matrix",
-  "block.thaumcraft.lamp_of_fertility": "Lamp of Fertility",
+  "block.thaumcraft.arcane_lamp_fertility": "Lamp of Fertility",
   "block.thaumcraft.vis_relay": "Vis Relay",
   "block.thaumcraft.arcane_stone_stairs": "Arcane Stone Stairs",
   "block.thaumcraft.greatwood_stairs": "Greatwood Stairs",
