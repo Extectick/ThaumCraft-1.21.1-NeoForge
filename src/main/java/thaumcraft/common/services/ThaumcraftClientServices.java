@@ -5,6 +5,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.common.network.BlockZapFxPayload;
 import thaumcraft.common.network.EssentiaSourceFxPayload;
+import thaumcraft.common.network.OreScanPayload;
 import thaumcraft.common.network.InfusionSourceFxPayload;
 import thaumcraft.common.network.PedestalSparkleFxPayload;
 import thaumcraft.common.network.ResearchCompleteNotificationPayload;
@@ -40,6 +41,9 @@ public interface ThaumcraftClientServices {
     }
 
     default void handleWarpMessage(WarpMessagePayload payload) {
+    }
+
+    default void handleOreScanFx(OreScanPayload payload) {
     }
 
     default void hungryNodeBlockFx(Level level, BlockPos source, BlockPos target, BlockState state) {

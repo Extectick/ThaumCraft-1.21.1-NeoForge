@@ -74,6 +74,10 @@ public final class TCDataComponents {
                             .persistent(NodeJarData.CODEC)
                             .networkSynchronized(NodeJarData.STREAM_CODEC)
                             .build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> FORTRESS_MASK = REGISTRY.register("fortress_mask",
+            () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> FORTRESS_GOGGLES = REGISTRY.register("fortress_goggles",
+            () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
 
     private TCDataComponents() {
     }

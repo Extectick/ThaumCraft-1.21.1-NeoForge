@@ -4,8 +4,11 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.world.level.FoliageColor;
+import thaumcraft.api.aspects.EssentiaStorage;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModContainer;
@@ -50,7 +53,9 @@ import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMenuTypes;
+import thaumcraft.common.registry.TCEntityTypes;
 import thaumcraft.common.research.ResearchNoteData;
 import thaumcraft.common.util.ClientInteractionState;
 import thaumcraft.common.util.ClientScreenHooks;
@@ -172,6 +177,9 @@ public class ThaumcraftClient {
         event.registerBlockEntityRenderer(TCBlockEntities.WARDED_JAR.get(), WardedJarRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.ARCANE_ALEMBIC.get(), ArcaneAlembicRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
+        
+        event.registerEntityRenderer(TCEntityTypes.FOLLOWING_ITEM.get(), ItemEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.SPECIAL_ITEM.get(), ItemEntityRenderer::new);
     }
 
     private void registerBlockColors(RegisterColorHandlersEvent.Block event) {
@@ -208,6 +216,18 @@ public class ThaumcraftClient {
         }, TCItems.RESEARCH_NOTES.get());
         event.register((stack, tintIndex) -> FoliageColor.getDefaultColor(), TCItems.GREATWOOD_LEAVES.get());
         event.register((stack, tintIndex) -> SILVERWOOD_LEAF_COLOR, TCItems.SILVERWOOD_LEAVES.get());
+
+        event.register((stack, tintIndex) -> {
+            if (tintIndex != 1) return 0xFFFFFFFF;
+            EssentiaStorage essentia = stack.getOrDefault(TCDataComponents.ESSENTIA, EssentiaStorage.EMPTY);
+            return essentia.isEmpty() ? 0xFFFFFFFF : (0xFF000000 | essentia.aspect().getColor());
+        }, TCItems.ESSENTIA_PHIAL.get());
+
+        event.register((stack, tintIndex) -> {
+            EssentiaStorage essentia = stack.getOrDefault(TCDataComponents.ESSENTIA, EssentiaStorage.EMPTY);
+            return essentia.isEmpty() ? 0xFFFFFFFF : (0xFF000000 | essentia.aspect().getColor());
+        }, TCItems.ETHEREAL_ESSENCE.get(), TCItems.CRYSTALLIZED_ESSENCE.get());
+
         event.register((stack, tintIndex) -> WHITE, TCItems.WHITE_TALLOW_CANDLE.get());
         event.register((stack, tintIndex) -> ORANGE, TCItems.ORANGE_TALLOW_CANDLE.get());
         event.register((stack, tintIndex) -> MAGENTA, TCItems.MAGENTA_TALLOW_CANDLE.get());

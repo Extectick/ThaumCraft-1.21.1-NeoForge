@@ -66,4 +66,8 @@ public final class TCPayloadHandlerBridge {
     public static void handleWarpMessage(WarpMessagePayload payload, IPayloadContext context) {
         ClientServices.get().handleWarpMessage(payload);
     }
+
+    public static void handleOreScanFx(OreScanPayload payload, IPayloadContext context) {
+        ClientServices.get().handleOreScanFx(payload);
+    }
 }

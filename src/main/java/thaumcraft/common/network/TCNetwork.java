@@ -33,5 +33,7 @@ public final class TCNetwork {
                 WarpMessagePayload.STREAM_CODEC, TCPayloadHandlerBridge::handleWarpMessage);
         registrar.playToClient(ResearchCompleteNotificationPayload.TYPE,
                 ResearchCompleteNotificationPayload.STREAM_CODEC, TCPayloadHandlerBridge::handleResearchComplete);
+        registrar.playToClient(OreScanPayload.TYPE,
+                OreScanPayload.STREAM_CODEC, TCPayloadHandlerBridge::handleOreScanFx);
     }
 }

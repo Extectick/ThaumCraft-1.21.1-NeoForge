@@ -11,6 +11,10 @@ import thaumcraft.common.items.ResearchNotesItem;
 import thaumcraft.common.items.wands.WandCastingItem;
 import thaumcraft.common.items.wands.WandVisHelper;
 import thaumcraft.common.research.ResearchRegistry;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.EssentiaStorage;
+import net.minecraft.world.item.ItemStack;
+import thaumcraft.common.registry.TCDataComponents;
 
 public final class TCCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Thaumcraft.MODID);
@@ -20,7 +24,11 @@ public final class TCCreativeTabs {
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
             .icon(() -> TCItems.THAUMONOMICON.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                TCItems.SIMPLE_ITEMS.forEach(item -> output.accept(item.get()));
+                TCItems.SIMPLE_ITEMS.forEach(item -> {
+                    if (item != TCItems.ETHEREAL_ESSENCE && item != TCItems.ESSENTIA_PHIAL) {
+                        output.accept(item.get());
+                    }
+                });
                 output.accept(WandVisHelper.fillAllVis(TCItems.WAND_CASTING.get().getDefaultInstance()));
                 output.accept(WandVisHelper.fillAllVis(WandCastingItem.createVariant(TCItems.WAND_CASTING.get(),
                         WandCastingItem.ROD_WOOD, WandCastingItem.CAP_IRON, true)));
@@ -53,6 +61,16 @@ public final class TCCreativeTabs {
                 TCItems.FOCUS_ITEMS.forEach(item -> output.accept(item.get()));
                 output.accept(ResearchNotesItem.createUnknown());
                 ResearchRegistry.entries().forEach(entry -> output.accept(ResearchNotesItem.create(entry.key())));
+
+                for (Aspect aspect : Aspect.values()) {
+                    ItemStack wisp = new ItemStack(TCItems.ETHEREAL_ESSENCE.get());
+                    wisp.set(TCDataComponents.ESSENTIA, new EssentiaStorage(aspect, 2));
+                    output.accept(wisp);
+
+                    ItemStack phial = new ItemStack(TCItems.ESSENTIA_PHIAL.get());
+                    phial.set(TCDataComponents.ESSENTIA, new EssentiaStorage(aspect, 8));
+                    output.accept(phial);
+                }
             })
             .build());
 
