@@ -42,10 +42,12 @@ import thaumcraft.client.renderers.block.NodeJarRenderer;
 import thaumcraft.client.renderers.block.NodeStabilizerRenderer;
 import thaumcraft.client.renderers.block.RunicMatrixRenderer;
 import thaumcraft.client.renderers.block.WardedJarRenderer;
+import thaumcraft.client.renderers.block.HungryChestRenderer;
 import thaumcraft.client.renderers.item.TCItemRenderers;
 import thaumcraft.client.renderers.item.ThaumometerFirstPersonHandler;
 import thaumcraft.client.screens.AlchemicalFurnaceScreen;
 import thaumcraft.client.screens.ArcaneWorktableScreen;
+import thaumcraft.client.screens.FocusPouchScreen;
 import thaumcraft.client.screens.ResearchTableScreen;
 import thaumcraft.client.screens.ThaumonomiconScreen;
 import thaumcraft.client.tooltip.AspectTooltipHandler;
@@ -141,6 +143,7 @@ public class ThaumcraftClient {
         event.register(TCMenuTypes.ALCHEMICAL_FURNACE.get(), AlchemicalFurnaceScreen::new);
         event.register(TCMenuTypes.ARCANE_WORKTABLE.get(), ArcaneWorktableScreen::new);
         event.register(TCMenuTypes.RESEARCH_TABLE.get(), ResearchTableScreen::new);
+        event.register(TCMenuTypes.FOCUS_POUCH.get(), FocusPouchScreen::new);
     }
 
     private void registerGuiLayers(RegisterGuiLayersEvent event) {
@@ -177,6 +180,7 @@ public class ThaumcraftClient {
         event.registerBlockEntityRenderer(TCBlockEntities.WARDED_JAR.get(), WardedJarRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.ARCANE_ALEMBIC.get(), ArcaneAlembicRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);
         
         event.registerEntityRenderer(TCEntityTypes.FOLLOWING_ITEM.get(), ItemEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.SPECIAL_ITEM.get(), ItemEntityRenderer::new);

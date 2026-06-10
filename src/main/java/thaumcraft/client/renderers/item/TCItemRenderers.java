@@ -10,6 +10,7 @@ import thaumcraft.common.items.equipment.CultistPlateArmorItem;
 import thaumcraft.common.items.equipment.CultistLeaderArmorItem;
 import thaumcraft.common.items.equipment.VoidRobeArmorItem;
 import thaumcraft.common.items.equipment.RobeArmorItem;
+import thaumcraft.client.renderers.item.HungryChestItemRenderer;
 
 public final class TCItemRenderers {
     private TCItemRenderers() {
@@ -64,6 +65,14 @@ public final class TCItemRenderers {
                 return this.renderer;
             }
         }, TCItems.NODE_STABILIZER.get(), TCItems.ADVANCED_NODE_STABILIZER.get());
+        event.registerItem(new IClientItemExtensions() {
+            private final HungryChestItemRenderer renderer = new HungryChestItemRenderer();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return this.renderer;
+            }
+        }, TCItems.HUNGRY_CHEST.get());
 
         event.registerItem(FortressArmorItem.getExtensions(), TCItems.FORTRESS_HELMET.get(), TCItems.FORTRESS_CHESTPLATE.get(), TCItems.FORTRESS_LEGGINGS.get());
         event.registerItem(CultistRobeArmorItem.getExtensions(), TCItems.CRIMSON_ROBE_HELMET.get(), TCItems.CRIMSON_ROBE_CHESTPLATE.get(), TCItems.CRIMSON_ROBE_LEGGINGS.get());

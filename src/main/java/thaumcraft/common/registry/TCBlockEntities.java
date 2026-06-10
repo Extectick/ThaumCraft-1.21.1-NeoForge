@@ -19,6 +19,8 @@ import thaumcraft.common.blockentities.NodeStabilizerBlockEntity;
 import thaumcraft.common.blockentities.ResearchTableBlockEntity;
 import thaumcraft.common.blockentities.RunicMatrixBlockEntity;
 import thaumcraft.common.blockentities.WardedJarBlockEntity;
+import thaumcraft.common.blockentities.HungryChestBlockEntity;
+import thaumcraft.common.blockentities.WardingStoneBlockEntity;
 
 public final class TCBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> REGISTRY = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Thaumcraft.MODID);
@@ -84,6 +86,14 @@ public final class TCBlockEntities {
                             TCBlocks.ESSENTIA_BUFFER.get(),
                             TCBlocks.RESTRICTED_ESSENTIA_TUBE.get(),
                             TCBlocks.DIRECTIONAL_ESSENTIA_TUBE.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HungryChestBlockEntity>> HUNGRY_CHEST =
+            REGISTRY.register("hungry_chest", () -> BlockEntityType.Builder
+                    .of(HungryChestBlockEntity::new, TCBlocks.HUNGRY_CHEST.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WardingStoneBlockEntity>> WARDING_STONE =
+            REGISTRY.register("warding_stone", () -> BlockEntityType.Builder
+                    .of(WardingStoneBlockEntity::new, TCBlocks.PAVING_STONE_WARDING.get())
                     .build(null));
 
     private TCBlockEntities() {
