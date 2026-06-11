@@ -409,8 +409,6 @@
     "item.ItemNuggetFish.name":  "Fish Nugget",
     "item.BlockJarFilledItem.name":  "Jar of Essentia",
     "item.BlockJarFilledItem.void.name":  "Void Jar of Essentia",
-    "item.BlockJarNodeItem.name":  "Node in a Jar",
-    "item.TripleMeatTreat.name":  "Triple Meat Treat",
     "item.ItemSwordElemental.name":  "Sword of the Zephyr",
     "item.ArcaneDoorKey.0.name":  "Iron Arcane Key",
     "item.ArcaneDoorKey.1.name":  "Gold Arcane Key",
@@ -501,9 +499,7 @@
     "item.HelmetFortress.mask.1":  "Angry Ghost",
     "item.HelmetFortress.mask.2":  "Sipping Fiend",
     "item.ItemEldritchObject.0.name":  "Eldritch Eye",
-    "item.ItemEldritchObject.1.name":  "Crimson Rites",
     "item.ItemEldritchObject.2.name":  "Runed Tablet",
-    "item.ItemEldritchObject.3.name":  "Primordial Pearl",
     "item.ItemEldritchObject.4.name":  "Eldritch Obelisk Placer",
     "item.ItemEldritchObject.text.1":  "It seems to be watching you.",
     "item.ItemEldritchObject.text.2":  "The book is filled with strange symbols.",
@@ -1924,5 +1920,11 @@
     "item.thaumcraft.thaumium_helmet":  "Thaumium Helmet",
     "item.thaumcraft.void_boots":  "Void Metal Boots",
     "item.thaumcraft.thaumium_leggings":  "Thaumium Leggings",
-    "item.thaumcraft.thaumium_hoe":  "Thaumium Hoe"
+    "item.thaumcraft.thaumium_hoe":  "Thaumium Hoe",
+    "item.thaumcraft.primordial_pearl":  "Primordial Pearl",
+    "item.thaumcraft.triple_meat_treat":  "Triple Meat Treat",
+    "item.thaumcraft.taint_slime":  "Taint Slime",
+    "item.thaumcraft.node_in_a_jar":  "Node in a Jar",
+    "item.thaumcraft.bath_salts":  "Bath Salts",
+    "item.thaumcraft.crimson_rites":  "Crimson Rites"
 }

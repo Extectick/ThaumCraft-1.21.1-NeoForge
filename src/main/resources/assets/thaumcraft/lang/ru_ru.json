@@ -408,7 +408,6 @@
     "item.BlockJarFilledItem.name":  "Банка с эссенцией",
     "item.BlockJarFilledItem.void.name":  "Пустотная банка с эссенцией",
     "item.BlockJarNodeItem.name":  "Узел ауры в банке",
-    "item.TripleMeatTreat.name":  "Мясное ассорти",
     "item.ItemSwordElemental.name":  "Меч Бури",
     "item.ItemLeggingsRobe.name":  "Шаровары тауматурга",
     "item.ItemBootsRobe.name":  "Сапоги тауматурга",
@@ -512,9 +511,7 @@
     "item.HelmetFortress.mask.1":  "Злое привидение",
     "item.HelmetFortress.mask.2":  "Тянущийся демон",
     "item.ItemEldritchObject.0.name":  "Глаз Древних",
-    "item.ItemEldritchObject.1.name":  "Багровые ритуалы",
     "item.ItemEldritchObject.2.name":  "Рунная скрижаль",
-    "item.ItemEldritchObject.3.name":  "Сингулярная жемчужина",
     "item.ItemEldritchObject.4.name":  "Установщик древних обелисков",
     "item.ItemEldritchObject.text.1":  "Как будто наблюдает за Вами.",
     "item.ItemEldritchObject.text.2":  "Книга, наполненная странными символами.",
@@ -1806,5 +1803,11 @@
     "item.thaumcraft.thaumium_helmet":  "Таумиевый шлем",
     "item.thaumcraft.void_boots":  "Ботинки из пустотного металла",
     "item.thaumcraft.thaumium_leggings":  "Таумиевые поножи",
-    "item.thaumcraft.thaumium_hoe":  "Таумиевая мотыга"
+    "item.thaumcraft.thaumium_hoe":  "Таумиевая мотыга",
+    "item.thaumcraft.primordial_pearl":  "Сингулярная жемчужина",
+    "item.thaumcraft.triple_meat_treat":  "Мясное ассорти",
+    "item.thaumcraft.taint_slime":  "Зараженная слизь",
+    "item.thaumcraft.node_in_a_jar":  "Узел в банке",
+    "item.thaumcraft.bath_salts":  "Соль для ванн",
+    "item.thaumcraft.crimson_rites":  "Багровые ритуалы"
 }
