@@ -1,5 +1,6 @@
 package thaumcraft.client.network;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import thaumcraft.client.fx.BlockZapFxHandler;
@@ -9,6 +10,7 @@ import thaumcraft.client.fx.PedestalSparkleFxHandler;
 import thaumcraft.common.network.BlockZapFxPayload;
 import thaumcraft.client.lib.PlayerNotifications;
 import thaumcraft.common.network.EssentiaSourceFxPayload;
+import thaumcraft.common.network.OreScanPayload;
 import thaumcraft.common.network.InfusionSourceFxPayload;
 import thaumcraft.common.network.PedestalSparkleFxPayload;
 import thaumcraft.common.network.ResearchCompleteNotificationPayload;
@@ -18,6 +20,7 @@ import thaumcraft.common.network.WarpMessagePayload;
 import thaumcraft.common.research.ResearchRegistry;
 import thaumcraft.common.registry.TCSoundEvents;
 import thaumcraft.client.fx.BlockRunesParticle;
+import thaumcraft.client.events.OreScanHandler;
 
 public final class TCClientPayloadHandler {
     private TCClientPayloadHandler() {
@@ -47,7 +50,7 @@ public final class TCClientPayloadHandler {
     }
 
     public static void handleThaumometerScanFx(ThaumometerScanFxPayload payload) {
-        net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
+        Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level == null || minecraft.particleEngine == null) {
             return;
         }
@@ -75,8 +78,8 @@ public final class TCClientPayloadHandler {
     }
 
     public static void handleWarpMessage(WarpMessagePayload payload) {
-        if (payload.amount() == 0 || net.minecraft.client.Minecraft.getInstance().player == null
-                || net.minecraft.client.Minecraft.getInstance().level == null) {
+        if (payload.amount() == 0 || Minecraft.getInstance().player == null
+                || Minecraft.getInstance().level == null) {
             return;
         }
         String key;
@@ -88,12 +91,19 @@ public final class TCClientPayloadHandler {
             key = payload.amount() > 0 ? "tc.addwarptemp" : "tc.removewarptemp";
         }
         if (payload.amount() > 0 && payload.warpType() != 2) {
-            net.minecraft.client.Minecraft.getInstance().level.playLocalSound(
-                    net.minecraft.client.Minecraft.getInstance().player.getX(),
-                    net.minecraft.client.Minecraft.getInstance().player.getY(),
-                    net.minecraft.client.Minecraft.getInstance().player.getZ(),
+            Minecraft.getInstance().level.playLocalSound(
+                    Minecraft.getInstance().player.getX(),
+                    Minecraft.getInstance().player.getY(),
+                    Minecraft.getInstance().player.getZ(),
                     TCSoundEvents.WHISPERS.get(), SoundSource.PLAYERS, 0.5F, 1.0F, false);
         }
         PlayerNotifications.addNotification(Component.translatable(key));
+    }
+
+    public static void handleOreScanFx(OreScanPayload payload) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player != null) {
+            OreScanHandler.startScan(minecraft.player, payload.center(), payload.range());
+        }
     }
 }

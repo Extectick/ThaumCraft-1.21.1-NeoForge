@@ -33,6 +33,7 @@ import thaumcraft.common.blocks.NodeJarBlock;
 import thaumcraft.common.blocks.NodeStabilizerBlock;
 import thaumcraft.common.blocks.ResearchTableBlock;
 import thaumcraft.common.blocks.RunicMatrixBlock;
+import thaumcraft.common.blocks.SimpleDirectionalBlock;
 import thaumcraft.common.blocks.SimpleJarBlock;
 import thaumcraft.common.blocks.SimpleMirrorBlock;
 import thaumcraft.common.blocks.SimplePlantBlock;
@@ -139,10 +140,10 @@ public final class TCBlocks {
             () -> new ArcaneLampBlock(metalDeviceProperties()));
     public static final DeferredBlock<Block> ALCHEMICAL_CONSTRUCT = metalDevice("alchemical_construct");
     public static final DeferredBlock<Block> THAUMATORIUM = metalDevice("thaumatorium");
-    public static final DeferredBlock<Block> MNEMONIC_MATRIX = REGISTRY.register("mnemonic_matrix", () -> new thaumcraft.common.blocks.SimpleDirectionalBlock(metalDeviceProperties()));
+    public static final DeferredBlock<Block> MNEMONIC_MATRIX = REGISTRY.register("mnemonic_matrix", () -> new SimpleDirectionalBlock(metalDeviceProperties()));
     public static final DeferredBlock<ArcaneLampBlock> LAMP_OF_FERTILITY = REGISTRY.register("arcane_lamp_fertility",
             () -> new ArcaneLampBlock(metalDeviceProperties()));
-    public static final DeferredBlock<Block> VIS_RELAY = REGISTRY.register("vis_relay", () -> new thaumcraft.common.blocks.SimpleDirectionalBlock(metalDeviceProperties()));
+    public static final DeferredBlock<Block> VIS_RELAY = REGISTRY.register("vis_relay", () -> new SimpleDirectionalBlock(metalDeviceProperties()));
     public static final DeferredBlock<EssentiaTubeBlock> ESSENTIA_TUBE = REGISTRY.register("essentia_tube",
             () -> new EssentiaTubeBlock(tubeProperties()));
     public static final DeferredBlock<EssentiaTubeBlock> ESSENTIA_VALVE = tube("essentia_valve", TubeMode.VALVE);

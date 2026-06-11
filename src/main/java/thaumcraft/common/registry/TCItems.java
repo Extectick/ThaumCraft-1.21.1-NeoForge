@@ -2,6 +2,9 @@ package thaumcraft.common.registry;
 
 import java.util.List;
 
+import thaumcraft.common.items.equipment.*;
+import net.minecraft.world.item.ArmorItem;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -16,6 +19,7 @@ import thaumcraft.common.curios.TCSlots;
 import thaumcraft.common.items.JarBlockItem;
 import thaumcraft.common.items.NodeJarBlockItem;
 import thaumcraft.common.items.AuraNodeItem;
+import thaumcraft.common.items.EssenceItem;
 import thaumcraft.common.items.ScribingToolsItem;
 import thaumcraft.common.items.ResearchNotesItem;
 import thaumcraft.common.items.ThaumometerItem;
@@ -210,8 +214,8 @@ public final class TCItems {
     public static final DeferredItem<Item> GOLD_ARCANE_KEY = simple("gold_arcane_key");
     public static final DeferredItem<Item> SCRIBING_TOOLS = REGISTRY.registerItem("scribing_tools", ScribingToolsItem::new);
     public static final DeferredItem<Item> RESEARCH_NOTES = REGISTRY.registerItem("research_notes", ResearchNotesItem::new);
-    public static final DeferredItem<Item> ETHEREAL_ESSENCE = simple("ethereal_essence");
-    public static final DeferredItem<Item> CRYSTALLIZED_ESSENCE = simple("crystallized_essence");
+    public static final DeferredItem<Item> ETHEREAL_ESSENCE = REGISTRY.registerItem("ethereal_essence", EssenceItem::new);
+    public static final DeferredItem<Item> CRYSTALLIZED_ESSENCE = REGISTRY.registerItem("crystallized_essence", EssenceItem::new);
     public static final DeferredItem<Item> GLASS_PHIAL = simple("glass_phial");
     public static final DeferredItem<Item> ESSENTIA_PHIAL = REGISTRY.registerItem("essentia_phial", EssentiaPhialItem::new);
     public static final DeferredItem<Item> MANA_BEAN = simple("mana_bean", food(1, 0.5F, true));
@@ -283,6 +287,65 @@ public final class TCItems {
     public static final DeferredItem<ItemFocusBasic> FOCUS_TRADE = focus("focus_trade",
             new PrimalVisStorage(0, 0, 0, 5, 5, 5), 0xC8A050, 0, false,
             null, "focus_trade_orn", ItemFocusBasic.WandFocusAnimation.CHARGE);
+
+    public static final DeferredItem<ThaumiumSwordItem> THAUMIUM_SWORD = REGISTRY.register("thaumium_sword", ThaumiumSwordItem::new);
+    public static final DeferredItem<ThaumiumShovelItem> THAUMIUM_SHOVEL = REGISTRY.register("thaumium_shovel", ThaumiumShovelItem::new);
+    public static final DeferredItem<ThaumiumPickaxeItem> THAUMIUM_PICKAXE = REGISTRY.register("thaumium_pickaxe", ThaumiumPickaxeItem::new);
+    public static final DeferredItem<ThaumiumAxeItem> THAUMIUM_AXE = REGISTRY.register("thaumium_axe", ThaumiumAxeItem::new);
+    public static final DeferredItem<ThaumiumHoeItem> THAUMIUM_HOE = REGISTRY.register("thaumium_hoe", ThaumiumHoeItem::new);
+
+    public static final DeferredItem<VoidSwordItem> VOID_SWORD = REGISTRY.register("void_sword", VoidSwordItem::new);
+    public static final DeferredItem<VoidShovelItem> VOID_SHOVEL = REGISTRY.register("void_shovel", VoidShovelItem::new);
+    public static final DeferredItem<VoidPickaxeItem> VOID_PICKAXE = REGISTRY.register("void_pickaxe", VoidPickaxeItem::new);
+    public static final DeferredItem<VoidAxeItem> VOID_AXE = REGISTRY.register("void_axe", VoidAxeItem::new);
+    public static final DeferredItem<VoidHoeItem> VOID_HOE = REGISTRY.register("void_hoe", VoidHoeItem::new);
+
+    public static final DeferredItem<ElementalShovelItem> ELEMENTAL_SHOVEL = REGISTRY.register("elemental_shovel", ElementalShovelItem::new);
+    public static final DeferredItem<ElementalPickaxeItem> ELEMENTAL_PICKAXE = REGISTRY.register("elemental_pickaxe", ElementalPickaxeItem::new);
+    public static final DeferredItem<ElementalAxeItem> ELEMENTAL_AXE = REGISTRY.register("elemental_axe", ElementalAxeItem::new);
+    public static final DeferredItem<ElementalHoeItem> ELEMENTAL_HOE = REGISTRY.register("elemental_hoe", ElementalHoeItem::new);
+
+    public static final DeferredItem<CrimsonBladeItem> CRIMSON_BLADE = REGISTRY.register("crimson_blade", CrimsonBladeItem::new);
+    public static final DeferredItem<PrimalCrusherItem> PRIMAL_CRUSHER = REGISTRY.register("primal_crusher", PrimalCrusherItem::new);
+
+    public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_HELMET = REGISTRY.register("thaumium_helmet", () -> new ThaumiumArmorItem(ArmorItem.Type.HELMET, TCArmorMaterials.THAUMIUM));
+    public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_CHESTPLATE = REGISTRY.register("thaumium_chestplate", () -> new ThaumiumArmorItem(ArmorItem.Type.CHESTPLATE, TCArmorMaterials.THAUMIUM));
+    public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_LEGGINGS = REGISTRY.register("thaumium_leggings", () -> new ThaumiumArmorItem(ArmorItem.Type.LEGGINGS, TCArmorMaterials.THAUMIUM));
+    public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_BOOTS = REGISTRY.register("thaumium_boots", () -> new ThaumiumArmorItem(ArmorItem.Type.BOOTS, TCArmorMaterials.THAUMIUM));
+
+    public static final DeferredItem<VoidArmorItem> VOID_HELMET = REGISTRY.register("void_helmet", () -> new VoidArmorItem(ArmorItem.Type.HELMET, TCArmorMaterials.VOID));
+    public static final DeferredItem<VoidArmorItem> VOID_CHESTPLATE = REGISTRY.register("void_chestplate", () -> new VoidArmorItem(ArmorItem.Type.CHESTPLATE, TCArmorMaterials.VOID));
+    public static final DeferredItem<VoidArmorItem> VOID_LEGGINGS = REGISTRY.register("void_leggings", () -> new VoidArmorItem(ArmorItem.Type.LEGGINGS, TCArmorMaterials.VOID));
+    public static final DeferredItem<VoidArmorItem> VOID_BOOTS = REGISTRY.register("void_boots", () -> new VoidArmorItem(ArmorItem.Type.BOOTS, TCArmorMaterials.VOID));
+
+    public static final DeferredItem<VoidRobeArmorItem> VOID_ROBE_HELMET = REGISTRY.register("void_robe_helmet", () -> new VoidRobeArmorItem(TCArmorMaterials.VOID_ROBE, ArmorItem.Type.HELMET));
+    public static final DeferredItem<VoidRobeArmorItem> VOID_ROBE_CHESTPLATE = REGISTRY.register("void_robe_chestplate", () -> new VoidRobeArmorItem(TCArmorMaterials.VOID_ROBE, ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<VoidRobeArmorItem> VOID_ROBE_LEGGINGS = REGISTRY.register("void_robe_leggings", () -> new VoidRobeArmorItem(TCArmorMaterials.VOID_ROBE, ArmorItem.Type.LEGGINGS));
+
+    public static final DeferredItem<FortressArmorItem> FORTRESS_HELMET = REGISTRY.register("fortress_helmet", () -> new FortressArmorItem(ArmorItem.Type.HELMET, TCArmorMaterials.FORTRESS));
+    public static final DeferredItem<FortressArmorItem> FORTRESS_CHESTPLATE = REGISTRY.register("fortress_chestplate", () -> new FortressArmorItem(ArmorItem.Type.CHESTPLATE, TCArmorMaterials.FORTRESS));
+    public static final DeferredItem<FortressArmorItem> FORTRESS_LEGGINGS = REGISTRY.register("fortress_leggings", () -> new FortressArmorItem(ArmorItem.Type.LEGGINGS, TCArmorMaterials.FORTRESS));
+
+    public static final DeferredItem<BootsTravellerItem> BOOTS_TRAVELLER = REGISTRY.register("boots_traveller", () -> new BootsTravellerItem(ArmorItem.Type.BOOTS, TCArmorMaterials.TRAVELLER));
+    public static final DeferredItem<GogglesItem> GOGGLES = REGISTRY.register("goggles", GogglesItem::new);
+
+    public static final DeferredItem<CultistRobeArmorItem> CRIMSON_ROBE_HELMET = REGISTRY.register("crimson_robe_helmet", () -> new CultistRobeArmorItem(TCArmorMaterials.CULTIST_CLOTH, ArmorItem.Type.HELMET));
+    public static final DeferredItem<CultistRobeArmorItem> CRIMSON_ROBE_CHESTPLATE = REGISTRY.register("crimson_robe_chestplate", () -> new CultistRobeArmorItem(TCArmorMaterials.CULTIST_CLOTH, ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<CultistRobeArmorItem> CRIMSON_ROBE_LEGGINGS = REGISTRY.register("crimson_robe_leggings", () -> new CultistRobeArmorItem(TCArmorMaterials.CULTIST_CLOTH, ArmorItem.Type.LEGGINGS));
+
+    public static final DeferredItem<CultistPlateArmorItem> CRIMSON_PLATE_HELMET = REGISTRY.register("crimson_plate_helmet", () -> new CultistPlateArmorItem(TCArmorMaterials.CULTIST_PLATE, ArmorItem.Type.HELMET));
+    public static final DeferredItem<CultistPlateArmorItem> CRIMSON_PLATE_CHESTPLATE = REGISTRY.register("crimson_plate_chestplate", () -> new CultistPlateArmorItem(TCArmorMaterials.CULTIST_PLATE, ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<CultistPlateArmorItem> CRIMSON_PLATE_LEGGINGS = REGISTRY.register("crimson_plate_leggings", () -> new CultistPlateArmorItem(TCArmorMaterials.CULTIST_PLATE, ArmorItem.Type.LEGGINGS));
+
+    public static final DeferredItem<CultistLeaderArmorItem> CRIMSON_LEADER_HELMET = REGISTRY.register("crimson_leader_helmet", () -> new CultistLeaderArmorItem(TCArmorMaterials.CULTIST_LEADER, ArmorItem.Type.HELMET));
+    public static final DeferredItem<CultistLeaderArmorItem> CRIMSON_LEADER_CHESTPLATE = REGISTRY.register("crimson_leader_chestplate", () -> new CultistLeaderArmorItem(TCArmorMaterials.CULTIST_LEADER, ArmorItem.Type.CHESTPLATE));
+    public static final DeferredItem<CultistLeaderArmorItem> CRIMSON_LEADER_LEGGINGS = REGISTRY.register("crimson_leader_leggings", () -> new CultistLeaderArmorItem(TCArmorMaterials.CULTIST_LEADER, ArmorItem.Type.LEGGINGS));
+
+    public static final DeferredItem<CultistBootsItem> CRIMSON_BOOTS = REGISTRY.register("crimson_boots", () -> new CultistBootsItem(TCArmorMaterials.CULTIST_CLOTH, ArmorItem.Type.BOOTS));
+
+    public static final DeferredItem<RobeArmorItem> ROBE_CHESTPLATE = REGISTRY.register("robe_chestplate", () -> new RobeArmorItem(ArmorItem.Type.CHESTPLATE, TCArmorMaterials.ROBE));
+    public static final DeferredItem<RobeArmorItem> ROBE_LEGGINGS = REGISTRY.register("robe_leggings", () -> new RobeArmorItem(ArmorItem.Type.LEGGINGS, TCArmorMaterials.ROBE));
+    public static final DeferredItem<RobeArmorItem> ROBE_BOOTS = REGISTRY.register("robe_boots", () -> new RobeArmorItem(ArmorItem.Type.BOOTS, TCArmorMaterials.ROBE));
 
     public static final List<DeferredItem<? extends Item>> SIMPLE_ITEMS = List.of(
             CINNABAR_ORE,
@@ -460,7 +523,21 @@ public final class TCItems {
             CRYSTALLIZED_ESSENCE,
             GLASS_PHIAL,
             ESSENTIA_PHIAL,
-            MANA_BEAN);
+            MANA_BEAN,
+            THAUMIUM_SWORD, THAUMIUM_SHOVEL, THAUMIUM_PICKAXE, THAUMIUM_AXE, THAUMIUM_HOE,
+            VOID_SWORD, VOID_SHOVEL, VOID_PICKAXE, VOID_AXE, VOID_HOE,
+            ELEMENTAL_SHOVEL, ELEMENTAL_PICKAXE, ELEMENTAL_AXE, ELEMENTAL_HOE,
+            CRIMSON_BLADE, PRIMAL_CRUSHER,
+            THAUMIUM_HELMET, THAUMIUM_CHESTPLATE, THAUMIUM_LEGGINGS, THAUMIUM_BOOTS,
+            VOID_HELMET, VOID_CHESTPLATE, VOID_LEGGINGS, VOID_BOOTS,
+            VOID_ROBE_HELMET, VOID_ROBE_CHESTPLATE, VOID_ROBE_LEGGINGS,
+            FORTRESS_HELMET, FORTRESS_CHESTPLATE, FORTRESS_LEGGINGS,
+            BOOTS_TRAVELLER, GOGGLES,
+            CRIMSON_ROBE_HELMET, CRIMSON_ROBE_CHESTPLATE, CRIMSON_ROBE_LEGGINGS,
+            CRIMSON_PLATE_HELMET, CRIMSON_PLATE_CHESTPLATE, CRIMSON_PLATE_LEGGINGS,
+            CRIMSON_LEADER_HELMET, CRIMSON_LEADER_CHESTPLATE, CRIMSON_LEADER_LEGGINGS,
+            CRIMSON_BOOTS,
+            ROBE_CHESTPLATE, ROBE_LEGGINGS, ROBE_BOOTS);
 
     public static final List<DeferredItem<? extends Item>> FOCUS_ITEMS = List.of(
             FOCUS_FIRE,

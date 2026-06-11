@@ -12,6 +12,7 @@ import thaumcraft.common.blockentities.CrucibleBlockEntity;
 import thaumcraft.client.network.TCClientPayloadHandler;
 import thaumcraft.common.network.BlockZapFxPayload;
 import thaumcraft.common.network.EssentiaSourceFxPayload;
+import thaumcraft.common.network.OreScanPayload;
 import thaumcraft.common.network.InfusionSourceFxPayload;
 import thaumcraft.common.network.PedestalSparkleFxPayload;
 import thaumcraft.common.network.ResearchCompleteNotificationPayload;
@@ -60,6 +61,11 @@ public final class ThaumcraftClientServicesProvider implements ThaumcraftClientS
     @Override
     public void handleWarpMessage(WarpMessagePayload payload) {
         TCClientPayloadHandler.handleWarpMessage(payload);
+    }
+
+    @Override
+    public void handleOreScanFx(OreScanPayload payload) {
+        TCClientPayloadHandler.handleOreScanFx(payload);
     }
 
     @Override
