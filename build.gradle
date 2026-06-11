@@ -254,6 +254,7 @@ tasks.register('checkCommonSideSafety') {
         include 'thaumcraft/api/**/*.java'
         include 'thaumcraft/common/**/*.java'
     }
+    def projectRoot = layout.projectDirectory.asFile.toPath()
 
     inputs.files(checkedSources)
 
@@ -263,7 +264,7 @@ tasks.register('checkCommonSideSafety') {
             def text = sourceFile.getText('UTF-8')
             forbiddenPatterns.each { pattern ->
                 if (text.contains(pattern)) {
-                    violations.add("${project.relativePath(sourceFile)} contains '${pattern}'")
+                    violations.add("${projectRoot.relativize(sourceFile.toPath())} contains '${pattern}'")
                 }
             }
         }
@@ -294,6 +295,7 @@ tasks.register('checkNoCommonReflectionSideDispatch') {
         include 'thaumcraft/api/**/*.java'
         include 'thaumcraft/common/**/*.java'
     }
+    def projectRoot = layout.projectDirectory.asFile.toPath()
 
     inputs.files(checkedSources)
 
@@ -303,7 +305,7 @@ tasks.register('checkNoCommonReflectionSideDispatch') {
             def text = sourceFile.getText('UTF-8')
             forbiddenPatterns.each { pattern ->
                 if (text.contains(pattern)) {
-                    violations.add("${project.relativePath(sourceFile)} contains '${pattern}'")
+                    violations.add("${projectRoot.relativize(sourceFile.toPath())} contains '${pattern}'")
                 }
             }
         }

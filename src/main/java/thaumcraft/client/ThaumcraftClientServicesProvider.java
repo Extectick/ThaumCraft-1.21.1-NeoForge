@@ -8,6 +8,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.client.fx.CrucibleClientFx;
 import thaumcraft.client.fx.InfusionMatrixClientFx;
 import thaumcraft.client.fx.InfusionBoreParticle;
+import thaumcraft.client.fx.RuneParticle;
 import thaumcraft.common.blockentities.CrucibleBlockEntity;
 import thaumcraft.client.network.TCClientPayloadHandler;
 import thaumcraft.common.network.BlockZapFxPayload;
@@ -83,6 +84,19 @@ public final class ThaumcraftClientServicesProvider implements ThaumcraftClientS
                 target.getZ() + 0.5D,
                 state,
                 source));
+    }
+
+    @Override
+    public void runeParticle(Level level, double x, double y, double z, float red, float green, float blue,
+            int lifetime, float gravity) {
+        if (Minecraft.getInstance().particleEngine == null
+                || !(level instanceof net.minecraft.client.multiplayer.ClientLevel clientLevel)) {
+            return;
+        }
+        RuneParticle rune = RuneParticle.createDirect(
+                clientLevel, x, y, z, red, green, blue, lifetime, gravity);
+        rune.setNoClip(true);
+        Minecraft.getInstance().particleEngine.add(rune);
     }
 
     @Override

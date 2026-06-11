@@ -4,13 +4,6 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import thaumcraft.common.registry.TCItems;
-import thaumcraft.common.items.equipment.FortressArmorItem;
-import thaumcraft.common.items.equipment.CultistRobeArmorItem;
-import thaumcraft.common.items.equipment.CultistPlateArmorItem;
-import thaumcraft.common.items.equipment.CultistLeaderArmorItem;
-import thaumcraft.common.items.equipment.VoidRobeArmorItem;
-import thaumcraft.common.items.equipment.RobeArmorItem;
-import thaumcraft.client.renderers.item.HungryChestItemRenderer;
 
 public final class TCItemRenderers {
     private TCItemRenderers() {
@@ -74,10 +67,10 @@ public final class TCItemRenderers {
             }
         }, TCItems.HUNGRY_CHEST.get());
 
-        event.registerItem(FortressArmorItem.getExtensions(), TCItems.FORTRESS_HELMET.get(), TCItems.FORTRESS_CHESTPLATE.get(), TCItems.FORTRESS_LEGGINGS.get());
-        event.registerItem(CultistRobeArmorItem.getExtensions(), TCItems.CRIMSON_ROBE_HELMET.get(), TCItems.CRIMSON_ROBE_CHESTPLATE.get(), TCItems.CRIMSON_ROBE_LEGGINGS.get());
-        event.registerItem(CultistPlateArmorItem.getExtensions(), TCItems.CRIMSON_PLATE_HELMET.get(), TCItems.CRIMSON_PLATE_CHESTPLATE.get(), TCItems.CRIMSON_PLATE_LEGGINGS.get());
-        event.registerItem(CultistLeaderArmorItem.getExtensions(), TCItems.CRIMSON_LEADER_HELMET.get(), TCItems.CRIMSON_LEADER_CHESTPLATE.get(), TCItems.CRIMSON_LEADER_LEGGINGS.get());
-        event.registerItem(VoidRobeArmorItem.getExtensions(), TCItems.VOID_ROBE_HELMET.get(), TCItems.VOID_ROBE_CHESTPLATE.get(), TCItems.VOID_ROBE_LEGGINGS.get());
+        event.registerItem(ArmorItemExtensions.fortress(), TCItems.FORTRESS_HELMET.get(), TCItems.FORTRESS_CHESTPLATE.get(), TCItems.FORTRESS_LEGGINGS.get());
+        event.registerItem(ArmorItemExtensions.cultistRobe(), TCItems.CRIMSON_ROBE_HELMET.get(), TCItems.CRIMSON_ROBE_CHESTPLATE.get(), TCItems.CRIMSON_ROBE_LEGGINGS.get());
+        event.registerItem(ArmorItemExtensions.cultistPlate(), TCItems.CRIMSON_PLATE_HELMET.get(), TCItems.CRIMSON_PLATE_CHESTPLATE.get(), TCItems.CRIMSON_PLATE_LEGGINGS.get());
+        event.registerItem(ArmorItemExtensions.cultistLeader(), TCItems.CRIMSON_LEADER_HELMET.get(), TCItems.CRIMSON_LEADER_CHESTPLATE.get(), TCItems.CRIMSON_LEADER_LEGGINGS.get());
+        event.registerItem(ArmorItemExtensions.voidRobe(), TCItems.VOID_ROBE_HELMET.get(), TCItems.VOID_ROBE_CHESTPLATE.get(), TCItems.VOID_ROBE_LEGGINGS.get());
     }
 }

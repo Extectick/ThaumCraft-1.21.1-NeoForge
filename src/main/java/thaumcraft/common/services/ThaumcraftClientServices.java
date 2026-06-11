@@ -49,6 +49,10 @@ public interface ThaumcraftClientServices {
     default void hungryNodeBlockFx(Level level, BlockPos source, BlockPos target, BlockState state) {
     }
 
+    default void runeParticle(Level level, double x, double y, double z, float red, float green, float blue,
+            int lifetime, float gravity) {
+    }
+
     default void blockRunes(Level level, BlockPos pos) {
     }
 

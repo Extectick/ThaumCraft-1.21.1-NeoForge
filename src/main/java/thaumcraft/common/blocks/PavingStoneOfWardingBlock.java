@@ -1,7 +1,6 @@
 package thaumcraft.common.blocks;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,8 +16,8 @@ import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.common.blockentities.WardingStoneBlockEntity;
-import thaumcraft.client.fx.RuneParticle;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.services.ClientServices;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -96,10 +95,9 @@ public class PavingStoneOfWardingBlock extends BaseEntityBlock {
                     double eyeY = y + 0.6 + random.nextFloat() * Math.max(0.8, mob.getEyeHeight());
                     double px = x + (random.nextFloat() - 0.5) * 0.6;
                     double pz = z + (random.nextFloat() - 0.5) * 0.6;
-                    RuneParticle rune = RuneParticle.createDirect((net.minecraft.client.multiplayer.ClientLevel) level, px, eyeY, pz,
-                            0.6F + random.nextFloat() * 0.4F, 0.0F, 0.3F + random.nextFloat() * 0.7F, 20, 0.0F);
-                    rune.setNoClip(true);
-                    Minecraft.getInstance().particleEngine.add(rune);
+                    ClientServices.get().runeParticle(level, px, eyeY, pz,
+                            0.6F + random.nextFloat() * 0.4F, 0.0F,
+                            0.3F + random.nextFloat() * 0.7F, 20, 0.0F);
                 }
             }
         }
@@ -109,9 +107,7 @@ public class PavingStoneOfWardingBlock extends BaseEntityBlock {
         double px = x + (random.nextFloat() - 0.5) * 0.6;
         double py = y + 0.7;
         double pz = z + (random.nextFloat() - 0.5) * 0.6;
-        RuneParticle rune = RuneParticle.createDirect((net.minecraft.client.multiplayer.ClientLevel) level, px, py, pz, r, g, b, 20, gravity);
-        rune.setNoClip(true);
-        Minecraft.getInstance().particleEngine.add(rune);
+        ClientServices.get().runeParticle(level, px, py, pz, r, g, b, 20, gravity);
     }
 }
 
