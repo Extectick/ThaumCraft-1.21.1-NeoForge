@@ -56,12 +56,12 @@ public class MagicSaplingBlock extends Block implements BonemealableBlock {
 
     @Override
     public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
-        return true;
+        return false;
     }
 
     @Override
