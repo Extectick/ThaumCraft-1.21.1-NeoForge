@@ -1,7 +1,7 @@
 name: Telegram Notifications
 
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
       - reopened
@@ -23,7 +23,7 @@ permissions:
 jobs:
   pull-request:
     name: Pull request notification
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request_target'
     runs-on: ubuntu-latest
     steps:
       - name: Send Telegram message
