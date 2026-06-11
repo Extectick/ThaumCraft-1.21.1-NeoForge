@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.haste": "Spěch",
   "enchantment.repair": "Opravování",
   "enchantment.special.sapless": "Menší Oslabení",
@@ -1601,8 +1601,8 @@
   "block.thaumcraft.infused_water_ore": "Vodou nasátý kámen",
   "block.thaumcraft.infusion_pillar": "Infusion sloup",
   "block.thaumcraft.item_grate": "Mříže předmětu",
-  "block.thaumcraft.lamp_of_fertility": "Lampa plodnosti",
-  "block.thaumcraft.lamp_of_growth": "Lampa Růstu",
+  "block.thaumcraft.arcane_lamp_fertility": "Lampa plodnosti",
+  "block.thaumcraft.arcane_lamp_growth": "Lampa Růstu",
   "block.thaumcraft.light_blue_tallow_candle": "Světle modrá lojová svíčka",
   "block.thaumcraft.light_gray_tallow_candle": "Světle šedá lojová svíčka",
   "block.thaumcraft.lime_tallow_candle": "Lime lojová svíčka",

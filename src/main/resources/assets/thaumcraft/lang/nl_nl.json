@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.potency": "Potentie",
   "enchantment.frugal": "Matiging",
   "enchantment.charging": "Opladen",
@@ -1165,8 +1165,8 @@
   "block.thaumcraft.infused_water_ore": "Water-geïnfuseerde Steen",
   "block.thaumcraft.infusion_pillar": "Infusiepilaar",
   "block.thaumcraft.item_grate": "Item Grate",
-  "block.thaumcraft.lamp_of_fertility": "Lamp van Vruchtbaarheid",
-  "block.thaumcraft.lamp_of_growth": "Lamp of Growth",
+  "block.thaumcraft.arcane_lamp_fertility": "Lamp van Vruchtbaarheid",
+  "block.thaumcraft.arcane_lamp_growth": "Lamp of Growth",
   "block.thaumcraft.light_blue_tallow_candle": "Licht Blauwe Talgkaars",
   "block.thaumcraft.light_gray_tallow_candle": "Lichtgrijze Talgkaars",
   "block.thaumcraft.lime_tallow_candle": "Limoene Talgkaars",

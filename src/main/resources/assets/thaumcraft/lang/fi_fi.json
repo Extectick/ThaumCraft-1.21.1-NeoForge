@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.potency": "Teho",
   "enchantment.frugal": "Säästäväinen",
   "enchantment.charging": "Lataus",
@@ -1116,8 +1116,8 @@
   "block.thaumcraft.infused_water_ore": "Vedellä infusoitu kivi",
   "block.thaumcraft.infusion_pillar": "Infuusiopilari",
   "block.thaumcraft.item_grate": "Item Grate",
-  "block.thaumcraft.lamp_of_fertility": "Hedelmällisyyden lamppu",
-  "block.thaumcraft.lamp_of_growth": "Lamp of Growth",
+  "block.thaumcraft.arcane_lamp_fertility": "Hedelmällisyyden lamppu",
+  "block.thaumcraft.arcane_lamp_growth": "Lamp of Growth",
   "block.thaumcraft.light_blue_tallow_candle": "Vaaleansininen talikynttilä",
   "block.thaumcraft.light_gray_tallow_candle": "Vaaleanharmaa talikynttilä",
   "block.thaumcraft.lime_tallow_candle": "Keltavihreä talikynttilä",

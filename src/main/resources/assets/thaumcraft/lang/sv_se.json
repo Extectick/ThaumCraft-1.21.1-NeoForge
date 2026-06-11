@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.potency": "Makt",
   "enchantment.frugal": "Sparsam",
   "enchantment.charging": "Ladda",
@@ -1131,8 +1131,8 @@
   "block.thaumcraft.infused_water_ore": "Vatteningjuten sten",
   "block.thaumcraft.infusion_pillar": "Ingjutningspelare",
   "block.thaumcraft.item_grate": "Item Grate",
-  "block.thaumcraft.lamp_of_fertility": "Fertilitetslampa",
-  "block.thaumcraft.lamp_of_growth": "Lamp of Growth",
+  "block.thaumcraft.arcane_lamp_fertility": "Fertilitetslampa",
+  "block.thaumcraft.arcane_lamp_growth": "Lamp of Growth",
   "block.thaumcraft.light_blue_tallow_candle": "Ljusblått talgljus",
   "block.thaumcraft.light_gray_tallow_candle": "Ljusgrått talgljus",
   "block.thaumcraft.lime_tallow_candle": "Lindblomsgrönt talgljus",

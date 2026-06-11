@@ -17,6 +17,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.blocks.AlchemicalFurnaceBlock;
 import thaumcraft.common.blocks.ArcaneAlembicBlock;
+import thaumcraft.common.blocks.ArcaneLampBlock;
 import thaumcraft.common.blocks.ArcanePedestalBlock;
 import thaumcraft.common.blocks.ArcaneWorktableBlock;
 import thaumcraft.common.blocks.AuraNodeBlock;
@@ -132,13 +133,16 @@ public final class TCBlocks {
     public static final DeferredBlock<Block> VIS_CHARGE_RELAY = metalDevice("vis_charge_relay");
     public static final DeferredBlock<Block> ADVANCED_ALCHEMICAL_CONSTRUCT = metalDevice("advanced_alchemical_construct");
     public static final DeferredBlock<Block> ITEM_GRATE = metalDevice("item_grate");
-    public static final DeferredBlock<Block> ARCANE_LAMP = metalDevice("arcane_lamp");
-    public static final DeferredBlock<Block> LAMP_OF_GROWTH = metalDevice("lamp_of_growth");
+    public static final DeferredBlock<ArcaneLampBlock> ARCANE_LAMP = REGISTRY.register("arcane_lamp",
+            () -> new ArcaneLampBlock(metalDeviceProperties()));
+    public static final DeferredBlock<ArcaneLampBlock> LAMP_OF_GROWTH = REGISTRY.register("arcane_lamp_growth",
+            () -> new ArcaneLampBlock(metalDeviceProperties()));
     public static final DeferredBlock<Block> ALCHEMICAL_CONSTRUCT = metalDevice("alchemical_construct");
     public static final DeferredBlock<Block> THAUMATORIUM = metalDevice("thaumatorium");
-    public static final DeferredBlock<Block> MNEMONIC_MATRIX = metalDevice("mnemonic_matrix");
-    public static final DeferredBlock<Block> LAMP_OF_FERTILITY = metalDevice("lamp_of_fertility");
-    public static final DeferredBlock<Block> VIS_RELAY = metalDevice("vis_relay");
+    public static final DeferredBlock<Block> MNEMONIC_MATRIX = REGISTRY.register("mnemonic_matrix", () -> new thaumcraft.common.blocks.SimpleDirectionalBlock(metalDeviceProperties()));
+    public static final DeferredBlock<ArcaneLampBlock> LAMP_OF_FERTILITY = REGISTRY.register("arcane_lamp_fertility",
+            () -> new ArcaneLampBlock(metalDeviceProperties()));
+    public static final DeferredBlock<Block> VIS_RELAY = REGISTRY.register("vis_relay", () -> new thaumcraft.common.blocks.SimpleDirectionalBlock(metalDeviceProperties()));
     public static final DeferredBlock<EssentiaTubeBlock> ESSENTIA_TUBE = REGISTRY.register("essentia_tube",
             () -> new EssentiaTubeBlock(tubeProperties()));
     public static final DeferredBlock<EssentiaTubeBlock> ESSENTIA_VALVE = tube("essentia_valve", TubeMode.VALVE);
@@ -328,12 +332,12 @@ public final class TCBlocks {
 
     private static DeferredBlock<SimplePlantBlock> plant(String name, int lightLevel) {
         return REGISTRY.register(name, () -> new SimplePlantBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)
-                .lightLevel(state -> lightLevel)));
+                .lightLevel(state -> lightLevel).offsetType(BlockBehaviour.OffsetType.NONE)));
     }
 
     private static DeferredBlock<MagicSaplingBlock> magicSapling(String name, int lightLevel, TreeKind treeKind) {
         return REGISTRY.register(name, () -> new MagicSaplingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)
-                .lightLevel(state -> lightLevel), treeKind));
+                .lightLevel(state -> lightLevel).offsetType(BlockBehaviour.OffsetType.NONE), treeKind));
     }
 
     private static DeferredBlock<SimpleTableBlock> table(String name) {

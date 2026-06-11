@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.haste": "急迫",
   "enchantment.repair": "修復",
   "enchantment.special.sapless": "輕度虛弱",
@@ -1601,8 +1601,8 @@
   "block.thaumcraft.infused_water_ore": "水之蘊魔石",
   "block.thaumcraft.infusion_pillar": "注魔樁",
   "block.thaumcraft.item_grate": "物品格柵",
-  "block.thaumcraft.lamp_of_fertility": "繁衍燈",
-  "block.thaumcraft.lamp_of_growth": "熟成燈",
+  "block.thaumcraft.arcane_lamp_fertility": "繁衍燈",
+  "block.thaumcraft.arcane_lamp_growth": "熟成燈",
   "block.thaumcraft.light_blue_tallow_candle": "淺藍色肉脂蠟燭",
   "block.thaumcraft.light_gray_tallow_candle": "淺灰色肉脂蠟燭",
   "block.thaumcraft.lime_tallow_candle": "黃綠色肉脂蠟燭",

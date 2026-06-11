@@ -1,4 +1,4 @@
-{
+﻿{
   "enchantment.haste": "Pressa",
   "enchantment.repair": "Auto-Reparo",
   "enchantment.special.sapless": "Lesser Sapping",
@@ -1455,8 +1455,8 @@
   "block.thaumcraft.infused_water_ore": "Pedra Infundida com Água",
   "block.thaumcraft.infusion_pillar": "Pilar de Infusão",
   "block.thaumcraft.item_grate": "Grelha de Itens",
-  "block.thaumcraft.lamp_of_fertility": "Lampâda da Fertilidade",
-  "block.thaumcraft.lamp_of_growth": "Lamp of Growth",
+  "block.thaumcraft.arcane_lamp_fertility": "Lampâda da Fertilidade",
+  "block.thaumcraft.arcane_lamp_growth": "Lamp of Growth",
   "block.thaumcraft.light_blue_tallow_candle": "Vela de Sebo Azul-Clara",
   "block.thaumcraft.light_gray_tallow_candle": "Vela de Sebo Cinzenta-Clara",
   "block.thaumcraft.lime_tallow_candle": "Vela de Sebo Lima",
