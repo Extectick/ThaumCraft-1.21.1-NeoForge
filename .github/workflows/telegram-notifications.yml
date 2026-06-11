@@ -1,0 +1,163 @@
+name: Telegram Notifications
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+      - synchronize
+      - closed
+      - converted_to_draft
+  workflow_run:
+    workflows:
+      - Build
+    types:
+      - completed
+
+permissions:
+  contents: read
+  pull-requests: read
+  actions: read
+
+jobs:
+  pull-request:
+    name: Pull request notification
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram message
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PR_ACTION: ${{ github.event.action }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_HEAD: ${{ github.event.pull_request.head.ref }}
+          PR_BASE: ${{ github.event.pull_request.base.ref }}
+          PR_DRAFT: ${{ github.event.pull_request.draft }}
+          PR_MERGED: ${{ github.event.pull_request.merged }}
+          PR_CHANGED_FILES: ${{ github.event.pull_request.changed_files }}
+          PR_ADDITIONS: ${{ github.event.pull_request.additions }}
+          PR_DELETIONS: ${{ github.event.pull_request.deletions }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          python3 <<'PY'
+          import json
+          import os
+          import sys
+          import urllib.request
+
+          token = os.environ.get("TELEGRAM_BOT_TOKEN")
+          chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+          if not token or not chat_id:
+              print("Telegram secrets are not configured; skipping notification.")
+              sys.exit(0)
+
+          action = os.environ["PR_ACTION"]
+          merged = os.environ["PR_MERGED"] == "true"
+          draft = os.environ["PR_DRAFT"] == "true"
+          status = {
+              "opened": "opened",
+              "reopened": "reopened",
+              "ready_for_review": "ready for review",
+              "synchronize": "updated",
+              "converted_to_draft": "converted to draft",
+              "closed": "merged" if merged else "closed",
+          }.get(action, action)
+
+          title = os.environ["PR_TITLE"]
+          number = os.environ["PR_NUMBER"]
+          repo = os.environ["REPOSITORY"]
+          author = os.environ["PR_AUTHOR"]
+          head = os.environ["PR_HEAD"]
+          base = os.environ["PR_BASE"]
+          files = os.environ["PR_CHANGED_FILES"]
+          additions = os.environ["PR_ADDITIONS"]
+          deletions = os.environ["PR_DELETIONS"]
+          url = os.environ["PR_URL"]
+
+          message = "\n".join([
+              f"PR {status}: {repo} #{number}",
+              f"Title: {title}",
+              f"Author: {author}",
+              f"Branch: {head} -> {base}",
+              f"Draft: {'yes' if draft else 'no'}",
+              f"Changes: {files} files, +{additions}/-{deletions}",
+              f"Link: {url}",
+          ])
+
+          payload = json.dumps({
+              "chat_id": chat_id,
+              "text": message,
+              "disable_web_page_preview": True,
+          }).encode("utf-8")
+          request = urllib.request.Request(
+              f"https://api.telegram.org/bot{token}/sendMessage",
+              data=payload,
+              headers={"Content-Type": "application/json"},
+              method="POST",
+          )
+          with urllib.request.urlopen(request, timeout=20) as response:
+              response.read()
+          PY
+
+  build:
+    name: Build notification
+    if: github.event_name == 'workflow_run'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram message
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+          WORKFLOW_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          WORKFLOW_STATUS: ${{ github.event.workflow_run.status }}
+          WORKFLOW_EVENT: ${{ github.event.workflow_run.event }}
+          WORKFLOW_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          WORKFLOW_SHA: ${{ github.event.workflow_run.head_sha }}
+          WORKFLOW_ACTOR: ${{ github.event.workflow_run.actor.login }}
+          WORKFLOW_URL: ${{ github.event.workflow_run.html_url }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          python3 <<'PY'
+          import json
+          import os
+          import sys
+          import urllib.request
+
+          token = os.environ.get("TELEGRAM_BOT_TOKEN")
+          chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+          if not token or not chat_id:
+              print("Telegram secrets are not configured; skipping notification.")
+              sys.exit(0)
+
+          conclusion = os.environ["WORKFLOW_CONCLUSION"] or os.environ["WORKFLOW_STATUS"]
+          sha = os.environ["WORKFLOW_SHA"][:8]
+          message = "\n".join([
+              f"Build {conclusion}: {os.environ['REPOSITORY']}",
+              f"Workflow: {os.environ['WORKFLOW_NAME']}",
+              f"Event: {os.environ['WORKFLOW_EVENT']}",
+              f"Branch: {os.environ['WORKFLOW_BRANCH']}",
+              f"Commit: {sha}",
+              f"Actor: {os.environ['WORKFLOW_ACTOR']}",
+              f"Link: {os.environ['WORKFLOW_URL']}",
+          ])
+
+          payload = json.dumps({
+              "chat_id": chat_id,
+              "text": message,
+              "disable_web_page_preview": True,
+          }).encode("utf-8")
+          request = urllib.request.Request(
+              f"https://api.telegram.org/bot{token}/sendMessage",
+              data=payload,
+              headers={"Content-Type": "application/json"},
+              method="POST",
+          )
+          with urllib.request.urlopen(request, timeout=20) as response:
+              response.read()
+          PY
