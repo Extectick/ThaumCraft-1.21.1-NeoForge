@@ -11,6 +11,8 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.common.util.DeferredSoundType;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -43,6 +45,10 @@ import thaumcraft.common.blocks.SilverwoodKnotBlock;
 import thaumcraft.common.blocks.ThaumcraftOreBlock;
 import thaumcraft.common.blocks.ThaumcraftOreBlock.OreType;
 import thaumcraft.common.blocks.WardedJarBlock;
+import thaumcraft.common.blocks.HungryChestBlock;
+import thaumcraft.common.blocks.PavingStoneOfTravelBlock;
+import thaumcraft.common.blocks.PavingStoneOfWardingBlock;
+import thaumcraft.common.blocks.WardingBarrierBlock;
 
 public final class TCBlocks {
     public static final DeferredRegister.Blocks REGISTRY = DeferredRegister.createBlocks(Thaumcraft.MODID);
@@ -74,6 +80,21 @@ public final class TCBlocks {
     public static final DeferredBlock<Block> ANCIENT_STONE = stone("ancient_stone");
     public static final DeferredBlock<Block> ANCIENT_ROCK = stone("ancient_rock");
     public static final DeferredBlock<Block> CRUSTED_STONE = stone("crusted_stone");
+    public static final DeferredBlock<Block> OBSIDIAN_TILE = REGISTRY.registerSimpleBlock("obsidian_tile",
+            BlockBehaviour.Properties.ofFullCopy(Blocks.OBSIDIAN));
+    public static final DeferredBlock<PavingStoneOfTravelBlock> PAVING_STONE_TRAVEL = REGISTRY.register("paving_stone_travel",
+            () -> new PavingStoneOfTravelBlock(stoneDeviceProperties()));
+    public static final DeferredBlock<PavingStoneOfWardingBlock> PAVING_STONE_WARDING = REGISTRY.register("paving_stone_warding",
+            () -> new PavingStoneOfWardingBlock(stoneDeviceProperties()));
+    public static final DeferredBlock<WardingBarrierBlock> WARDING_BARRIER = REGISTRY.register("warding_barrier",
+            () -> new WardingBarrierBlock(BlockBehaviour.Properties.of()
+                    .replaceable()
+                    .noCollission()
+                    .strength(-1.0F, 3600000.0F)
+                    .noLootTable()
+                    .pushReaction(PushReaction.BLOCK)));
+    public static final DeferredBlock<HungryChestBlock> HUNGRY_CHEST = REGISTRY.register("hungry_chest",
+            () -> new HungryChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST)));
     public static final DeferredBlock<RotatedPillarBlock> GREATWOOD_LOG = log("greatwood_log");
     public static final DeferredBlock<RotatedPillarBlock> SILVERWOOD_LOG = log("silverwood_log");
     public static final DeferredBlock<SilverwoodKnotBlock> SILVERWOOD_KNOT = REGISTRY.register("silverwood_knot",

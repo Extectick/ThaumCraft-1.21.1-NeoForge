@@ -22,6 +22,8 @@ import thaumcraft.common.items.AuraNodeItem;
 import thaumcraft.common.items.EssenceItem;
 import thaumcraft.common.items.ScribingToolsItem;
 import thaumcraft.common.items.ResearchNotesItem;
+import thaumcraft.common.items.CrimsonRitesItem;
+import thaumcraft.common.items.PrimordialPearlItem;
 import thaumcraft.common.items.ThaumometerItem;
 import thaumcraft.common.items.ThaumonomiconItem;
 import thaumcraft.common.items.EssentiaPhialItem;
@@ -54,6 +56,11 @@ public final class TCItems {
     public static final DeferredItem<BlockItem> ANCIENT_STONE = REGISTRY.registerSimpleBlockItem(TCBlocks.ANCIENT_STONE);
     public static final DeferredItem<BlockItem> ANCIENT_ROCK = REGISTRY.registerSimpleBlockItem(TCBlocks.ANCIENT_ROCK);
     public static final DeferredItem<BlockItem> CRUSTED_STONE = REGISTRY.registerSimpleBlockItem(TCBlocks.CRUSTED_STONE);
+    public static final DeferredItem<BlockItem> OBSIDIAN_TILE = REGISTRY.registerSimpleBlockItem(TCBlocks.OBSIDIAN_TILE);
+    public static final DeferredItem<BlockItem> PAVING_STONE_TRAVEL = REGISTRY.registerSimpleBlockItem(TCBlocks.PAVING_STONE_TRAVEL);
+    public static final DeferredItem<BlockItem> PAVING_STONE_WARDING = REGISTRY.registerSimpleBlockItem(TCBlocks.PAVING_STONE_WARDING);
+    public static final DeferredItem<BlockItem> WARDING_BARRIER = REGISTRY.registerSimpleBlockItem(TCBlocks.WARDING_BARRIER);
+    public static final DeferredItem<BlockItem> HUNGRY_CHEST = REGISTRY.registerSimpleBlockItem(TCBlocks.HUNGRY_CHEST);
     public static final DeferredItem<BlockItem> GREATWOOD_LOG = REGISTRY.registerSimpleBlockItem(TCBlocks.GREATWOOD_LOG);
     public static final DeferredItem<BlockItem> SILVERWOOD_LOG = REGISTRY.registerSimpleBlockItem(TCBlocks.SILVERWOOD_LOG);
     public static final DeferredItem<BlockItem> ARCANE_WOOD = REGISTRY.registerSimpleBlockItem(TCBlocks.ARCANE_WOOD);
@@ -179,7 +186,6 @@ public final class TCItems {
     public static final DeferredItem<Item> TAINT_TENDRIL = simple("taint_tendril");
     public static final DeferredItem<Item> JAR_LABEL = simple("jar_label");
     public static final DeferredItem<Item> SALIS_MUNDUS = simple("salis_mundus");
-    public static final DeferredItem<Item> PRIMAL_CHARM = simple("primal_charm");
     public static final DeferredItem<Item> VOID_INGOT = simple("void_ingot");
     public static final DeferredItem<Item> VOID_SEED = simple("void_seed");
     public static final DeferredItem<Item> GOLD_COIN = simple("gold_coin");
@@ -210,6 +216,12 @@ public final class TCItems {
     public static final DeferredItem<Item> BEEF_NUGGET = simple("beef_nugget", food(1, 0.3F));
     public static final DeferredItem<Item> PORK_NUGGET = simple("pork_nugget", food(1, 0.3F));
     public static final DeferredItem<Item> FISH_NUGGET = simple("fish_nugget", food(1, 0.3F));
+    public static final DeferredItem<Item> TRIPLE_MEAT_TREAT = simple("triple_meat_treat", food(6, 0.8F));
+    public static final DeferredItem<Item> TAINT_SLIME = simple("taint_slime");
+    public static final DeferredItem<Item> BATH_SALTS = simple("bath_salts");
+    public static final DeferredItem<Item> PRIMAL_CHARM = simple("primal_charm");
+    public static final DeferredItem<CrimsonRitesItem> CRIMSON_RITES = REGISTRY.registerItem("crimson_rites", CrimsonRitesItem::new);
+    public static final DeferredItem<PrimordialPearlItem> PRIMORDIAL_PEARL = REGISTRY.registerItem("primordial_pearl", PrimordialPearlItem::new);
     public static final DeferredItem<Item> IRON_ARCANE_KEY = simple("iron_arcane_key");
     public static final DeferredItem<Item> GOLD_ARCANE_KEY = simple("gold_arcane_key");
     public static final DeferredItem<Item> SCRIBING_TOOLS = REGISTRY.registerItem("scribing_tools", ScribingToolsItem::new);
@@ -515,6 +527,12 @@ public final class TCItems {
             BEEF_NUGGET,
             PORK_NUGGET,
             FISH_NUGGET,
+            TRIPLE_MEAT_TREAT,
+            TAINT_SLIME,
+            BATH_SALTS,
+            PRIMAL_CHARM,
+            CRIMSON_RITES,
+            PRIMORDIAL_PEARL,
             IRON_ARCANE_KEY,
             GOLD_ARCANE_KEY,
             SCRIBING_TOOLS,
@@ -601,3 +619,4 @@ public final class TCItems {
     private TCItems() {
     }
 }
+

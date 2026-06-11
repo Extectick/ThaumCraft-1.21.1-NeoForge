@@ -22,6 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.phys.Vec3;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
@@ -51,7 +52,8 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
         LocalPlayer player = Minecraft.getInstance().player;
         boolean holdingThaumometer = player != null && (player.getMainHandItem().is(TCItems.THAUMOMETER.get())
                 || player.getOffhandItem().is(TCItems.THAUMOMETER.get()));
-        boolean revealed = holdingThaumometer && isVisibleThroughThaumometer(player, node, partialTick);
+        boolean hasGoggles = player != null && player.getItemBySlot(EquipmentSlot.HEAD).is(TCItems.GOGGLES.get());
+        boolean revealed = hasGoggles || (holdingThaumometer && isVisibleThroughThaumometer(player, node, partialTick));
         double distance = player == null ? 0.0D
                 : Math.sqrt(player.distanceToSqr(node.getBlockPos().getCenter()));
         if (distance > (holdingThaumometer ? 48.0D : 64.0D)) {

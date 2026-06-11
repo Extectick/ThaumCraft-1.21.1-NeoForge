@@ -24,6 +24,11 @@ import thaumcraft.common.blockentities.AuraNodeBlockEntity;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.world.AuraNodeGenerator;
+import net.minecraft.world.entity.player.Player;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.EssentiaStorage;
+import thaumcraft.common.registry.TCDataComponents;
 
 public class AuraNodeBlock extends Block implements EntityBlock {
     public static final MapCodec<AuraNodeBlock> CODEC = simpleCodec(AuraNodeBlock::new);
@@ -77,5 +82,27 @@ public class AuraNodeBlock extends Block implements EntityBlock {
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
             CollisionContext context) {
         return Shapes.empty();
+    }
+
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide) {
+            BlockEntity te = level.getBlockEntity(pos);
+            if (te instanceof AuraNodeBlockEntity node) {
+                AspectList aspects = node.getAspects();
+                for (Aspect aspect : aspects.getAspects()) {
+                    int amount = aspects.getAmount(aspect);
+                    if (amount >= 5) {
+                        int dropCount = amount / 10;
+                        for (int i = 0; i <= dropCount; i++) {
+                            ItemStack essence = new ItemStack(TCItems.ETHEREAL_ESSENCE.get());
+                            essence.set(TCDataComponents.ESSENTIA, new EssentiaStorage(aspect, 2));
+                            Block.popResource(level, pos, essence);
+                        }
+                    }
+                }
+            }
+        }
+        return super.playerWillDestroy(level, pos, state, player);
     }
 }
