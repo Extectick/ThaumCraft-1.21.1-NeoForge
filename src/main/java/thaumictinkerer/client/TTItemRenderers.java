@@ -44,8 +44,9 @@ public final class TTItemRenderers {
         };
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private static void copyPose(HumanoidModel<?> original, HumanoidModel<?> model) {
-        original.copyPropertiesTo(model);
+        ((HumanoidModel) original).copyPropertiesTo((HumanoidModel) model);
         model.young = original.young;
         model.crouching = original.crouching;
         model.riding = original.riding;
