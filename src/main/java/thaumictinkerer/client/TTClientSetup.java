@@ -9,6 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import thaumictinkerer.ThaumicTinkerer;
 import thaumictinkerer.client.gui.IchorPouchScreen;
@@ -30,6 +31,11 @@ public class TTClientSetup {
     @SubscribeEvent
     public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
         event.register(TTMenuTypes.ICHOR_POUCH.get(), IchorPouchScreen::new);
+    }
+
+    @SubscribeEvent
+    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        TTItemRenderers.register(event);
     }
 
     @SubscribeEvent

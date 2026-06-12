@@ -52,11 +52,14 @@ sourceSets {
             srcDir 'src/main/java'
             include 'thaumcraft/Thaumcraft.java'
             include 'thaumcraft/common/**/*.java'
+            include 'thaumictinkerer/ThaumicTinkerer.java'
+            include 'thaumictinkerer/common/**/*.java'
         }
         resources {
             srcDir 'src/main/resources'
             srcDir 'src/generated/resources'
             exclude 'assets/thaumcraft/**'
+            exclude 'assets/thaumictinkerer/**'
             exclude '**/*.bbmodel'
             exclude 'src/generated/**/.cache'
         }
@@ -65,10 +68,12 @@ sourceSets {
         java {
             srcDir 'src/main/java'
             include 'thaumcraft/client/**/*.java'
+            include 'thaumictinkerer/client/**/*.java'
         }
         resources {
             setSrcDirs(['src/main/resources', 'src/generated/resources', 'src/client/resources'])
             include 'assets/thaumcraft/**'
+            include 'assets/thaumictinkerer/**'
             include 'META-INF/services/**'
             exclude '**/*.bbmodel'
             exclude 'src/generated/**/.cache'
@@ -248,11 +253,13 @@ tasks.register('checkCommonSideSafety') {
             'import net.minecraft.client.gui',
             'import net.minecraft.client.renderer',
             'import thaumcraft.client',
+            'import thaumictinkerer.client',
             'import thaumcraft.server'
     ]
     def checkedSources = fileTree('src/main/java') {
         include 'thaumcraft/api/**/*.java'
         include 'thaumcraft/common/**/*.java'
+        include 'thaumictinkerer/common/**/*.java'
     }
     def projectRoot = layout.projectDirectory.asFile.toPath()
 
@@ -294,6 +301,7 @@ tasks.register('checkNoCommonReflectionSideDispatch') {
     def checkedSources = fileTree('src/main/java') {
         include 'thaumcraft/api/**/*.java'
         include 'thaumcraft/common/**/*.java'
+        include 'thaumictinkerer/common/**/*.java'
     }
     def projectRoot = layout.projectDirectory.asFile.toPath()
 
@@ -414,8 +422,12 @@ tasks.register('checkVariantJars') {
         if (jarContains(serverJarFile.get().asFile, 'thaumcraft/client/')) {
             throw new GradleException('Server variant contains client implementation classes.')
         }
+        if (jarContains(serverJarFile.get().asFile, 'thaumictinkerer/client/')) {
+            throw new GradleException('Server variant contains Thaumic Tinkerer client implementation classes.')
+        }
         if (!jarContains(universalJarFile.get().asFile, 'thaumcraft/client/')
-                || !jarContains(universalJarFile.get().asFile, 'thaumcraft/server/')) {
+                || !jarContains(universalJarFile.get().asFile, 'thaumcraft/server/')
+                || !jarContains(universalJarFile.get().asFile, 'thaumictinkerer/client/')) {
             throw new GradleException('Universal variant must contain both client and server implementation packages.')
         }
     }
