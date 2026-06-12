@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fire_floor",
+  "textures": {
+    "fire": "thaumictinkerer:block/chaos_fire_1"
+  }
+}

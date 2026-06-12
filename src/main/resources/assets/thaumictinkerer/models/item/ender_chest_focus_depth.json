@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "thaumictinkerer:item/ender_chest_focus_depth"
+    }
+}

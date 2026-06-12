@@ -1,0 +1,15 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "BLOCK_TALISMAN",
+  "catalyst": { "item": "thaumcraft:portable_hole_focus" },
+  "components": [
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "minecraft:ender_chest" },
+    { "item": "minecraft:diamond" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumcraft:void_jar" }
+  ],
+  "instability": 9,
+  "essentia": { "vacuos": 65, "tenebrae": 32, "praecantatio": 50, "alienis": 32 },
+  "result": { "id": "thaumictinkerer:block_talisman" }
+}

@@ -1,0 +1,22 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "ICHORCLOTH_LEGS_GEM",
+  "catalyst": { "item": "thaumictinkerer:ichor_leggings" },
+  "components": [
+    { "item": "minecraft:diamond" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumcraft:primal_focus" },
+    { "item": "thaumcraft:thaumonomicon" },
+    { "item": "minecraft:golden_leggings" },
+    { "item": "minecraft:potion" },
+    { "item": "thaumictinkerer:smelt_focus" },
+    { "item": "thaumictinkerer:bright_nitor" },
+    { "item": "minecraft:lava_bucket" },
+    { "item": "minecraft:fire_charge" },
+    { "item": "minecraft:blaze_rod" }
+  ],
+  "instability": 13,
+  "essentia": { "ignis": 50, "praemunio": 32, "sano": 32, "potentia": 32, "lux": 64, "desiderium": 16, "alienis": 16 },
+  "result": { "id": "thaumictinkerer:advanced_ichor_leggings" }
+}

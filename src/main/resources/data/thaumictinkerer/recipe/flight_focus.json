@@ -1,0 +1,17 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "FOCUS_FLIGHT",
+  "catalyst": { "item": "minecraft:ender_pearl" },
+  "components": [
+    { "item": "minecraft:quartz" },
+    { "item": "minecraft:quartz" },
+    { "item": "minecraft:quartz" },
+    { "item": "minecraft:quartz" },
+    { "item": "minecraft:feather" },
+    { "item": "minecraft:feather" },
+    { "item": "thaumcraft:aer_crystal" }
+  ],
+  "instability": 3,
+  "essentia": { "aer": 15, "motus": 20, "volatus": 10 },
+  "result": { "id": "thaumictinkerer:flight_focus" }
+}

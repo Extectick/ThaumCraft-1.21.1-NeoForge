@@ -1,0 +1,18 @@
+﻿{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "MAGNET",
+  "pattern": [
+    " I ",
+    "SIs",
+    "WFW"
+  ],
+  "key": {
+    "I": { "item": "minecraft:iron_ingot" },
+    "s": { "item": "thaumcraft:earth_crystal" },
+    "S": { "item": "thaumcraft:aer_crystal" },
+    "W": { "item": "thaumcraft:greatwood_log" },
+    "F": { "item": "thaumictinkerer:telekinesis_focus" }
+  },
+  "vis": { "aer": 20, "ordo": 5, "terra": 15, "perditio": 5 },
+  "result": { "id": "thaumictinkerer:item_magnet" }
+}

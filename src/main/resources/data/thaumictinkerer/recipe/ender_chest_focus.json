@@ -1,0 +1,14 @@
+﻿{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "FOCUS_ENDER_CHEST",
+  "pattern": [
+    "MEP"
+  ],
+  "key": {
+    "M": { "item": "thaumcraft:magic_mirror" },
+    "E": { "item": "minecraft:ender_eye" },
+    "P": { "item": "thaumcraft:portable_hole_focus" }
+  },
+  "vis": { "ordo": 10, "perditio": 10 },
+  "result": { "id": "thaumictinkerer:ender_chest_focus" }
+}

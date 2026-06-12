@@ -1,0 +1,22 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "ICHOR_SWORD_GEM",
+  "catalyst": { "item": "thaumictinkerer:ichor_sword" },
+  "components": [
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumcraft:sword_of_the_zephyr" },
+    { "item": "thaumcraft:frost_focus" },
+    { "item": "minecraft:cactus" },
+    { "item": "thaumcraft:iron_nugget" },
+    { "item": "thaumcraft:gold_nugget" },
+    { "item": "thaumcraft:copper_nugget" },
+    { "item": "minecraft:diamond" },
+    { "item": "thaumcraft:frost_focus" },
+    { "item": "thaumcraft:sword_of_the_zephyr" },
+    { "item": "thaumictinkerer:ichor_cloth" }
+  ],
+  "instability": 15,
+  "essentia": { "aer": 50, "fames": 64, "spiritus": 32, "telum": 32, "potentia": 32, "ordo": 16, "vitreus": 16 },
+  "result": { "id": "thaumictinkerer:advanced_ichor_sword" }
+}

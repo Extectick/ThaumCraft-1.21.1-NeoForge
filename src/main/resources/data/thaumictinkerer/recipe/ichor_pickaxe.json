@@ -1,0 +1,15 @@
+﻿{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "ICHOR_TOOLS",
+  "pattern": [
+    "III",
+    " R ",
+    " R "
+  ],
+  "key": {
+    "I": { "item": "thaumictinkerer:ichorium" },
+    "R": { "item": "thaumcraft:silverwood_wand_rod" }
+  },
+  "vis": { "ignis": 75 },
+  "result": { "id": "thaumictinkerer:ichor_pickaxe" }
+}
