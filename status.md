@@ -218,12 +218,38 @@ Build a first playable Curios accessory slice on NeoForge 1.21.1, replacing the 
   - right-clicking a vanilla bookshelf with the wand now removes the bookshelf, spawns a no-gravity Thaumonomicon at `x + 0.5, y + 0.3, z + 0.5`, plays `thaumcraft:wand` at volume/pitch `1.0`, and emits a sparkle-like particle burst
   - added survival recipes for iron wand caps and the basic wand using the original shaped patterns adapted to explicit 1.21.1 item IDs
 - `gradlew.bat build` completed successfully after the Thaumonomicon wand trigger slice.
+- Ported the initial Thaumic Tinkerer addon slice into the workspace:
+  - added the `thaumictinkerer` mod entrypoint and metadata alongside the existing `thaumcraft` mod
+  - registered Thaumic Tinkerer blocks, items, creative tab, armor materials, data components, menu type, and recipe serializer
+  - added recipes, loot tables, translations, blockstates, models, textures, and GUI assets for the initial port
+  - added client setup for item property overrides, the ichor pouch screen, and the Kami armor model layer
+- Fixed the split architecture after the Thaumic Tinkerer merge:
+  - included `thaumictinkerer/ThaumicTinkerer.java` and `thaumictinkerer/common/**` in the common logical source set
+  - included `thaumictinkerer/client/**` and `assets/thaumictinkerer/**` in the client logical source set
+  - excluded `assets/thaumictinkerer/**` from the common/server-side resource layer
+  - extended common side-safety checks to scan `thaumictinkerer/common/**`
+  - extended variant jar checks so server jars reject `thaumictinkerer/client/**` and universal jars must include it
+- Removed client-only imports from `thaumictinkerer.common.items.equipment.AwakenedIchorclothArmorItem`.
+- Moved advanced ichor armor client model wiring into `thaumictinkerer.client.TTItemRenderers` and registered it from `TTClientSetup` through `RegisterClientExtensionsEvent`.
+- GitHub Actions `Build` passed after the Thaumic Tinkerer split fixes:
+  - commit `8c722f2` fixed the source-set/resource split and client extension placement
+  - commit `9628504` fixed the armor model generic copy compile error
+  - successful run: `https://github.com/Extectick/ThaumCraft-1.21.1-NeoForge/actions/runs/27425784629`
+- Local Windows Gradle verification was blocked before compilation by repeated `Read timed out` downloads from `maven.neoforged.net` for `net.neoforged.gradle:*:7.1.36`; CI verified the actual build path successfully.
 
 ## Next checks
 
 - Expand inventory into full registry id lists before moving large legacy subsystems.
 - Continue large visual placeholder batches before moving deep BlockEntity behavior.
 - Good next candidates: ethereal bloom/taint visual placeholders, remaining wooden devices, or first focused jar/tube BlockEntity behavior slice.
+- Finish the Thaumic Tinkerer behavior pass:
+  - implement Item/Mob Magnet block entities, menus, filters, redstone modes, and client screen
+  - wire `ShareBookItem` to the real Thaumcraft research sharing APIs instead of the current TODO stub
+  - audit KAMI armor flight/step-height mutations for server authority, cleanup on unequip/logout/death, and compatibility with other flight providers
+  - validate Thaumic Tinkerer infusion/arcane recipes against existing Thaumcraft item IDs and research keys
+  - add dedicated datagen or validation for `data/thaumictinkerer` recipes/loot tables once the recipe systems stabilize
+- Re-run a local `gradlew.bat checkSplitArchitecture build` when NeoForge Maven dependency downloads are stable.
+- Run an explicit `runClient` smoke after the Thaumic Tinkerer merge and check the ichor pouch screen, item property overrides, and Kami armor rendering in-game.
 - Complete behavior for the first Curios slice:
   - add client HUD/network sync for current runic charge
   - add write path for hardening augment recipes

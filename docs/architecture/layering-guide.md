@@ -22,7 +22,7 @@ Forbidden:
 
 ## Common
 
-Package: `thaumcraft.common`
+Packages: `thaumcraft.common`, `thaumictinkerer.common`
 
 Allowed:
 
@@ -39,14 +39,15 @@ Forbidden:
 - `net.minecraft.client.*`
 - `com.mojang.blaze3d.*`
 - `thaumcraft.client.*`
+- `thaumictinkerer.client.*`
 - `thaumcraft.server.*`
 - hidden gameplay algorithms intended to be absent from the protected client jar
 
-Common may request side behavior only through side-safe hooks or common bridge classes. Side implementations must be registered from `thaumcraft.client` or `thaumcraft.server`.
+Common may request side behavior only through side-safe hooks or common bridge classes. Side implementations must be registered from `thaumcraft.client`, `thaumictinkerer.client`, or `thaumcraft.server`.
 
 ## Client
 
-Package: `thaumcraft.client`
+Packages: `thaumcraft.client`, `thaumictinkerer.client`
 
 Allowed:
 
@@ -148,6 +149,8 @@ For server/common changes, also run:
 
 Dedicated server must reach `Done`. Client runtime and client-server connection checks still require an explicit `runClient` pass.
 
+The latest CI-verified full build is commit `9628504da2a26bb696cda9a6226fabacbba0c629`, which passed GitHub Actions run `27425784629` after the Thaumic Tinkerer split fix. Local Windows verification may require retrying dependency downloads if `maven.neoforged.net` times out during NeoGradle plugin resolution.
+
 ## Adding a New Mechanic
 
 Put shared IDs, shell classes, data components, recipe serializers, and payload records in common.
@@ -157,3 +160,5 @@ Put visual state, screens, key input, particles, renderers, tooltips, and client
 Put serverbound handlers, validation, calculations, persistent state updates, and actual effects in server.
 
 Do not duplicate gameplay logic into client/server/universal copies. The universal jar is assembled from the same classes.
+
+For Thaumic Tinkerer additions, use the same rule set: `thaumictinkerer.common` for side-safe registrations and shells, `thaumictinkerer.client` for screens/renderers/models/item property overrides, and `thaumcraft.server` or a future `thaumictinkerer.server` package for protected server authority.

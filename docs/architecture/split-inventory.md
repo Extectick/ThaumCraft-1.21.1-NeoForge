@@ -1,9 +1,9 @@
 # Thaumcraft Architecture Split Inventory
 
 Baseline date: 2026-05-28
-Last updated: 2026-05-31
+Last updated: 2026-06-12
 
-This inventory records the split migration state. The project is still one NeoForge Gradle project, but it now enforces side boundaries through logical `api`, `common`, `client`, and `server` source sets and produces client, server, and universal variant jars.
+This inventory records the split migration state. The project is still one NeoForge Gradle project, but it now enforces side boundaries through logical `api`, `common`, `client`, and `server` source sets and produces client, server, and universal variant jars. The workspace now contains the base `thaumcraft` mod and the ported `thaumictinkerer` addon namespace.
 
 ## Gradle and Entrypoints
 
@@ -17,7 +17,9 @@ This inventory records the split migration state. The project is still one NeoFo
 - `runs.client`, `runs.server`, `runs.gameTestServer`, and `runs.data` still use `project.sourceSets.main` for local development runtime.
 - Main mod entrypoint: `thaumcraft.Thaumcraft`, registered with `@Mod(Thaumcraft.MODID)`.
 - Client entrypoint: `thaumcraft.client.ThaumcraftClient`, registered with `@Mod(value = Thaumcraft.MODID, dist = Dist.CLIENT)`.
-- All runtime variants currently share the same `META-INF/neoforge.mods.toml` and `modId="${mod_id}"`.
+- Thaumic Tinkerer entrypoint: `thaumictinkerer.ThaumicTinkerer`, registered with `@Mod(ThaumicTinkerer.MODID)`.
+- Thaumic Tinkerer client event subscriber: `thaumictinkerer.client.TTClientSetup`, registered on the mod event bus for `Dist.CLIENT`.
+- All runtime variants currently share the same `META-INF/neoforge.mods.toml`; it declares `thaumcraft` plus `thaumictinkerer`.
 
 ## Client-only Classes
 
@@ -35,6 +37,15 @@ Client-only code is already grouped under `thaumcraft.client`:
 - `thaumcraft.client.tooltip.*`
 
 The client entrypoint registers render layers, item properties, GUI layers, key mappings, menu screens, item renderers, block entity renderers, color handlers, FX tick handlers, and tooltip component handlers.
+
+Thaumic Tinkerer client-only code is grouped under `thaumictinkerer.client`:
+
+- `thaumictinkerer.client.TTClientSetup`
+- `thaumictinkerer.client.TTItemRenderers`
+- `thaumictinkerer.client.gui.IchorPouchScreen`
+- `thaumictinkerer.client.models.KamiArmorModel`
+
+The Thaumic Tinkerer client layer registers item property overrides, the ichor pouch screen, the Kami armor model layer, and advanced ichor armor client extensions.
 
 ## Server-authoritative Classes
 
@@ -67,8 +78,10 @@ The physical multi-module split is still future work, but the logical server sou
 These are valid common-layer candidates when they remain side-safe:
 
 - Registry holders: `thaumcraft.common.registry.TCBlocks`, `TCItems`, `TCBlockEntities`, `TCEntityTypes`, `TCMenuTypes`, `TCRecipeTypes`, `TCRecipeSerializers`, `TCSoundEvents`, `TCParticleTypes`, `TCDataAttachments`, `TCDataComponents`, `TCCreativeTabs`.
+- Thaumic Tinkerer registry holders: `thaumictinkerer.common.registry.TTBlocks`, `TTItems`, `TTTabs`, `TTDataComponents`, `TTMenuTypes`, and `TTRecipeSerializers`; armor material registration lives in `thaumictinkerer.common.items.equipment.TTArmorMaterials`.
 - Public-ish contracts and data: `thaumcraft.api.aspects.*`, `thaumcraft.api.wands.*`, `thaumcraft.common.research.ResearchEntry`, `ResearchCategory`, `ResearchPage`, `ResearchTrigger`, `ResearchStatus`, `ResearchNoteData`, `ResearchKnowledgeData`, `AspectPoolData`, `WarpData`.
 - Block/item/block entity/menu shells under `thaumcraft.common.blocks`, `thaumcraft.common.items`, `thaumcraft.common.blockentities`, and `thaumcraft.common.menus`, provided they avoid client imports and delegate authority to server services.
+- Thaumic Tinkerer block/item/menu/recipe shells under `thaumictinkerer.common.blocks`, `thaumictinkerer.common.items`, `thaumictinkerer.common.menus`, and `thaumictinkerer.common.recipes`, provided they avoid client imports and delegate authority to server services as behavior matures.
 - Packet payload records under `thaumcraft.common.network`, after handlers are split out.
 
 ## Mixed Classes that Must Be Split
@@ -86,6 +99,9 @@ These are valid common-layer candidates when they remain side-safe:
 - `InfusionAltarScan` now lives under `server.infusion`; `RunicMatrixBlockEntity` refreshes surroundings through `ServerInfusionHooks`.
 - `Thaumcraft.java` is now a thin universal entrypoint. `ThaumcraftCommonBootstrap` registers common registries, network payloads, and config; `ThaumcraftServerBootstrap` delegates server event registration to `ThaumcraftServerServices`.
 - Server commands and Runic Shield event handlers now live under `thaumcraft.server.events` and are absent from the client variant jar.
+- `AwakenedIchorclothArmorItem` is now a side-safe common item shell. Its advanced armor model registration moved to `thaumictinkerer.client.TTItemRenderers`.
+- `MagnetBlock` is still a placeholder common shell. It returns no block entity yet and still needs Item/Mob Magnet block entities, menus, filters, redstone behavior, and screen wiring.
+- `ShareBookItem` still has a TODO for real Thaumcraft research sharing integration.
 
 ## Packet Contracts
 
@@ -125,8 +141,9 @@ Target split:
 Initial scan found one forbidden direct client import in common:
 
 - `src/main/java/thaumcraft/common/items/wands/WandCastingItem.java`: `net.minecraft.client.gui.screens.Screen`
+- `src/main/java/thaumictinkerer/common/items/equipment/AwakenedIchorclothArmorItem.java`: `net.minecraft.client.*` and `thaumictinkerer.client.*`
 
-This pass removed that direct import and added `checkCommonSideSafety` to fail on future client-only imports in `thaumcraft.api` or `thaumcraft.common`.
+These direct imports have been removed. `checkCommonSideSafety` now fails on future client-only imports in `thaumcraft.api`, `thaumcraft.common`, and `thaumictinkerer.common`.
 
 Current side-boundary notes:
 
@@ -156,6 +173,7 @@ Current split tasks:
 - `checkProtectedClientJar`: fails if protected server implementation classes leak into the client variant jar.
 - `checkPhysicalSubprojects`: verifies all physical Gradle split entrypoint projects are included.
 - `checkSplitArchitecture`: runs the full split architecture gate.
+- The side package checks now cover both `thaumcraft/client|server` and `thaumictinkerer/client`.
 
 Current outputs:
 
@@ -168,11 +186,12 @@ Current outputs:
 Jar inspection after this pass:
 
 - Client jar: contains `thaumcraft/client`, contains no `thaumcraft/server`, and contains `META-INF/services/thaumcraft.common.services.ThaumcraftClientServices`.
-- Server jar: contains `thaumcraft/server`, contains no `thaumcraft/client`, and contains `META-INF/services/thaumcraft.common.services.ThaumcraftServerServices`.
-- Universal jar: contains both `thaumcraft/client` and `thaumcraft/server` plus both service-provider files.
+- Client jar: contains `thaumictinkerer/client` and `assets/thaumictinkerer`.
+- Server jar: contains `thaumcraft/server`, contains no `thaumcraft/client`, contains no `thaumictinkerer/client`, and contains `META-INF/services/thaumcraft.common.services.ThaumcraftServerServices`.
+- Universal jar: contains both `thaumcraft/client`, `thaumcraft/server`, and `thaumictinkerer/client` plus both service-provider files.
 - Client jar: contains client assets and data resources.
-- Server jar: contains data resources and mod metadata, but excludes `assets/thaumcraft`.
-- All variants preserve `META-INF/neoforge.mods.toml` and mod id `thaumcraft`.
+- Server jar: contains data resources and mod metadata, but excludes `assets/thaumcraft` and `assets/thaumictinkerer`.
+- All variants preserve `META-INF/neoforge.mods.toml` and the declared mod ids `thaumcraft` and `thaumictinkerer`.
 
 Protected gameplay note: high-value systems listed above have moved into `thaumcraft.server`. Common now uses service interfaces for side dispatch, so the logical source sets enforce compile boundaries while keeping the single-project Gradle layout.
 
@@ -180,8 +199,10 @@ Protected gameplay note: high-value systems listed above have moved into `thaumc
 
 - `src/main/resources/assets/thaumcraft` currently contains 1062 files.
 - `src/main/resources/data/thaumcraft` currently contains 284 files.
+- `src/main/resources/assets/thaumictinkerer` contains the initial Thaumic Tinkerer client asset port.
+- `src/main/resources/data/thaumictinkerer` contains the initial Thaumic Tinkerer recipe and loot table port.
 - `src/generated/resources` is configured but currently missing.
-- Existing resources use the stable `thaumcraft` namespace and should remain namespace-compatible across client, server, and universal variants.
+- Existing resources use the stable `thaumcraft` and `thaumictinkerer` namespaces and should remain namespace-compatible across client, server, and universal variants.
 - Client variants will eventually need assets, language files, models, textures, particles, and client display resources.
 - Server variants should keep data packs, recipes, loot tables, tags, and mod metadata, and should not require client-only assets at runtime.
 
@@ -245,5 +266,18 @@ Recorded results:
 - After adding physical split subprojects and bootstrap separation, `./gradlew checkSplitArchitecture :thaumcraft-api:build :thaumcraft-common:build :thaumcraft-client:build :thaumcraft-server:build :thaumcraft-universal:build :thaumcraft-datagen:build :thaumcraft-gametest:build build`: passed.
 - CI now runs the same physical subproject build targets and uploads api/common/client/server/universal jars.
 - After fixing universal dev resources, `./gradlew checkSplitArchitecture build`: passed and `build/resources/main/META-INF/services` contains both client and server service-provider files.
+- After merging the Thaumic Tinkerer port, GitHub Actions initially caught a `compileClientJava` failure caused by client-only armor model registration in `thaumictinkerer.common`.
+- After extending logical source sets and side-safety checks to `thaumictinkerer`, moving advanced ichor armor model registration into `thaumictinkerer.client.TTItemRenderers`, and fixing the generic model copy call, GitHub Actions `Build` passed for commit `9628504da2a26bb696cda9a6226fabacbba0c629`.
+- Successful CI run: `https://github.com/Extectick/ThaumCraft-1.21.1-NeoForge/actions/runs/27425784629`.
+- Local Windows verification of the same Gradle command was blocked before project compilation by repeated `Read timed out` failures downloading `net.neoforged.gradle:*:7.1.36` from `maven.neoforged.net`.
 
 This pass keeps the original universal-style `jar` task for development and adds physical split project entrypoints plus layer and variant jar tasks.
+
+## Current Follow-up Work
+
+- Run an explicit client smoke after the Thaumic Tinkerer merge and check item property overrides, `IchorPouchScreen`, and `KamiArmorModel` rendering.
+- Implement Thaumic Tinkerer Item/Mob Magnet block entities, menus, filters, redstone modes, and client screen.
+- Replace the `ShareBookItem` TODO with real Thaumcraft research sharing behavior.
+- Audit KAMI armor flight and step-height behavior for server authority, cleanup on unequip/logout/death, and compatibility with other mods that grant flight.
+- Validate `data/thaumictinkerer` recipes and loot tables against the current Thaumcraft item IDs, research keys, and recipe serializers.
+- Consider extending protected-client checks once Thaumic Tinkerer gains server-authoritative behavior classes.
