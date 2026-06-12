@@ -1,0 +1,22 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "ICHORCLOTH_BOOTS_GEM",
+  "catalyst": { "item": "thaumictinkerer:ichor_boots" },
+  "components": [
+    { "item": "minecraft:diamond" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumcraft:thaumonomicon" },
+    { "item": "thaumcraft:primal_focus" },
+    { "item": "minecraft:golden_boots" },
+    { "item": "minecraft:grass_block" },
+    { "item": "thaumcraft:bellows" },
+    { "item": "thaumcraft:lamp_of_growth" },
+    { "item": "minecraft:wheat_seeds" },
+    { "item": "minecraft:white_wool" },
+    { "item": "minecraft:lead" }
+  ],
+  "instability": 13,
+  "essentia": { "terra": 50, "praemunio": 32, "perfodio": 32, "motus": 32, "lux": 64, "herba": 16, "iter": 16 },
+  "result": { "id": "thaumictinkerer:advanced_ichor_boots" }
+}

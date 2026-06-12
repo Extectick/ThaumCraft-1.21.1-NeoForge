@@ -1,0 +1,14 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "FOCUS_DEFLECT",
+  "catalyst": { "item": "thaumictinkerer:flight_focus" },
+  "components": [
+    { "item": "thaumcraft:mirrored_glass" },
+    { "item": "thaumcraft:mirrored_glass" },
+    { "item": "thaumcraft:warded_stone" },
+    { "item": "thaumcraft:ordo_crystal" }
+  ],
+  "instability": 5,
+  "essentia": { "aer": 15, "praemunio": 5, "ordo": 20 },
+  "result": { "id": "thaumictinkerer:deflect_focus" }
+}

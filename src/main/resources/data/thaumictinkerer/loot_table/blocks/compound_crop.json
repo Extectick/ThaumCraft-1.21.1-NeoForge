@@ -1,0 +1,43 @@
+﻿{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thaumictinkerer:compound_seed"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thaumictinkerer:compound_seed",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "thaumictinkerer:compound_crop",
+              "properties": {
+                "age": "3"
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:apply_bonus",
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:binomial_with_bonus_count",
+              "parameters": {
+                "extra": 1,
+                "probability": 0.5
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

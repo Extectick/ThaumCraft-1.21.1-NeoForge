@@ -1,0 +1,21 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "BLOOD_SWORD",
+  "catalyst": { "item": "thaumcraft:thaumium_sword" },
+  "components": [
+    { "item": "minecraft:rotten_flesh" },
+    { "item": "minecraft:porkchop" },
+    { "item": "minecraft:beef" },
+    { "item": "minecraft:bone" },
+    { "item": "minecraft:diamond" },
+    { "item": "minecraft:ghast_tear" }
+  ],
+  "instability": 6,
+  "essentia": {
+    "fames": 20,
+    "tenebrae": 5,
+    "spiritus": 10,
+    "humanus": 6
+  },
+  "result": { "id": "thaumictinkerer:blood_sword" }
+}

@@ -1,0 +1,21 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "CLEANSING_TALISMAN",
+  "catalyst": { "item": "minecraft:ender_pearl" },
+  "components": [
+    { "item": "thaumictinkerer:dark_quartz_block" },
+    { "item": "thaumictinkerer:dark_quartz_block" },
+    { "item": "thaumictinkerer:dark_quartz_block" },
+    { "item": "thaumictinkerer:dark_quartz_block" },
+    { "item": "minecraft:ghast_tear" },
+    { "item": "thaumcraft:salis_mundus" }
+  ],
+  "instability": 5,
+  "essentia": {
+    "sano": 10,
+    "instrumentum": 10,
+    "humanus": 20,
+    "victus": 10
+  },
+  "result": { "id": "thaumictinkerer:cleansing_talisman" }
+}

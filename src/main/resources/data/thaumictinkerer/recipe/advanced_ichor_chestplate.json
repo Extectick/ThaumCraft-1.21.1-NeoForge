@@ -1,0 +1,22 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "ICHORCLOTH_CHEST_GEM",
+  "catalyst": { "item": "thaumictinkerer:ichor_chestplate" },
+  "components": [
+    { "item": "minecraft:diamond" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumcraft:primal_focus" },
+    { "item": "thaumcraft:thaumonomicon" },
+    { "item": "minecraft:golden_chestplate" },
+    { "item": "thaumictinkerer:flight_focus" },
+    { "item": "thaumcraft:hover_harness" },
+    { "item": "thaumictinkerer:deflect_focus" },
+    { "item": "minecraft:feather" },
+    { "item": "minecraft:ghast_tear" },
+    { "item": "minecraft:arrow" }
+  ],
+  "instability": 13,
+  "essentia": { "aer": 50, "praemunio": 32, "volatus": 32, "ordo": 32, "lux": 64, "alienis": 16, "sensus": 16 },
+  "result": { "id": "thaumictinkerer:advanced_ichor_chestplate" }
+}

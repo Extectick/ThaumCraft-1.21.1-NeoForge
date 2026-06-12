@@ -1,0 +1,22 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "ICHOR_SHOVEL_GEM",
+  "catalyst": { "item": "thaumictinkerer:ichor_shovel" },
+  "components": [
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumcraft:shovel_of_the_earthmover" },
+    { "item": "thaumcraft:excavation_focus" },
+    { "item": "minecraft:tnt" },
+    { "item": "thaumcraft:iron_nugget" },
+    { "item": "thaumcraft:gold_nugget" },
+    { "item": "thaumcraft:copper_nugget" },
+    { "item": "minecraft:diamond" },
+    { "item": "thaumcraft:excavation_focus" },
+    { "item": "thaumcraft:shovel_of_the_earthmover" },
+    { "item": "thaumictinkerer:ichor_cloth" }
+  ],
+  "instability": 15,
+  "essentia": { "terra": 50, "perfodio": 64, "instrumentum": 32, "terra": 32, "messis": 32, "vinculum": 16, "sensus": 16 },
+  "result": { "id": "thaumictinkerer:advanced_ichor_shovel" }
+}

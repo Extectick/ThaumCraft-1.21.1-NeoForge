@@ -1,0 +1,19 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "XP_TALISMAN",
+  "catalyst": { "item": "minecraft:gold_ingot" },
+  "components": [
+    { "item": "minecraft:quartz" },
+    { "item": "minecraft:quartz" },
+    { "item": "thaumcraft:zombie_brain" },
+    { "item": "minecraft:diamond" }
+  ],
+  "instability": 6,
+  "essentia": {
+    "desiderium": 20,
+    "permutatio": 10,
+    "bestia": 10,
+    "machina": 5
+  },
+  "result": { "id": "thaumictinkerer:xp_talisman" }
+}

@@ -1,0 +1,22 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "ICHOR_AXE_GEM",
+  "catalyst": { "item": "thaumictinkerer:ichor_axe" },
+  "components": [
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumcraft:axe_of_the_stream" },
+    { "item": "thaumcraft:excavation_focus" },
+    { "item": "minecraft:tnt" },
+    { "item": "thaumcraft:iron_nugget" },
+    { "item": "thaumcraft:gold_nugget" },
+    { "item": "thaumcraft:copper_nugget" },
+    { "item": "minecraft:diamond" },
+    { "item": "thaumcraft:excavation_focus" },
+    { "item": "thaumcraft:axe_of_the_stream" },
+    { "item": "thaumictinkerer:ichor_cloth" }
+  ],
+  "instability": 15,
+  "essentia": { "aqua": 50, "perfodio": 64, "instrumentum": 32, "arbor": 32, "messis": 32, "herba": 16, "sensus": 16 },
+  "result": { "id": "thaumictinkerer:advanced_ichor_axe" }
+}

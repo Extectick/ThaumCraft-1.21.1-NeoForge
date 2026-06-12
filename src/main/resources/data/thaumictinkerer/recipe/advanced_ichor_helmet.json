@@ -1,0 +1,22 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "ICHORCLOTH_HELM_GEM",
+  "catalyst": { "item": "thaumictinkerer:ichor_helmet" },
+  "components": [
+    { "item": "minecraft:diamond" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumcraft:thaumonomicon" },
+    { "item": "thaumcraft:primal_focus" },
+    { "item": "minecraft:golden_helmet" },
+    { "item": "minecraft:potion" },
+    { "item": "thaumcraft:goggles" },
+    { "item": "minecraft:ghast_tear" },
+    { "item": "minecraft:cod" },
+    { "item": "minecraft:cake" },
+    { "item": "minecraft:ender_eye" }
+  ],
+  "instability": 13,
+  "essentia": { "aqua": 50, "praemunio": 32, "fames": 32, "auram": 32, "lux": 64, "corpus": 16, "cognitio": 16 },
+  "result": { "id": "thaumictinkerer:advanced_ichor_helmet" }
+}

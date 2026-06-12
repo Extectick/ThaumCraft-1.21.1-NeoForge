@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.1.27'
+    id 'net.neoforged.gradle.userdev' version '7.1.36'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -596,6 +596,24 @@ tasks.register('checkSplitArchitecture') {
     dependsOn tasks.named('checkVariantServiceProviders')
     dependsOn tasks.named('checkDevRuntimeServiceProviders')
     dependsOn tasks.named('checkProtectedClientJar')
+}
+
+// Work around NeoGradle ListLibraries failing with a null staged cache value for the
+// client-extra transform classpath. The task inputs are already resolved here.
+tasks.configureEach { task ->
+    if (task.name == 'neoFormListTransformLibraries') {
+        actions.clear()
+
+        doLast {
+            def outputFile = task.getOutput().get().asFile
+            outputFile.parentFile.mkdirs()
+            outputFile.withWriter('UTF-8') { writer ->
+                task.getVersionJsonLibraries().files
+                        .sort { it.absolutePath }
+                        .each { file -> writer.println("-e=${file.absolutePath}") }
+            }
+        }
+    }
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

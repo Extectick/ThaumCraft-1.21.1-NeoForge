@@ -1,0 +1,14 @@
+﻿{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "ICHORCLOTH_ARMOR",
+  "pattern": [
+    "CCC",
+    "C C",
+    "C C"
+  ],
+  "key": {
+    "C": { "item": "thaumictinkerer:ichor_cloth" }
+  },
+  "vis": { "ignis": 75 },
+  "result": { "id": "thaumictinkerer:ichor_leggings" }
+}

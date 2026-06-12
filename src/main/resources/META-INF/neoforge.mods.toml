@@ -39,3 +39,33 @@ Adding a touch of magic to Minecraft.
     versionRange="[19.27.0,)"
     ordering="AFTER"
     side="CLIENT"
+
+[[mods]]
+modId="thaumictinkerer"
+version="${mod_version}"
+displayName="Thaumic Tinkerer"
+authors="Vazkii, pixlepix, nekosune, GoldWolf"
+description='''
+An addon to Thaumcraft. Ported to NeoForge 1.21.1
+'''
+
+[[dependencies.thaumictinkerer]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.thaumictinkerer]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.thaumictinkerer]]
+    modId="thaumcraft"
+    type="required"
+    versionRange="[${mod_version},)"
+    ordering="AFTER"
+    side="BOTH"

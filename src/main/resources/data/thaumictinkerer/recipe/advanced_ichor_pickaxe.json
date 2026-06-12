@@ -1,0 +1,22 @@
+﻿{
+  "type": "thaumcraft:infusion",
+  "research": "ICHOR_PICK_GEM",
+  "catalyst": { "item": "thaumictinkerer:ichor_pickaxe" },
+  "components": [
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumictinkerer:ichorium" },
+    { "item": "thaumcraft:pickaxe_of_the_core" },
+    { "item": "thaumcraft:excavation_focus" },
+    { "item": "minecraft:tnt" },
+    { "item": "thaumcraft:iron_nugget" },
+    { "item": "thaumcraft:gold_nugget" },
+    { "item": "thaumcraft:copper_nugget" },
+    { "item": "minecraft:diamond" },
+    { "item": "thaumcraft:excavation_focus" },
+    { "item": "thaumcraft:pickaxe_of_the_core" },
+    { "item": "thaumictinkerer:ichor_cloth" }
+  ],
+  "instability": 15,
+  "essentia": { "ignis": 50, "perfodio": 64, "metallum": 32, "terra": 32, "messis": 32, "desiderium": 16, "sensus": 16 },
+  "result": { "id": "thaumictinkerer:advanced_ichor_pickaxe" }
+}

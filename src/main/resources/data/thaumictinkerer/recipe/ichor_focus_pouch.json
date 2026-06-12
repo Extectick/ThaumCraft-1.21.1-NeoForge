@@ -1,0 +1,15 @@
+﻿{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "ICHOR_FOCUS_POUCH",
+  "pattern": [
+    " C ",
+    "CGC",
+    " C "
+  ],
+  "key": {
+    "C": { "item": "thaumictinkerer:ichor_cloth" },
+    "G": { "item": "minecraft:gold_ingot" }
+  },
+  "vis": { "ordo": 50, "perditio": 50 },
+  "result": { "id": "thaumictinkerer:ichor_focus_pouch" }
+}

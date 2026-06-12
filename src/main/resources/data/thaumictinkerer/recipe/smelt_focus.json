@@ -1,0 +1,14 @@
+﻿{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "FOCUS_SMELT",
+  "pattern": [
+    "FNE"
+  ],
+  "key": {
+    "F": { "item": "thaumcraft:fire_focus" },
+    "N": { "item": "thaumcraft:nitor" },
+    "E": { "item": "thaumcraft:excavation_focus" }
+  },
+  "vis": { "ignis": 10, "ordo": 5, "perditio": 6 },
+  "result": { "id": "thaumictinkerer:smelt_focus" }
+}
