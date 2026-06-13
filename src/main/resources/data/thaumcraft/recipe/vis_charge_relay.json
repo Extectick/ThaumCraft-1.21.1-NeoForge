@@ -1,0 +1,29 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "VISCHARGERELAY",
+  "pattern": [
+    " R ",
+    "W W",
+    "I I"
+  ],
+  "key": {
+    "R": {
+      "item": "thaumcraft:vis_relay"
+    },
+    "W": {
+      "item": "thaumcraft:greatwood_wand_rod"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "vis": {
+    "air": 1600,
+    "fire": 1600,
+    "order": 1600
+  },
+  "result": {
+    "id": "thaumcraft:vis_charge_relay",
+    "count": 1
+  }
+}

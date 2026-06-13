@@ -6,36 +6,38 @@ import java.util.Optional;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 
 public record ResearchPage(PageType type, String textKey, Optional<String> concealedResearch,
         Optional<ResourceLocation> image, List<Aspect> aspects, List<ResourceLocation> recipeIds,
-        Optional<ItemStack> recipeOutput) {
+        Optional<ItemStack> recipeOutput, Optional<CompoundCrafting> compoundCrafting) {
     public ResearchPage {
         concealedResearch = concealedResearch == null ? Optional.empty() : concealedResearch;
         image = image == null ? Optional.empty() : image;
         aspects = List.copyOf(aspects);
         recipeIds = List.copyOf(recipeIds);
         recipeOutput = recipeOutput == null ? Optional.empty() : recipeOutput.map(ItemStack::copy);
+        compoundCrafting = compoundCrafting == null ? Optional.empty() : compoundCrafting;
     }
 
     public static ResearchPage text(String textKey) {
         return new ResearchPage(PageType.TEXT, textKey, Optional.empty(), Optional.empty(), List.of(), List.of(),
-                Optional.empty());
+                Optional.empty(), Optional.empty());
     }
 
     public static ResearchPage concealedText(String requiredResearch, String textKey) {
         return new ResearchPage(PageType.TEXT_CONCEALED, textKey, Optional.of(requiredResearch), Optional.empty(),
-                List.of(), List.of(), Optional.empty());
+                List.of(), List.of(), Optional.empty(), Optional.empty());
     }
 
     public static ResearchPage image(ResourceLocation image, String captionKey) {
         return new ResearchPage(PageType.IMAGE, captionKey, Optional.empty(), Optional.of(image), List.of(), List.of(),
-                Optional.empty());
+                Optional.empty(), Optional.empty());
     }
 
     public static ResearchPage aspects(List<Aspect> aspects) {
         return new ResearchPage(PageType.ASPECTS, "", Optional.empty(), Optional.empty(), aspects, List.of(),
-                Optional.empty());
+                Optional.empty(), Optional.empty());
     }
 
     public static ResearchPage normalCrafting(ResourceLocation recipeId) {
@@ -64,7 +66,12 @@ public record ResearchPage(PageType type, String textKey, Optional<String> conce
 
     public static ResearchPage compoundCrafting(List<ResourceLocation> recipeIds) {
         return new ResearchPage(PageType.COMPOUND_CRAFTING, "", Optional.empty(), Optional.empty(), List.of(),
-                recipeIds, Optional.empty());
+                recipeIds, Optional.empty(), Optional.empty());
+    }
+
+    public static ResearchPage compoundCrafting(CompoundCrafting compoundCrafting) {
+        return new ResearchPage(PageType.COMPOUND_CRAFTING, "", Optional.empty(), Optional.empty(), List.of(),
+                List.of(), Optional.empty(), Optional.of(compoundCrafting));
     }
 
     public static ResearchPage recipe(ResourceLocation recipeId) {
@@ -73,12 +80,12 @@ public record ResearchPage(PageType type, String textKey, Optional<String> conce
 
     public static ResearchPage textAndRecipe(String textKey, ResourceLocation recipeId) {
         return new ResearchPage(PageType.TEXT_AND_RECIPE, textKey, Optional.empty(), Optional.empty(), List.of(),
-                List.of(recipeId), Optional.empty());
+                List.of(recipeId), Optional.empty(), Optional.empty());
     }
 
     private static ResearchPage recipe(PageType type, ResourceLocation recipeId) {
         return new ResearchPage(type, "", Optional.empty(), Optional.empty(), List.of(), List.of(recipeId),
-                Optional.empty());
+                Optional.empty(), Optional.empty());
     }
 
     public boolean isConcealedFor(ResearchKnowledgeData knowledge) {
@@ -98,5 +105,14 @@ public record ResearchPage(PageType type, String textKey, Optional<String> conce
         INFUSION_ENCHANTMENT,
         SMELTING,
         TEXT_AND_RECIPE
+    }
+
+    public record CompoundCrafting(AspectList aspects, int width, int height, int depth, List<ItemStack> stacks) {
+        public CompoundCrafting {
+            aspects = aspects == null ? AspectList.EMPTY : aspects.copy();
+            stacks = List.copyOf(stacks.stream()
+                    .map(stack -> stack == null ? ItemStack.EMPTY : stack.copy())
+                    .toList());
+        }
     }
 }

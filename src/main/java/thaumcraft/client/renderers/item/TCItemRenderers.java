@@ -67,6 +67,14 @@ public final class TCItemRenderers {
             }
         }, TCItems.NODE_TRANSDUCER.get());
         event.registerItem(new IClientItemExtensions() {
+            private final VisChargeRelayItemRenderer renderer = VisChargeRelayItemRenderer.create();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return this.renderer;
+            }
+        }, TCItems.VIS_CHARGE_RELAY.get());
+        event.registerItem(new IClientItemExtensions() {
             private final HungryChestItemRenderer renderer = new HungryChestItemRenderer();
 
             @Override

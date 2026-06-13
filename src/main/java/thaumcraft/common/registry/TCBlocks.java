@@ -45,6 +45,8 @@ import thaumcraft.common.blocks.SimpleTubeBlock;
 import thaumcraft.common.blocks.SilverwoodKnotBlock;
 import thaumcraft.common.blocks.ThaumcraftOreBlock;
 import thaumcraft.common.blocks.ThaumcraftOreBlock.OreType;
+import thaumcraft.common.blocks.VisChargeRelayBlock;
+import thaumcraft.common.blocks.VisRelayBlock;
 import thaumcraft.common.blocks.WardedJarBlock;
 import thaumcraft.common.blocks.HungryChestBlock;
 import thaumcraft.common.blocks.PavingStoneOfTravelBlock;
@@ -154,7 +156,8 @@ public final class TCBlocks {
             () -> new CrucibleBlock(metalDeviceProperties()));
     public static final DeferredBlock<ArcaneAlembicBlock> ARCANE_ALEMBIC = REGISTRY.register("arcane_alembic",
             () -> new ArcaneAlembicBlock(metalDeviceProperties()));
-    public static final DeferredBlock<Block> VIS_CHARGE_RELAY = metalDevice("vis_charge_relay");
+    public static final DeferredBlock<VisChargeRelayBlock> VIS_CHARGE_RELAY = REGISTRY.register("vis_charge_relay",
+            () -> new VisChargeRelayBlock(metalDeviceProperties()));
     public static final DeferredBlock<Block> ADVANCED_ALCHEMICAL_CONSTRUCT = metalDevice("advanced_alchemical_construct");
     public static final DeferredBlock<Block> ITEM_GRATE = metalDevice("item_grate");
     public static final DeferredBlock<ArcaneLampBlock> ARCANE_LAMP = REGISTRY.register("arcane_lamp",
@@ -166,7 +169,9 @@ public final class TCBlocks {
     public static final DeferredBlock<Block> MNEMONIC_MATRIX = REGISTRY.register("mnemonic_matrix", () -> new SimpleDirectionalBlock(metalDeviceProperties()));
     public static final DeferredBlock<ArcaneLampBlock> LAMP_OF_FERTILITY = REGISTRY.register("arcane_lamp_fertility",
             () -> new ArcaneLampBlock(metalDeviceProperties()));
-    public static final DeferredBlock<Block> VIS_RELAY = REGISTRY.register("vis_relay", () -> new SimpleDirectionalBlock(metalDeviceProperties()));
+    public static final DeferredBlock<VisRelayBlock> VIS_RELAY = REGISTRY.register("vis_relay",
+            () -> new VisRelayBlock(metalDeviceProperties()
+                    .lightLevel(state -> state.getValue(VisRelayBlock.CONNECTED) ? 10 : 2)));
     public static final DeferredBlock<EssentiaTubeBlock> ESSENTIA_TUBE = REGISTRY.register("essentia_tube",
             () -> new EssentiaTubeBlock(tubeProperties()));
     public static final DeferredBlock<EssentiaTubeBlock> ESSENTIA_VALVE = tube("essentia_valve", TubeMode.VALVE);

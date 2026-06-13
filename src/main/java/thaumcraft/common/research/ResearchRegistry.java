@@ -15,6 +15,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.research.ResearchEntry.ResearchFlag;
 
@@ -159,7 +161,7 @@ public final class ResearchRegistry {
                 .icon(Thaumcraft.id("textures/block/jar.png"))
                 .parents("NODEPRESERVE")
                 .flag(ResearchFlag.CONCEALED)
-                .pages(pages("NODEJAR", 2))
+                .pages(page("NODEJAR", 1), nodeJarConstruct(), page("NODEJAR", 2))
                 .build());
         register(ResearchEntry.builder("NODETAPPER2", BASICS)
                 .tags(List.of(Aspect.AURA, Aspect.MAGIC, Aspect.MOTION, Aspect.EXCHANGE))
@@ -340,7 +342,7 @@ public final class ResearchRegistry {
                 .complexity(2)
                 .icon(new ItemStack(TCItems.ARCANE_ALEMBIC.get()))
                 .parents("BASIC_ALCHEMY")
-                .pages(page("DISTILESSENTIA", 1), ResearchPage.normalCrafting(Thaumcraft.id("alchemical_furnace")),
+                .pages(page("DISTILESSENTIA", 1), ResearchPage.arcaneCrafting(Thaumcraft.id("alchemical_furnace")),
                         page("DISTILESSENTIA", 2), ResearchPage.arcaneCrafting(Thaumcraft.id("arcane_alembic")))
                 .build());
         register(ResearchEntry.builder("ALUMENTUM", ALCHEMY)
@@ -411,7 +413,7 @@ public final class ResearchRegistry {
                 .flag(ResearchFlag.CONCEALED)
                 .pages(page("INFUSION", 1), ResearchPage.arcaneCrafting(Thaumcraft.id("runic_matrix")),
                         ResearchPage.arcaneCrafting(Thaumcraft.id("arcane_pedestal")), page("INFUSION", 2),
-                        page("INFUSION", 3), page("INFUSION", 4), page("INFUSION", 5))
+                        infusionAltarConstruct(), page("INFUSION", 3), page("INFUSION", 4), page("INFUSION", 5))
                 .build());
         register(ResearchEntry.builder("ENCHFABRIC", ARTIFICE)
                 .tags(List.of(Aspect.CLOTH, Aspect.MAGIC))
@@ -1105,6 +1107,99 @@ public final class ResearchRegistry {
         return java.util.stream.IntStream.rangeClosed(1, count)
                 .mapToObj(index -> page(key, index))
                 .toList();
+    }
+
+    private static ResearchPage infusionAltarConstruct() {
+        AspectList aspects = new AspectList()
+                .add(Aspect.FIRE, 25)
+                .add(Aspect.EARTH, 25)
+                .add(Aspect.ORDER, 25)
+                .add(Aspect.AIR, 25)
+                .add(Aspect.ENTROPY, 25)
+                .add(Aspect.WATER, 25);
+        return compound(aspects, 3, 3, 3, List.of(
+                ItemStack.EMPTY,
+                ItemStack.EMPTY,
+                ItemStack.EMPTY,
+                ItemStack.EMPTY,
+                stack(TCBlocks.RUNIC_MATRIX.get()),
+                ItemStack.EMPTY,
+                ItemStack.EMPTY,
+                ItemStack.EMPTY,
+                ItemStack.EMPTY,
+                stack(TCBlocks.ARCANE_STONE.get()),
+                ItemStack.EMPTY,
+                stack(TCBlocks.ARCANE_STONE.get()),
+                ItemStack.EMPTY,
+                ItemStack.EMPTY,
+                ItemStack.EMPTY,
+                stack(TCBlocks.ARCANE_STONE.get()),
+                ItemStack.EMPTY,
+                stack(TCBlocks.ARCANE_STONE.get()),
+                stack(TCBlocks.ARCANE_STONE_BRICKS.get()),
+                ItemStack.EMPTY,
+                stack(TCBlocks.ARCANE_STONE_BRICKS.get()),
+                ItemStack.EMPTY,
+                stack(TCBlocks.ARCANE_PEDESTAL.get()),
+                ItemStack.EMPTY,
+                stack(TCBlocks.ARCANE_STONE_BRICKS.get()),
+                ItemStack.EMPTY,
+                stack(TCBlocks.ARCANE_STONE_BRICKS.get())));
+    }
+
+    private static ResearchPage nodeJarConstruct() {
+        AspectList aspects = new AspectList()
+                .add(Aspect.FIRE, 70)
+                .add(Aspect.EARTH, 70)
+                .add(Aspect.AIR, 70)
+                .add(Aspect.WATER, 70)
+                .add(Aspect.ORDER, 70)
+                .add(Aspect.ENTROPY, 70);
+        return compound(aspects, 3, 4, 3, List.of(
+                stack(Blocks.OAK_SLAB),
+                stack(Blocks.OAK_SLAB),
+                stack(Blocks.OAK_SLAB),
+                stack(Blocks.OAK_SLAB),
+                stack(Blocks.OAK_SLAB),
+                stack(Blocks.OAK_SLAB),
+                stack(Blocks.OAK_SLAB),
+                stack(Blocks.OAK_SLAB),
+                stack(Blocks.OAK_SLAB),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                new ItemStack(TCItems.AURA_NODE.get()),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS),
+                stack(Blocks.GLASS)));
+    }
+
+    private static ResearchPage compound(AspectList aspects, int width, int height, int depth, List<ItemStack> stacks) {
+        return ResearchPage.compoundCrafting(new ResearchPage.CompoundCrafting(aspects, width, height, depth, stacks));
+    }
+
+    private static ItemStack stack(net.minecraft.world.level.ItemLike item) {
+        return new ItemStack(item);
     }
 
     private static ResourceLocation miscIcon(String name) {

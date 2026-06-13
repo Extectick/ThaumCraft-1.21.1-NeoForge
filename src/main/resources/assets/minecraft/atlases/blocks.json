@@ -1,0 +1,32 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "thaumcraft:models/node_stabilizer"
+    },
+    {
+      "type": "single",
+      "resource": "thaumcraft:models/node_stabilizer_over"
+    },
+    {
+      "type": "single",
+      "resource": "thaumcraft:models/node_stabilizer_over_advanced"
+    },
+    {
+      "type": "single",
+      "resource": "thaumcraft:models/node_converter"
+    },
+    {
+      "type": "single",
+      "resource": "thaumcraft:models/node_converter_over_idle"
+    },
+    {
+      "type": "single",
+      "resource": "thaumcraft:models/node_converter_over_forward"
+    },
+    {
+      "type": "single",
+      "resource": "thaumcraft:models/node_converter_over_reverse"
+    }
+  ]
+}

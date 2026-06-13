@@ -18,10 +18,11 @@ import thaumcraft.api.IRunicArmor;
 import thaumcraft.api.IVisDiscountGear;
 import thaumcraft.api.IWarpingGear;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.reveal.IRevealerItem;
 
 import java.util.List;
 
-public class VoidRobeArmorItem extends ArmorItem implements IRunicArmor, IVisDiscountGear, IWarpingGear {
+public class VoidRobeArmorItem extends ArmorItem implements IRunicArmor, IVisDiscountGear, IWarpingGear, IRevealerItem {
 
     public VoidRobeArmorItem(Holder<ArmorMaterial> material, ArmorItem.Type type) {
         super(material, type, new Item.Properties().component(DataComponents.DYED_COLOR, new DyedItemColor(6961280, true)).rarity(Rarity.EPIC).stacksTo(1));
@@ -40,6 +41,11 @@ public class VoidRobeArmorItem extends ArmorItem implements IRunicArmor, IVisDis
     @Override
     public int getWarp(ItemStack itemstack, Player player) {
         return 1;
+    }
+
+    @Override
+    public boolean showNodes(ItemStack stack, LivingEntity entity) {
+        return getType() == Type.HELMET;
     }
 
     @Override

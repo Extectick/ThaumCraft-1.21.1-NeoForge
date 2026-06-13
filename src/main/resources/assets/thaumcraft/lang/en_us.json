@@ -1811,6 +1811,7 @@
     "tc.thaumonomicon.recipe.crucible_crafting":  "Crucible",
     "tc.thaumonomicon.recipe.infusion_crafting":  "Arcane Infusion",
     "tc.thaumonomicon.recipe.infusion_enchantment":  "Infusion Enchantment",
+    "tc.thaumonomicon.recipe.enchantment_levels":  "%s levels",
     "tc.thaumonomicon.recipe.smelting":  "Smelting",
     "tc.thaumonomicon.recipe.compound_crafting":  "Mystical Construct",
     "tc.research_category.BASICS.name":  "Basic Information",

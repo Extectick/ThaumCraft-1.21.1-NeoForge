@@ -22,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.phys.Vec3;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
@@ -31,6 +30,7 @@ import thaumcraft.api.nodes.NodeModifier;
 import thaumcraft.api.nodes.NodeType;
 import thaumcraft.common.blockentities.AuraNodeBlockEntity;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.util.RevealerHelper;
 
 public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity> {
     private static final ResourceLocation NODE_TEXTURE = Thaumcraft.id("textures/misc/nodes.png");
@@ -52,10 +52,9 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
     public void render(AuraNodeBlockEntity node, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource,
             int packedLight, int packedOverlay) {
         LocalPlayer player = Minecraft.getInstance().player;
-        boolean holdingThaumometer = player != null && (player.getMainHandItem().is(TCItems.THAUMOMETER.get())
-                || player.getOffhandItem().is(TCItems.THAUMOMETER.get()));
-        boolean hasGoggles = player != null && player.getItemBySlot(EquipmentSlot.HEAD).is(TCItems.GOGGLES.get());
-        boolean revealed = hasGoggles || (holdingThaumometer && isVisibleThroughThaumometer(player, node, partialTick));
+        boolean holdingThaumometer = player != null && isHoldingThaumometer(player);
+        boolean hasRevealer = player != null && RevealerHelper.showsNodes(player);
+        boolean revealed = hasRevealer && (!holdingThaumometer || isVisibleThroughThaumometer(player, node, partialTick));
         double distance = player == null ? 0.0D
                 : Math.sqrt(player.distanceToSqr(node.getBlockPos().getCenter()));
         if (distance > (holdingThaumometer ? 48.0D : 64.0D)) {
@@ -78,6 +77,11 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
         }
         poseStack.popPose();
         renderDrainBeam(node, partialTick, poseStack, bufferSource);
+    }
+
+    private static boolean isHoldingThaumometer(LocalPlayer player) {
+        return player.getMainHandItem().is(TCItems.THAUMOMETER.get())
+                || player.getOffhandItem().is(TCItems.THAUMOMETER.get());
     }
 
     private static boolean isVisibleThroughThaumometer(LocalPlayer player, AuraNodeBlockEntity node,

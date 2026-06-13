@@ -1,7 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/block",
   "textures": {
-    "all": "thaumcraft:block/metalbase"
-  },
-  "render_type": "minecraft:cutout"
+    "particle": "thaumcraft:block/model/vis_relay"
+  }
 }

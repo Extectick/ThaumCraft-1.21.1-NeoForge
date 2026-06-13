@@ -19,6 +19,8 @@ import thaumcraft.common.blockentities.NodeStabilizerBlockEntity;
 import thaumcraft.common.blockentities.NodeTransducerBlockEntity;
 import thaumcraft.common.blockentities.ResearchTableBlockEntity;
 import thaumcraft.common.blockentities.RunicMatrixBlockEntity;
+import thaumcraft.common.blockentities.VisChargeRelayBlockEntity;
+import thaumcraft.common.blockentities.VisRelayBlockEntity;
 import thaumcraft.common.blockentities.WardedJarBlockEntity;
 import thaumcraft.common.blockentities.HungryChestBlockEntity;
 import thaumcraft.common.blockentities.WardingStoneBlockEntity;
@@ -57,6 +59,14 @@ public final class TCBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NodeTransducerBlockEntity>> NODE_TRANSDUCER =
             REGISTRY.register("node_transducer", () -> BlockEntityType.Builder
                     .of(NodeTransducerBlockEntity::new, TCBlocks.NODE_TRANSDUCER.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<VisRelayBlockEntity>> VIS_RELAY =
+            REGISTRY.register("vis_relay", () -> BlockEntityType.Builder
+                    .of(VisRelayBlockEntity::new, TCBlocks.VIS_RELAY.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<VisChargeRelayBlockEntity>> VIS_CHARGE_RELAY =
+            REGISTRY.register("vis_charge_relay", () -> BlockEntityType.Builder
+                    .of(VisChargeRelayBlockEntity::new, TCBlocks.VIS_CHARGE_RELAY.get())
                     .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionPillarBlockEntity>> INFUSION_PILLAR =
             REGISTRY.register("infusion_pillar", () -> BlockEntityType.Builder

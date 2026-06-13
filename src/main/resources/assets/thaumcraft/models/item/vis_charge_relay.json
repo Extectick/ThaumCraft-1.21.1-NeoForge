@@ -1,3 +1,6 @@
 {
-  "parent": "thaumcraft:block/vis_charge_relay"
+  "parent": "builtin/entity",
+  "textures": {
+    "particle": "thaumcraft:block/model/vis_relay"
+  }
 }

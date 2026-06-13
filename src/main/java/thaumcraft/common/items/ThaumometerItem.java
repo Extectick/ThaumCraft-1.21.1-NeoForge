@@ -8,9 +8,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import thaumcraft.api.reveal.IRevealerItem;
 import thaumcraft.common.services.ServerServices;
 
-public class ThaumometerItem extends Item {
+public class ThaumometerItem extends Item implements IRevealerItem {
     public ThaumometerItem(Properties properties) {
         super(properties.stacksTo(1));
     }
@@ -33,5 +34,10 @@ public class ThaumometerItem extends Item {
             ServerServices.get().startThaumometerScan(player, usedHand);
         }
         return InteractionResultHolder.consume(stack);
+    }
+
+    @Override
+    public boolean showNodes(ItemStack stack, LivingEntity entity) {
+        return true;
     }
 }

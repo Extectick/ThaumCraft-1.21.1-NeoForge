@@ -1,26 +1,51 @@
 {
 	"variants": {
-		"facing=down": {
+		"connected=false,facing=down": {
 			"model": "thaumcraft:block/vis_relay"
 		},
-		"facing=up": {
+		"connected=false,facing=up": {
 			"model": "thaumcraft:block/vis_relay",
 			"x": 180
 		},
-		"facing=north": {
+		"connected=false,facing=north": {
 			"model": "thaumcraft:block/vis_relay",
 			"x": 270
 		},
-		"facing=south": {
+		"connected=false,facing=south": {
 			"model": "thaumcraft:block/vis_relay",
 			"x": 90
 		},
-		"facing=west": {
+		"connected=false,facing=west": {
 			"model": "thaumcraft:block/vis_relay",
 			"x": 90,
 			"y": 90
 		},
-		"facing=east": {
+		"connected=false,facing=east": {
+			"model": "thaumcraft:block/vis_relay",
+			"x": 90,
+			"y": 270
+		},
+		"connected=true,facing=down": {
+			"model": "thaumcraft:block/vis_relay"
+		},
+		"connected=true,facing=up": {
+			"model": "thaumcraft:block/vis_relay",
+			"x": 180
+		},
+		"connected=true,facing=north": {
+			"model": "thaumcraft:block/vis_relay",
+			"x": 270
+		},
+		"connected=true,facing=south": {
+			"model": "thaumcraft:block/vis_relay",
+			"x": 90
+		},
+		"connected=true,facing=west": {
+			"model": "thaumcraft:block/vis_relay",
+			"x": 90,
+			"y": 90
+		},
+		"connected=true,facing=east": {
 			"model": "thaumcraft:block/vis_relay",
 			"x": 90,
 			"y": 270

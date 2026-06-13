@@ -2,6 +2,7 @@ package thaumcraft.client.screens;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -25,19 +26,21 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.PrimalVisStorage;
 import thaumcraft.common.crafting.ArcaneWorktableRecipe;
+import thaumcraft.common.crafting.CrucibleRecipe;
 import thaumcraft.common.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.crafting.InfusionRecipe;
 import thaumcraft.common.network.ThaumonomiconCreateNotePayload;
@@ -639,6 +642,10 @@ public class ThaumonomiconScreen extends Screen {
             if (renderArcaneCraftingPage(guiGraphics, page, x, y, width)) {
                 return;
             }
+        } else if (page.type() == ResearchPage.PageType.CRUCIBLE_CRAFTING) {
+            if (renderCrucibleCraftingPage(guiGraphics, page, x, y, width)) {
+                return;
+            }
         } else if (page.type() == ResearchPage.PageType.INFUSION_CRAFTING) {
             if (renderInfusionCraftingPage(guiGraphics, page, x, y, width)) {
                 return;
@@ -649,6 +656,10 @@ public class ThaumonomiconScreen extends Screen {
             }
         } else if (page.type() == ResearchPage.PageType.SMELTING) {
             if (renderSmeltingPage(guiGraphics, page, x, y, width)) {
+                return;
+            }
+        } else if (page.type() == ResearchPage.PageType.COMPOUND_CRAFTING) {
+            if (renderCompoundCraftingPage(guiGraphics, page, x, y, width)) {
                 return;
             }
         }
@@ -683,7 +694,7 @@ public class ThaumonomiconScreen extends Screen {
 
         int recipeLeft = x + width / 2 - 56;
         int recipeTop = y - RECIPE_HEADER_HEIGHT;
-        renderRecipeTitle(guiGraphics, normalCraftingTitle(recipe), x, recipeTop, width);
+        renderOldRecipeTitle(guiGraphics, normalCraftingTitle(recipe), recipeLeft, recipeTop);
         renderRecipeFrame(guiGraphics, recipeLeft, recipeTop);
 
         ItemStack result = craftingRecipe.getResultItem(this.minecraft.level.registryAccess()).copy();
@@ -760,6 +771,28 @@ public class ThaumonomiconScreen extends Screen {
         return true;
     }
 
+    private boolean renderCrucibleCraftingPage(GuiGraphics guiGraphics, ResearchPage page, int x, int y, int width) {
+        Optional<RecipeHolder<?>> holder = resolveRecipe(page);
+        if (holder.isEmpty()) {
+            return false;
+        }
+        Recipe<?> recipe = holder.get().value();
+        if (!(recipe instanceof CrucibleRecipe crucibleRecipe)) {
+            return false;
+        }
+
+        int recipeLeft = x + width / 2 - 56;
+        int recipeTop = y - RECIPE_HEADER_HEIGHT;
+        renderOldRecipeTitle(guiGraphics, Component.translatable("recipe.type.crucible"), recipeLeft, recipeTop);
+        renderCrucibleRecipeFrame(guiGraphics, recipeLeft, recipeTop);
+
+        ItemStack result = crucibleRecipe.getResultItem(this.minecraft.level.registryAccess()).copy();
+        renderRecipeStack(guiGraphics, result, recipeLeft + 48, recipeTop + 36);
+        renderRecipeIngredient(guiGraphics, crucibleRecipe.getCatalyst(), recipeLeft + 26, recipeTop + 72);
+        renderCrucibleAspects(guiGraphics, crucibleRecipe.getAspects(), recipeLeft, recipeTop);
+        return true;
+    }
+
     private boolean renderInfusionCraftingPage(GuiGraphics guiGraphics, ResearchPage page, int x, int y, int width) {
         Optional<RecipeHolder<?>> holder = resolveRecipe(page);
         if (holder.isEmpty()) {
@@ -772,69 +805,44 @@ public class ThaumonomiconScreen extends Screen {
 
         int recipeLeft = x + width / 2 - 56;
         int recipeTop = y - RECIPE_HEADER_HEIGHT;
-        renderRecipeTitle(guiGraphics, recipeTitle(page), x, recipeTop, width);
-
-        int centerX = recipeLeft + 56;
-        int centerY = recipeTop + 101;
-        int outputX = recipeLeft + 48;
-        int outputY = recipeTop + 30;
-        int catalystX = centerX - 8;
-        int catalystY = centerY - 8;
-
-        drawResearchSlot(guiGraphics, outputX - 4, outputY - 4, 24, 0x55302030, 0xFF8A6A8F);
-        drawResearchSlot(guiGraphics, catalystX - 4, catalystY - 4, 24, 0x55302030, 0xFF8A6A8F);
-        guiGraphics.hLine(centerX, centerX, outputY + 24, 0xAA8A6A8F);
-        guiGraphics.vLine(centerX, outputY + 24, catalystY - 6, 0xAA8A6A8F);
+        renderOldRecipeTitle(guiGraphics, Component.translatable("recipe.type.infusion"), recipeLeft, recipeTop);
+        renderOldInfusionFrame(guiGraphics, recipeLeft, recipeTop, true);
 
         ItemStack result = infusionRecipe.getResultItem(this.minecraft.level.registryAccess()).copy();
-        renderRecipeStack(guiGraphics, result, outputX, outputY);
-        renderRecipeIngredient(guiGraphics, infusionRecipe.getCatalyst(), catalystX, catalystY);
-
-        List<Ingredient> components = infusionRecipe.getComponents();
-        int componentCount = components.size();
-        if (componentCount > 0) {
-            float slice = 360.0F / componentCount;
-            float rotation = -90.0F;
-            for (Ingredient component : components) {
-                int slotX = centerX + Math.round(Mth.cos(rotation * Mth.DEG_TO_RAD) * 40.0F) - 8;
-                int slotY = centerY + Math.round(Mth.sin(rotation * Mth.DEG_TO_RAD) * 40.0F) - 8;
-                drawResearchSlot(guiGraphics, slotX - 4, slotY - 4, 24, 0x44201020, 0xFF7C5E84);
-                guiGraphics.hLine(Math.min(centerX, slotX + 8), Math.max(centerX, slotX + 8), slotY + 8,
-                        0x778A6A8F);
-                guiGraphics.vLine(slotX + 8, Math.min(centerY, slotY + 8), Math.max(centerY, slotY + 8),
-                        0x778A6A8F);
-                renderRecipeIngredient(guiGraphics, component, slotX, slotY);
-                rotation += slice;
-            }
-        }
+        renderRecipeStack(guiGraphics, result, recipeLeft + 48, recipeTop + 28);
+        renderRecipeIngredient(guiGraphics, infusionRecipe.getCatalyst(), recipeLeft + 48, recipeTop + 94);
+        renderInfusionComponents(guiGraphics, infusionRecipe.getComponents(), recipeLeft + 56, recipeTop + 102);
 
         int inst = Math.min(5, infusionRecipe.getInstability() / 2);
         Component instability = Component.translatable("tc.inst")
                 .append(Component.translatable("tc.inst." + inst));
-        drawCenteredFittedString(guiGraphics, instability, x + width / 2, recipeTop + 155, width, 0xFF4F3922,
-                PAGE_TEXT_SCALE);
-        renderInfusionEssentia(guiGraphics, infusionRecipe, x, recipeTop + 171, width);
+        renderOldRecipeTitle(guiGraphics, instability, recipeLeft, recipeTop + 194);
+        renderInfusionEssentia(guiGraphics, infusionRecipe, recipeLeft, recipeTop);
         return true;
     }
 
-    private void renderInfusionEssentia(GuiGraphics guiGraphics, InfusionRecipe recipe, int x, int y, int width) {
-        renderInfusionEssentia(guiGraphics, recipe.getEssentia(), x, y, width);
+    private void renderInfusionEssentia(GuiGraphics guiGraphics, InfusionRecipe recipe, int recipeLeft, int recipeTop) {
+        renderInfusionEssentia(guiGraphics, recipe.getEssentia(), recipeLeft, recipeTop, 1);
     }
 
-    private void renderInfusionEssentia(GuiGraphics guiGraphics, thaumcraft.api.aspects.AspectList essentia, int x,
-            int y, int width) {
+    private void renderInfusionEssentia(GuiGraphics guiGraphics, AspectList essentia, int recipeLeft, int recipeTop,
+            int amountMultiplier) {
         List<Aspect> aspects = essentia.getAspectsSorted();
         if (aspects.isEmpty()) {
             return;
         }
-        int columns = Math.min(5, aspects.size());
-        int rows = Mth.ceil(aspects.size() / 5.0F);
-        int startX = x + width / 2 - columns * 10;
-        int startY = y - Math.max(0, rows - 1) * 10;
+        int rows = (aspects.size() - 1) / 5;
+        int shift = (5 - aspects.size() % 5) * 10;
+        int startX = recipeLeft + 8;
+        int startY = recipeTop + 164 - 10 * rows;
         for (int index = 0; index < aspects.size(); index++) {
             Aspect aspect = aspects.get(index);
-            int amount = essentia.getAmount(aspect);
-            int iconX = startX + index % 5 * 20;
+            int centeredLastRow = 0;
+            if (index / 5 >= rows && (rows > 1 || aspects.size() < 5)) {
+                centeredLastRow = 1;
+            }
+            int amount = essentia.getAmount(aspect) * amountMultiplier;
+            int iconX = startX + index % 5 * 20 + shift * centeredLastRow;
             int iconY = startY + index / 5 * 20;
             renderAspectIcon(guiGraphics, aspect, iconX, iconY, 16, 1.0F);
             drawScaledString(guiGraphics, Component.literal(String.valueOf(amount)), iconX + 10, iconY + 10,
@@ -855,45 +863,53 @@ public class ThaumonomiconScreen extends Screen {
 
         int recipeLeft = x + width / 2 - 56;
         int recipeTop = y - RECIPE_HEADER_HEIGHT;
-        renderRecipeTitle(guiGraphics, recipeTitle(page), x, recipeTop, width);
-
-        int centerX = recipeLeft + 56;
-        int centerY = recipeTop + 101;
-        int outputX = recipeLeft + 48;
-        int outputY = recipeTop + 30;
-
-        drawResearchSlot(guiGraphics, outputX - 4, outputY - 4, 24, 0x55302030, 0xFF8A6A8F);
-        renderRecipeStack(guiGraphics, new ItemStack(Items.ENCHANTED_BOOK), outputX, outputY);
-        drawCenteredFittedString(guiGraphics, Component.empty().append(enchantmentRecipe.getEnchantment().value()
-                        .description()),
-                x + width / 2, outputY + 26, width, 0xFF4F3922, 0.7F);
-
-        List<Ingredient> components = enchantmentRecipe.getComponents();
-        int componentCount = components.size();
-        if (componentCount > 0) {
-            float slice = 360.0F / componentCount;
-            float rotation = -90.0F;
-            for (Ingredient component : components) {
-                int slotX = centerX + Math.round(Mth.cos(rotation * Mth.DEG_TO_RAD) * 40.0F) - 8;
-                int slotY = centerY + Math.round(Mth.sin(rotation * Mth.DEG_TO_RAD) * 40.0F) - 8;
-                drawResearchSlot(guiGraphics, slotX - 4, slotY - 4, 24, 0x44201020, 0xFF7C5E84);
-                guiGraphics.hLine(Math.min(centerX, slotX + 8), Math.max(centerX, slotX + 8), slotY + 8,
-                        0x778A6A8F);
-                guiGraphics.vLine(slotX + 8, Math.min(centerY, slotY + 8), Math.max(centerY, slotY + 8),
-                        0x778A6A8F);
-                renderRecipeIngredient(guiGraphics, component, slotX, slotY);
-                rotation += slice;
-            }
-        }
+        int level = 1 + Math.floorMod((int) (System.currentTimeMillis() / 1000L),
+                Math.max(1, enchantmentRecipe.getEnchantment().value().getMaxLevel()));
+        renderOldRecipeTitle(guiGraphics, Component.translatable("recipe.type.infusionenchantment"), recipeLeft,
+                recipeTop);
+        drawCenteredFittedString(guiGraphics, Enchantment.getFullname(enchantmentRecipe.getEnchantment(), level),
+                recipeLeft + 56, recipeTop + 24, 112, 0xFF705050, PAGE_TEXT_SCALE);
+        int xp = enchantmentRecipe.getRecipeXp() * level;
+        drawCenteredFittedString(guiGraphics, Component.translatable("tc.thaumonomicon.recipe.enchantment_levels", xp),
+                recipeLeft + 56, recipeTop + 40, 112, 0xFF508050, PAGE_TEXT_SCALE);
+        renderOldInfusionFrame(guiGraphics, recipeLeft, recipeTop, false);
+        renderInfusionComponents(guiGraphics, enchantmentRecipe.getComponents(), recipeLeft + 56, recipeTop + 102);
 
         int inst = Math.min(5, enchantmentRecipe.getInstability() / 2);
         Component instability = Component.translatable("tc.inst")
-                .append(Component.translatable("tc.inst." + inst))
-                .append(Component.literal("  XP: " + enchantmentRecipe.getRecipeXp()));
-        drawCenteredFittedString(guiGraphics, instability, x + width / 2, recipeTop + 155, width, 0xFF4F3922,
-                PAGE_TEXT_SCALE);
-        renderInfusionEssentia(guiGraphics, enchantmentRecipe.getEssentia(), x, recipeTop + 171, width);
+                .append(Component.translatable("tc.inst." + inst));
+        renderOldRecipeTitle(guiGraphics, instability, recipeLeft, recipeTop + 194);
+        renderInfusionEssentia(guiGraphics, enchantmentRecipe.getEssentia(), recipeLeft, recipeTop, level);
         return true;
+    }
+
+    private static void renderOldInfusionFrame(GuiGraphics guiGraphics, int recipeLeft, int recipeTop,
+            boolean renderOutputRune) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, RECIPE_GRID_ALPHA);
+        if (renderOutputRune) {
+            guiGraphics.blit(BOOK_OVERLAY, recipeLeft, recipeTop + 20, 112, 34, 0, 6, 112, 34, 512, 512);
+        }
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft, recipeTop + 58, 120, 88, 400, 154, 120, 88, 512, 512);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+    }
+
+    private void renderInfusionComponents(GuiGraphics guiGraphics, List<Ingredient> components, int centerX,
+            int centerY) {
+        int componentCount = components.size();
+        if (componentCount <= 0) {
+            return;
+        }
+        float slice = 360.0F / componentCount;
+        float rotation = -90.0F;
+        for (Ingredient component : components) {
+            int slotX = centerX + (int) (Mth.cos(rotation * Mth.DEG_TO_RAD) * 40.0F) - 8;
+            int slotY = centerY + (int) (Mth.sin(rotation * Mth.DEG_TO_RAD) * 40.0F) - 8;
+            renderRecipeIngredient(guiGraphics, component, slotX, slotY);
+            rotation += slice;
+        }
     }
 
     private static void drawResearchSlot(GuiGraphics guiGraphics, int x, int y, int size, int fillColor,
@@ -917,7 +933,7 @@ public class ThaumonomiconScreen extends Screen {
 
         int recipeLeft = x + width / 2 - 56;
         int recipeTop = y - RECIPE_HEADER_HEIGHT;
-        renderRecipeTitle(guiGraphics, recipeTitle(page), x, recipeTop, width);
+        renderOldRecipeTitle(guiGraphics, Component.translatable("recipe.type.smelting"), recipeLeft, recipeTop);
         renderSmeltingFrame(guiGraphics, recipeLeft, recipeTop);
 
         List<Ingredient> ingredients = cookingRecipe.getIngredients();
@@ -927,6 +943,128 @@ public class ThaumonomiconScreen extends Screen {
         ItemStack result = cookingRecipe.getResultItem(this.minecraft.level.registryAccess()).copy();
         renderRecipeStack(guiGraphics, result, recipeLeft + 48, recipeTop + 144);
         return true;
+    }
+
+    private boolean renderCompoundCraftingPage(GuiGraphics guiGraphics, ResearchPage page, int x, int y, int width) {
+        Optional<ResearchPage.CompoundCrafting> compoundOptional = page.compoundCrafting();
+        if (compoundOptional.isEmpty()) {
+            return false;
+        }
+        ResearchPage.CompoundCrafting compound = compoundOptional.get();
+        int dx = compound.width();
+        int dy = compound.height();
+        int dz = compound.depth();
+        if (dx <= 0 || dy <= 0 || dz <= 0) {
+            return false;
+        }
+
+        int recipeLeft = x + width / 2 - 56;
+        int recipeTop = y - RECIPE_HEADER_HEIGHT;
+        int xoff = 64 - (dx * 16 + dz * 16) / 2;
+        int yoff = -dy * 25;
+        float scaleShrink = dy > 3 ? (dy - 3) * 0.2F : 0.0F;
+        float structureScale = 1.0F - scaleShrink;
+
+        renderOldRecipeTitle(guiGraphics, Component.translatable("recipe.type.construct"), recipeLeft, recipeTop);
+        renderCompoundAspects(guiGraphics, compound.aspects(), recipeLeft, recipeTop);
+
+        guiGraphics.pose().pushPose();
+        if (dy > 3) {
+            guiGraphics.pose().translate(recipeLeft + xoff * (1.0F + scaleShrink),
+                    recipeTop + 108 + yoff * structureScale, 0.0F);
+            guiGraphics.pose().scale(structureScale, structureScale, structureScale);
+        } else {
+            guiGraphics.pose().translate(recipeLeft + xoff, recipeTop + 108 + yoff, 0.0F);
+        }
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
+        guiGraphics.blit(BOOK_OVERLAY, -8 - xoff,
+                -119 + Math.max(3 - dx, 3 - dz) * 8 + dx * 4 + dz * 4 + dy * 50,
+                128, 88, 0, 144, 128, 88, 512, 512);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+
+        List<ItemStack> stacks = compound.stacks();
+        int count = 0;
+        int max = Math.min(stacks.size(), dx * dy * dz);
+        for (int j = 0; j < dy; j++) {
+            for (int k = dz - 1; k >= 0; k--) {
+                for (int i = dx - 1; i >= 0; i--) {
+                    if (count >= max) {
+                        guiGraphics.pose().popPose();
+                        return true;
+                    }
+                    ItemStack stack = stacks.get(count);
+                    if (!stack.isEmpty()) {
+                        int px = i * 16 + k * 16;
+                        int py = -i * 8 + k * 8 + j * 50;
+                        guiGraphics.pose().pushPose();
+                        guiGraphics.pose().translate(0.0F, 0.0F, 60 - j * 10);
+                        guiGraphics.renderItem(stack, px, py);
+                        guiGraphics.renderItemDecorations(this.font, stack, px, py);
+                        guiGraphics.pose().popPose();
+                    }
+                    count++;
+                }
+            }
+        }
+        guiGraphics.pose().popPose();
+
+        renderCompoundTooltip(guiGraphics, stacks, dx, dy, dz, recipeLeft, recipeTop, xoff, yoff, scaleShrink);
+        return true;
+    }
+
+    private void renderCompoundAspects(GuiGraphics guiGraphics, AspectList aspects, int recipeLeft, int recipeTop) {
+        List<Aspect> sorted = aspects.getAspectsSortedAmount();
+        if (sorted.isEmpty()) {
+            return;
+        }
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.4F);
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft, recipeTop + 174, 24, 24, 136, 152, 24, 24, 512, 512);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+
+        int startX = recipeLeft + 14 + (5 - sorted.size()) * 8;
+        for (int index = 0; index < sorted.size(); index++) {
+            Aspect aspect = sorted.get(index);
+            int iconX = startX + 18 * index;
+            int iconY = recipeTop + 182;
+            renderAspectIcon(guiGraphics, aspect, iconX, iconY, 16, 1.0F);
+            drawScaledString(guiGraphics, Component.literal(String.valueOf(aspects.getAmount(aspect))), iconX + 9,
+                    iconY + 9, 0xFFFFFFFF, 0.5F, true);
+        }
+    }
+
+    private void renderCompoundTooltip(GuiGraphics guiGraphics, List<ItemStack> stacks, int dx, int dy, int dz,
+            int recipeLeft, int recipeTop, int xoff, int yoff, float scaleShrink) {
+        float structureScale = 1.0F - scaleShrink;
+        int count = 0;
+        int max = Math.min(stacks.size(), dx * dy * dz);
+        for (int j = 0; j < dy; j++) {
+            for (int k = dz - 1; k >= 0; k--) {
+                for (int i = dx - 1; i >= 0; i--) {
+                    if (count >= max) {
+                        return;
+                    }
+                    ItemStack stack = stacks.get(count);
+                    int px = (int) (recipeLeft + xoff * (1.0F + scaleShrink) + i * 16 * structureScale
+                            + k * 16 * structureScale);
+                    int py = (int) (recipeTop + 108 + yoff * structureScale - i * 8 * structureScale
+                            + k * 8 * structureScale + j * 50 * structureScale);
+                    int size = Math.max(1, (int) (16.0F * structureScale));
+                    if (!stack.isEmpty() && this.mouseX >= px && this.mouseY >= py
+                            && this.mouseX < px + size && this.mouseY < py + size) {
+                        guiGraphics.renderTooltip(this.font, stack, this.mouseX, this.mouseY);
+                        return;
+                    }
+                    count++;
+                }
+            }
+        }
     }
 
     private Optional<RecipeHolder<?>> resolveRecipe(ResearchPage page) {
@@ -944,8 +1082,8 @@ public class ThaumonomiconScreen extends Screen {
 
     private static Component normalCraftingTitle(Recipe<?> recipe) {
         return Component.translatable(recipe instanceof ShapedRecipe
-                ? "tc.thaumonomicon.recipe.normal_crafting"
-                : "tc.thaumonomicon.recipe.normal_crafting_shapeless");
+                ? "recipe.type.workbench"
+                : "recipe.type.workbenchshapeless");
     }
 
     private static Component recipeTitle(ResearchPage page) {
@@ -966,6 +1104,13 @@ public class ThaumonomiconScreen extends Screen {
                 .withStyle(style -> style.withFont(ResourceLocation.withDefaultNamespace("default")));
         int titleX = x + width / 2 - this.font.width(recipeTitle) / 2;
         guiGraphics.drawString(this.font, recipeTitle, titleX, y, 0xFF000000, false);
+    }
+
+    private void renderOldRecipeTitle(GuiGraphics guiGraphics, Component title, int recipeLeft, int y) {
+        Component recipeTitle = title.copy()
+                .withStyle(style -> style.withFont(ResourceLocation.withDefaultNamespace("default")));
+        int titleX = recipeLeft + 56 - this.font.width(recipeTitle) / 2;
+        guiGraphics.drawString(this.font, recipeTitle, titleX, y, 0xFF505050, false);
     }
 
     private static void renderRecipeFrame(GuiGraphics guiGraphics, int recipeLeft, int y) {
@@ -999,6 +1144,38 @@ public class ThaumonomiconScreen extends Screen {
         RenderSystem.disableBlend();
     }
 
+    private static void renderCrucibleRecipeFrame(GuiGraphics guiGraphics, int recipeLeft, int y) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, RECIPE_GRID_ALPHA);
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft, y + 28, 112, 34, 0, 6, 112, 34, 512, 512);
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft, y + 92, 112, 96, 0, 40, 112, 96, 512, 512);
+        guiGraphics.blit(BOOK_OVERLAY, recipeLeft + 42, y + 76, 22, 26, 200, 168, 22, 26, 512, 512);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+    }
+
+    private void renderCrucibleAspects(GuiGraphics guiGraphics, AspectList aspects, int recipeLeft, int y) {
+        int total = 0;
+        int rows = (aspects.size() - 1) / 3;
+        int shift = (3 - aspects.size() % 3) * 10;
+        int startX = recipeLeft + 28;
+        int startY = y + 128 - 10 * rows;
+
+        for (Aspect aspect : aspects.getAspectsSorted()) {
+            int centered = 0;
+            if (total / 3 >= rows && (rows > 1 || aspects.size() < 3)) {
+                centered = 1;
+            }
+            int iconX = startX + total % 3 * 20 + shift * centered;
+            int iconY = startY + total / 3 * 20;
+            renderAspectIcon(guiGraphics, aspect, iconX, iconY, 16, 1.0F);
+            drawScaledString(guiGraphics, Component.literal(String.valueOf(aspects.getAmount(aspect))), iconX + 9,
+                    iconY + 9, 0xFFFFFFFF, 0.5F, true);
+            total++;
+        }
+    }
+
     private void renderPrimalVisCost(GuiGraphics guiGraphics, PrimalVisStorage visCost, int recipeLeft, int y) {
         if (visCost.isEmpty()) {
             return;
@@ -1011,9 +1188,18 @@ public class ThaumonomiconScreen extends Screen {
             Aspect aspect = aspects.get(index);
             int iconX = startX + index * 18;
             renderAspectIcon(guiGraphics, aspect, iconX, y, 16, 1.0F);
-            drawScaledString(guiGraphics, Component.literal(String.valueOf(visCost.get(aspect))), iconX + 9, y + 9,
+            drawScaledString(guiGraphics, Component.literal(formatCentivis(visCost.get(aspect))), iconX + 9, y + 9,
                     0xFFFFFFFF, 0.5F, true);
         }
+    }
+
+    private static String formatCentivis(int amount) {
+        if (amount % 100 == 0) {
+            return String.valueOf(amount / 100);
+        }
+        return String.format(Locale.ROOT, "%.2f", amount / 100.0F)
+                .replaceAll("0+$", "")
+                .replaceAll("\\.$", "");
     }
 
     private void renderRecipeIngredient(GuiGraphics guiGraphics, Ingredient ingredient, int x, int y) {
@@ -1112,7 +1298,12 @@ public class ThaumonomiconScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (this.minecraft != null && this.minecraft.options.keyInventory.matches(keyCode, scanCode)) {
-            this.onClose();
+            if (this.openedEntry != null) {
+                this.openedEntry = null;
+                this.playUiSound(TCSoundEvents.PAGE.get(), 0.9F, 0.35F);
+            } else {
+                this.onClose();
+            }
             return true;
         }
         if (this.openedEntry != null && keyCode == 256) {
@@ -1355,11 +1546,14 @@ public class ThaumonomiconScreen extends Screen {
 
     private static void renderAspectIcon(GuiGraphics guiGraphics, Aspect aspect, int x, int y, int size, float alpha) {
         int color = aspect.getColor();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         guiGraphics.setColor(((color >> 16) & 0xFF) / 255.0F, ((color >> 8) & 0xFF) / 255.0F,
                 (color & 0xFF) / 255.0F, alpha);
         guiGraphics.blit(Thaumcraft.id("textures/aspects/" + aspect.getTag() + ".png"), x, y, size, size, 0, 0, 32, 32,
                 32, 32);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
     }
 
     private void clampMap(ResearchCategory category) {

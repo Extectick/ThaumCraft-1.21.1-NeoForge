@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
@@ -26,8 +25,9 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.EssentiaStorage;
 import thaumcraft.api.aspects.IEssentiaContainer;
 import thaumcraft.common.blockentities.AuraNodeBlockEntity;
+import thaumcraft.common.blockentities.CrucibleBlockEntity;
 import thaumcraft.common.registry.TCBlocks;
-import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.util.RevealerHelper;
 
 public final class AuraNodeHighlightHandler {
     private AuraNodeHighlightHandler() {}
@@ -41,16 +41,15 @@ public final class AuraNodeHighlightHandler {
             event.setCanceled(true);
         }
         
-        boolean hasGoggles = mc.player.getItemBySlot(EquipmentSlot.HEAD).is(TCItems.GOGGLES.get());
-        boolean hasThaumometer = mc.player.getMainHandItem().is(TCItems.THAUMOMETER.get()) || mc.player.getOffhandItem().is(TCItems.THAUMOMETER.get());
-        
-        if (hasGoggles || hasThaumometer) {
+        if (RevealerHelper.showsIngamePopups(mc.player)) {
             BlockEntity be = mc.level.getBlockEntity(pos);
             AspectList aspects = null;
             float renderYOffset = 0.0F;
 
             if (be instanceof AuraNodeBlockEntity node) {
                 aspects = node.getAspects();
+            } else if (be instanceof CrucibleBlockEntity crucible) {
+                aspects = crucible.getAspects();
             } else if (be instanceof IEssentiaContainer container) {
                 EssentiaStorage storage = container.getEssentia();
                 if (storage != null && !storage.isEmpty()) {

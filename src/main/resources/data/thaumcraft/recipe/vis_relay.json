@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "VISPOWER",
+  "pattern": [
+    " I ",
+    "ISI",
+    " I "
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "thaumcraft:balanced_shard"
+    }
+  },
+  "vis": {
+    "fire": 800,
+    "order": 800
+  },
+  "result": {
+    "id": "thaumcraft:vis_relay",
+    "count": 2
+  }
+}

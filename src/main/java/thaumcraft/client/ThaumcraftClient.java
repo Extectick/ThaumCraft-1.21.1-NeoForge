@@ -42,6 +42,8 @@ import thaumcraft.client.renderers.block.NodeJarRenderer;
 import thaumcraft.client.renderers.block.NodeStabilizerRenderer;
 import thaumcraft.client.renderers.block.NodeTransducerRenderer;
 import thaumcraft.client.renderers.block.RunicMatrixRenderer;
+import thaumcraft.client.renderers.block.VisChargeRelayRenderer;
+import thaumcraft.client.renderers.block.VisRelayRenderer;
 import thaumcraft.client.renderers.block.WardedJarRenderer;
 import thaumcraft.client.renderers.block.HungryChestRenderer;
 import thaumcraft.client.renderers.item.TCItemRenderers;
@@ -173,6 +175,8 @@ public class ThaumcraftClient {
         event.registerBlock(InfusedOreClientExtensions.INSTANCE,
                 TCBlocks.INFUSED_AIR_ORE, TCBlocks.INFUSED_FIRE_ORE, TCBlocks.INFUSED_WATER_ORE,
                 TCBlocks.INFUSED_EARTH_ORE, TCBlocks.INFUSED_ORDER_ORE, TCBlocks.INFUSED_ENTROPY_ORE);
+        event.registerBlock(NodeDeviceClientExtensions.INSTANCE,
+                TCBlocks.NODE_STABILIZER, TCBlocks.ADVANCED_NODE_STABILIZER, TCBlocks.NODE_TRANSDUCER);
     }
 
     private void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -188,6 +192,8 @@ public class ThaumcraftClient {
         event.registerBlockEntityRenderer(TCBlockEntities.ARCANE_ALEMBIC.get(), ArcaneAlembicRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.VIS_RELAY.get(), VisRelayRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.VIS_CHARGE_RELAY.get(), VisChargeRelayRenderer::new);
         
         event.registerEntityRenderer(TCEntityTypes.FOLLOWING_ITEM.get(), ItemEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.SPECIAL_ITEM.get(), ItemEntityRenderer::new);
