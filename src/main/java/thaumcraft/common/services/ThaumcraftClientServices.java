@@ -14,6 +14,7 @@ import thaumcraft.common.network.ThaumometerScanFxPayload;
 import thaumcraft.common.network.WarpMessagePayload;
 import thaumcraft.common.blockentities.CrucibleBlockEntity;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.nodes.NodeType;
 
 public interface ThaumcraftClientServices {
     final class Empty implements ThaumcraftClientServices {
@@ -63,6 +64,9 @@ public interface ThaumcraftClientServices {
     }
 
     default void crucibleBlockEvent(CrucibleBlockEntity crucible, int eventId, int eventParam) {
+    }
+
+    default void trackAuraNode(Level level, BlockPos pos, NodeType type) {
     }
 
     default boolean isAspectDiscovered(Aspect aspect) {

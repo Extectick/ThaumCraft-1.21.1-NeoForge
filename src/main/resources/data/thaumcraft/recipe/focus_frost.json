@@ -1,0 +1,28 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "FOCUSFROST",
+  "pattern": [
+    "CQC",
+    "Q#Q",
+    "CQC"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:diamond"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "C": {
+      "item": "thaumcraft:water_shard"
+    }
+  },
+  "vis": {
+    "water": 1000,
+    "order": 1000,
+    "entropy": 1000
+  },
+  "result": {
+    "id": "thaumcraft:focus_frost"
+  }
+}

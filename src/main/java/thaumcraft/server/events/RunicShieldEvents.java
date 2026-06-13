@@ -8,7 +8,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -17,6 +20,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thaumcraft.api.IRunicArmor;
 import thaumcraft.common.config.ThaumcraftConfig;
 import thaumcraft.common.curios.ThaumcraftCuriosCompat;
+import thaumcraft.common.items.equipment.FortressArmorItem;
 import thaumcraft.common.lib.RunicShielding;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCSoundEvents;
@@ -66,6 +70,8 @@ public final class RunicShieldEvents {
 
     @SubscribeEvent
     public void onLivingDamagePre(LivingDamageEvent.Pre event) {
+        applyFortressMaskEffects(event);
+
         if (!(event.getEntity() instanceof Player player) || player.level().isClientSide()) {
             return;
         }
@@ -96,6 +102,34 @@ public final class RunicShieldEvents {
             this.rechargeDelay.put(id, ThaumcraftConfig.RUNIC_RECHARGE_DELAY_TICKS.get());
             applyEmergencyRecharge(player, id, info);
         }
+    }
+
+    private static void applyFortressMaskEffects(LivingDamageEvent.Pre event) {
+        if (event.getEntity().level().isClientSide()) {
+            return;
+        }
+        float damage = event.getNewDamage();
+        if (damage <= 0.0F) {
+            return;
+        }
+
+        if (event.getSource().getEntity() instanceof Player attacker
+                && getFortressMask(attacker) == 2
+                && attacker.getRandom().nextFloat() < damage / 12.0F) {
+            attacker.heal(1.0F);
+        }
+
+        if (event.getEntity() instanceof Player player
+                && event.getSource().getEntity() instanceof LivingEntity attacker
+                && getFortressMask(player) == 1
+                && player.getRandom().nextFloat() < damage / 10.0F) {
+            attacker.addEffect(new MobEffectInstance(MobEffects.WITHER, 80));
+        }
+    }
+
+    private static int getFortressMask(Player player) {
+        ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
+        return helmet.getItem() instanceof FortressArmorItem ? FortressArmorItem.getMask(helmet) : -1;
     }
 
     private static RunicInfo collectRunicInfo(Player player) {

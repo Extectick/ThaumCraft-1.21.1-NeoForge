@@ -40,6 +40,7 @@ import thaumcraft.client.renderers.block.CrucibleRenderer;
 import thaumcraft.client.renderers.block.InfusionPillarRenderer;
 import thaumcraft.client.renderers.block.NodeJarRenderer;
 import thaumcraft.client.renderers.block.NodeStabilizerRenderer;
+import thaumcraft.client.renderers.block.NodeTransducerRenderer;
 import thaumcraft.client.renderers.block.RunicMatrixRenderer;
 import thaumcraft.client.renderers.block.WardedJarRenderer;
 import thaumcraft.client.renderers.block.HungryChestRenderer;
@@ -48,6 +49,7 @@ import thaumcraft.client.renderers.item.ThaumometerFirstPersonHandler;
 import thaumcraft.client.screens.AlchemicalFurnaceScreen;
 import thaumcraft.client.screens.ArcaneWorktableScreen;
 import thaumcraft.client.screens.FocusPouchScreen;
+import thaumcraft.client.screens.HandMirrorScreen;
 import thaumcraft.client.screens.ResearchTableScreen;
 import thaumcraft.client.screens.ThaumonomiconScreen;
 import thaumcraft.client.tooltip.AspectTooltipHandler;
@@ -136,6 +138,9 @@ public class ThaumcraftClient {
                             .getOrDefault(TCDataComponents.RESEARCH_NOTE, ResearchNoteData.EMPTY).complete()
                                     ? 1.0F
                                     : 0.0F);
+            ItemProperties.register(TCItems.SINISTER_LODESTONE.get(), Thaumcraft.id("active"),
+                    (stack, level, entity, seed) -> entity != null
+                            && SinisterLodestoneClientTracker.hasVisibleDarkNode(entity) ? 1.0F : 0.0F);
         });
     }
 
@@ -144,6 +149,7 @@ public class ThaumcraftClient {
         event.register(TCMenuTypes.ARCANE_WORKTABLE.get(), ArcaneWorktableScreen::new);
         event.register(TCMenuTypes.RESEARCH_TABLE.get(), ResearchTableScreen::new);
         event.register(TCMenuTypes.FOCUS_POUCH.get(), FocusPouchScreen::new);
+        event.register(TCMenuTypes.HAND_MIRROR.get(), HandMirrorScreen::new);
     }
 
     private void registerGuiLayers(RegisterGuiLayersEvent event) {
@@ -174,6 +180,7 @@ public class ThaumcraftClient {
         event.registerBlockEntityRenderer(TCBlockEntities.RUNIC_MATRIX.get(), RunicMatrixRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.NODE_TRANSDUCER.get(), NodeTransducerRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.INFUSION_PILLAR.get(), InfusionPillarRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.BRAIN_IN_A_JAR.get(), BrainInAJarRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.NODE_IN_A_JAR.get(), NodeJarRenderer::new);

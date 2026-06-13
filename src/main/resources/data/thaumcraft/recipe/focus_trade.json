@@ -1,0 +1,31 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "FOCUSTRADE",
+  "pattern": [
+    "CQE",
+    "Q#Q",
+    "CQE"
+  ],
+  "key": {
+    "#": {
+      "item": "thaumcraft:quicksilver"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "C": {
+      "item": "thaumcraft:balanced_shard"
+    },
+    "E": {
+      "item": "thaumcraft:balanced_shard"
+    }
+  },
+  "vis": {
+    "order": 1500,
+    "entropy": 1500,
+    "earth": 1000
+  },
+  "result": {
+    "id": "thaumcraft:focus_trade"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "minecraft:smite",
+  "components": [
+    { "item": "minecraft:iron_sword" },
+    { "item": "minecraft:glowstone_dust" },
+    { "item": "thaumcraft:salis_mundus" }
+  ],
+  "instability": 2,
+  "essentia": {
+    "praecantatio": 4,
+    "telum": 4,
+    "exanimis": 4
+  }
+}

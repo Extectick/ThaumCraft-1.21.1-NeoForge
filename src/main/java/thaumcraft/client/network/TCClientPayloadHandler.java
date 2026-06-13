@@ -37,7 +37,8 @@ public final class TCClientPayloadHandler {
     }
 
     public static void handleInfusionSourceFx(InfusionSourceFxPayload payload) {
-        InfusionSourceFxHandler.add(payload.target(), payload.source(), payload.color(), payload.ticks());
+        InfusionSourceFxHandler.add(payload.target(), payload.source(), payload.color(), payload.ticks(),
+                payload.sourceEntityId());
     }
 
     public static void handleBlockZapFx(BlockZapFxPayload payload) {

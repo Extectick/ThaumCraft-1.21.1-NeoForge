@@ -16,6 +16,7 @@ import thaumcraft.common.blockentities.EssentiaTubeBlockEntity;
 import thaumcraft.common.blockentities.InfusionPillarBlockEntity;
 import thaumcraft.common.blockentities.NodeJarBlockEntity;
 import thaumcraft.common.blockentities.NodeStabilizerBlockEntity;
+import thaumcraft.common.blockentities.NodeTransducerBlockEntity;
 import thaumcraft.common.blockentities.ResearchTableBlockEntity;
 import thaumcraft.common.blockentities.RunicMatrixBlockEntity;
 import thaumcraft.common.blockentities.WardedJarBlockEntity;
@@ -52,6 +53,10 @@ public final class TCBlockEntities {
             REGISTRY.register("node_stabilizer", () -> BlockEntityType.Builder
                     .of(NodeStabilizerBlockEntity::new,
                             TCBlocks.NODE_STABILIZER.get(), TCBlocks.ADVANCED_NODE_STABILIZER.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NodeTransducerBlockEntity>> NODE_TRANSDUCER =
+            REGISTRY.register("node_transducer", () -> BlockEntityType.Builder
+                    .of(NodeTransducerBlockEntity::new, TCBlocks.NODE_TRANSDUCER.get())
                     .build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionPillarBlockEntity>> INFUSION_PILLAR =
             REGISTRY.register("infusion_pillar", () -> BlockEntityType.Builder

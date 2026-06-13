@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import thaumcraft.common.blockentities.ArcanePedestalBlockEntity;
 import thaumcraft.common.blockentities.RunicMatrixBlockEntity;
+import thaumcraft.common.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.crafting.InfusionRecipe;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCRecipeTypes;
@@ -75,6 +76,20 @@ public final class InfusionCrafting {
                 .findFirst();
 
         if (recipe.isEmpty()) {
+            InfusionEnchantmentRecipe.Input enchantmentInput =
+                    new InfusionEnchantmentRecipe.Input(catalyst.copy(), components);
+            Optional<RecipeHolder<InfusionEnchantmentRecipe>> enchantmentRecipe = level.getRecipeManager()
+                    .getAllRecipesFor(TCRecipeTypes.INFUSION_ENCHANTMENT.get())
+                    .stream()
+                    .filter(holder -> holder.value().matches(enchantmentInput, level))
+                    .findFirst();
+            if (enchantmentRecipe.isPresent()) {
+                matrix.startEnchantmentCrafting(player, enchantmentRecipe.get(), enchantmentInput);
+                ServerEssentiaHooks.refreshSources(level, pos);
+                level.playSound(null, pos, TCSoundEvents.CRAFTSTART.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
+                return InteractionResult.CONSUME;
+            }
+
             if (player != null) {
                 player.displayClientMessage(Component.literal("No matching infusion recipe"), true);
             }

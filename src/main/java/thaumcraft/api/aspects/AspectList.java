@@ -92,7 +92,7 @@ public class AspectList {
         if (this.getAmount(aspect) < amount) {
             return false;
         }
-        this.remove(aspect, amount);
+        this.aspects.put(aspect, this.getAmount(aspect) - amount);
         return true;
     }
 

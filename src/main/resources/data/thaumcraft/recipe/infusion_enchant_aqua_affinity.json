@@ -1,0 +1,16 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "minecraft:aqua_affinity",
+  "components": [
+    { "item": "minecraft:sugar_cane" },
+    { "item": "minecraft:slime_ball" },
+    { "item": "thaumcraft:salis_mundus" }
+  ],
+  "instability": 2,
+  "essentia": {
+    "praecantatio": 4,
+    "motus": 8,
+    "aqua": 8
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "minecraft:fortune",
+  "components": [
+    { "item": "minecraft:iron_pickaxe" },
+    { "item": "minecraft:diamond" },
+    { "item": "thaumcraft:salis_mundus" }
+  ],
+  "instability": 3,
+  "essentia": {
+    "praecantatio": 4,
+    "instrumentum": 4,
+    "lucrum": 8
+  }
+}

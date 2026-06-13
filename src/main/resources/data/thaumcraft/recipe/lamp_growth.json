@@ -1,0 +1,36 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "LAMPGROWTH",
+  "catalyst": {
+    "item": "thaumcraft:arcane_lamp"
+  },
+  "components": [
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "item": "thaumcraft:earth_shard"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "item": "thaumcraft:earth_shard"
+    }
+  ],
+  "instability": 4,
+  "essentia": {
+    "herba": 16,
+    "lux": 8,
+    "victus": 16
+  },
+  "result": {
+    "id": "thaumcraft:arcane_lamp_growth"
+  }
+}

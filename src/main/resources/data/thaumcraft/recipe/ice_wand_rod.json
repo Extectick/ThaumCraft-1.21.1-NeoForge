@@ -1,20 +1,22 @@
 {
-  "type": "thaumcraft:arcane_worktable",
-  "pattern": [
-    " S ",
-    " C ",
-    " S "
-  ],
-  "key": {
-    "C": {
-      "item": "minecraft:ice"
+  "type": "thaumcraft:infusion",
+  "research": "ROD_ice",
+  "catalyst": {
+    "item": "minecraft:ice"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:balanced_shard"
     },
-    "S": {
+    {
       "item": "thaumcraft:water_shard"
     }
-  },
-  "vis": {
-    "water": 1200
+  ],
+  "instability": 3,
+  "essentia": {
+    "aqua": 12,
+    "praecantatio": 6,
+    "gelum": 6
   },
   "result": {
     "id": "thaumcraft:ice_wand_rod"

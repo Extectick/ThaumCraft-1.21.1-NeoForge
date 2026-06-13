@@ -35,7 +35,9 @@ import thaumcraft.common.registry.TCItems;
 public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity> {
     private static final ResourceLocation NODE_TEXTURE = Thaumcraft.id("textures/misc/nodes.png");
     private static final ResourceLocation WISPY_TEXTURE = Thaumcraft.id("textures/misc/wispy.png");
+    private static final ResourceLocation ENERGIZED_RING_TEXTURE = Thaumcraft.id("textures/items/lightningringv.png");
     private static final int FRAMES = 32;
+    private static final int ENERGIZED_RING_FRAMES = 16;
     private static final float LINK_QUALITY = 16.0F;
     private static final Map<AuraNodeBlockEntity, SmoothedDrainColor> DRAIN_COLORS = new WeakHashMap<>();
     private static final RenderType NODE_ADDITIVE_SEE_THROUGH = createSeeThroughType(
@@ -65,8 +67,12 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
         poseStack.translate(0.5D, 0.5D, 0.5D);
         poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
         if (revealed) {
-            renderNodeLayers(poseStack, bufferSource, node.getAspects(), node.getNodeType(), node.getNodeModifier(),
+            AspectList renderedAspects = node.isEnergized() ? node.getAuraBase() : node.getAspects();
+            renderNodeLayers(poseStack, bufferSource, renderedAspects, node.getNodeType(), node.getNodeModifier(),
                     alpha, 1.0F, true);
+            if (node.isEnergized()) {
+                renderEnergizedRing(poseStack, bufferSource, alpha);
+            }
         } else {
             renderStrip(poseStack, additive(bufferSource), frame(), 1, 0.5F, alpha, 0xFFFFFF, 0.0F, 0.001F);
         }
@@ -164,6 +170,20 @@ public class AuraNodeRenderer implements BlockEntityRenderer<AuraNodeBlockEntity
         addVertex(poseStack, consumer, half, half, u1, v1, r, g, b, a);
         addVertex(poseStack, consumer, -half, half, u2, v1, r, g, b, a);
         poseStack.popPose();
+    }
+
+    private static void renderEnergizedRing(PoseStack poseStack, MultiBufferSource buffers, float alpha) {
+        VertexConsumer consumer = buffers.getBuffer(RenderType.EYES.apply(ENERGIZED_RING_TEXTURE,
+                RenderStateShard.LIGHTNING_TRANSPARENCY));
+        int frame = (int) (System.nanoTime() / 40_000_000L % ENERGIZED_RING_FRAMES);
+        float u1 = frame / (float) ENERGIZED_RING_FRAMES;
+        float u2 = (frame + 1) / (float) ENERGIZED_RING_FRAMES;
+        float half = 0.33F;
+        int opacity = Mth.clamp(Math.round(alpha * 230.0F), 0, 255);
+        addVertex(poseStack, consumer, -half, -half, u2, 1.0F, 255, 255, 255, opacity);
+        addVertex(poseStack, consumer, half, -half, u1, 1.0F, 255, 255, 255, opacity);
+        addVertex(poseStack, consumer, half, half, u1, 0.0F, 255, 255, 255, opacity);
+        addVertex(poseStack, consumer, -half, half, u2, 0.0F, 255, 255, 255, opacity);
     }
 
     private static void addVertex(PoseStack poseStack, VertexConsumer consumer, float x, float y, float u, float v,

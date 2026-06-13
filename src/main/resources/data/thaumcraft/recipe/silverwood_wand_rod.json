@@ -1,20 +1,41 @@
 {
-  "type": "thaumcraft:arcane_worktable",
-  "pattern": [
-    " S ",
-    " C ",
-    " S "
-  ],
-  "key": {
-    "C": {
-      "item": "thaumcraft:silverwood_log"
-    },
-    "S": {
-      "item": "thaumcraft:balanced_shard"
-    }
+  "type": "thaumcraft:infusion",
+  "research": "ROD_silverwood",
+  "catalyst": {
+    "item": "thaumcraft:silverwood_log"
   },
-  "vis": {
-    "order": 1200
+  "components": [
+    {
+      "item": "thaumcraft:balanced_shard"
+    },
+    {
+      "item": "thaumcraft:air_shard"
+    },
+    {
+      "item": "thaumcraft:fire_shard"
+    },
+    {
+      "item": "thaumcraft:water_shard"
+    },
+    {
+      "item": "thaumcraft:earth_shard"
+    },
+    {
+      "item": "thaumcraft:order_shard"
+    },
+    {
+      "item": "thaumcraft:entropy_shard"
+    }
+  ],
+  "instability": 5,
+  "essentia": {
+    "aer": 9,
+    "ignis": 9,
+    "aqua": 9,
+    "terra": 9,
+    "ordo": 9,
+    "perditio": 9,
+    "praecantatio": 9
   },
   "result": {
     "id": "thaumcraft:silverwood_wand_rod"

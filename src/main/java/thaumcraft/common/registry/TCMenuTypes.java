@@ -9,6 +9,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.menus.AlchemicalFurnaceMenu;
 import thaumcraft.common.menus.ArcaneWorktableMenu;
 import thaumcraft.common.menus.FocusPouchMenu;
+import thaumcraft.common.menus.HandMirrorMenu;
 import thaumcraft.common.menus.ResearchTableMenu;
 
 public final class TCMenuTypes {
@@ -21,6 +22,8 @@ public final class TCMenuTypes {
             () -> new MenuType<>(ResearchTableMenu::new, FeatureFlags.VANILLA_SET));
     public static final DeferredHolder<MenuType<?>, MenuType<FocusPouchMenu>> FOCUS_POUCH = REGISTRY.register("focus_pouch",
             () -> new MenuType<>(FocusPouchMenu::new, FeatureFlags.VANILLA_SET));
+    public static final DeferredHolder<MenuType<?>, MenuType<HandMirrorMenu>> HAND_MIRROR = REGISTRY.register("hand_mirror",
+            () -> new MenuType<>(HandMirrorMenu::new, FeatureFlags.VANILLA_SET));
 
     private TCMenuTypes() {
     }

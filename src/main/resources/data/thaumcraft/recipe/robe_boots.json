@@ -1,0 +1,19 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "ENCHFABRIC",
+  "pattern": [
+    "I I",
+    "I I"
+  ],
+  "key": {
+    "I": {
+      "item": "thaumcraft:enchanted_fabric"
+    }
+  },
+  "vis": {
+    "earth": 300
+  },
+  "result": {
+    "id": "thaumcraft:robe_boots"
+  }
+}

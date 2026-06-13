@@ -40,13 +40,20 @@ public class InfusionBoreSparkleParticle extends SingleQuadParticle {
 
     public InfusionBoreSparkleParticle(ClientLevel level, double x, double y, double z,
                                        double targetX, double targetY, double targetZ) {
+        this(level, x, y, z, targetX, targetY, targetZ,
+                0.4F + level.random.nextFloat() * 0.2F, 0.2F, 0.6F + level.random.nextFloat() * 0.3F);
+    }
+
+    public InfusionBoreSparkleParticle(ClientLevel level, double x, double y, double z,
+                                       double targetX, double targetY, double targetZ,
+                                       float red, float green, float blue) {
         super(level, x, y, z, 0.0D, 0.0D, 0.0D);
         this.targetX = targetX;
         this.targetY = targetY;
         this.targetZ = targetZ;
-        this.rCol = 0.4F + this.random.nextFloat() * 0.2F;
-        this.gCol = 0.2F;
-        this.bCol = 0.6F + this.random.nextFloat() * 0.3F;
+        this.rCol = red;
+        this.gCol = green;
+        this.bCol = blue;
         this.quadSize = 0.1F * (this.random.nextFloat() * 0.5F + 0.5F);
         this.gravity = 0.2F;
         this.hasPhysics = true;

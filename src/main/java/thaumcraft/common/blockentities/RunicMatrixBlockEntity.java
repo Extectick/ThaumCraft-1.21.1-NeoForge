@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.crafting.InfusionRecipe;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCSoundEvents;
@@ -45,6 +46,9 @@ public class RunicMatrixBlockEntity extends BlockEntity {
     private ResourceLocation recipeId;
     private String recipePlayer = "";
     private int recipeInstability;
+    private int recipeType;
+    private int recipeXp;
+    private ResourceLocation recipeEnchantmentId;
 
     public RunicMatrixBlockEntity(BlockPos pos, BlockState blockState) {
         super(TCBlockEntities.RUNIC_MATRIX.get(), pos, blockState);
@@ -150,6 +154,13 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         this.recipeIngredients = loadStacks(tag, registries);
         this.recipePlayer = tag.getString("recipePlayer");
         this.recipeInstability = tag.getInt("recipeInstability");
+        this.recipeType = tag.getInt("recipeType");
+        this.recipeXp = tag.getInt("recipeXp");
+        if (tag.contains("recipeEnchantmentId")) {
+            this.recipeEnchantmentId = ResourceLocation.tryParse(tag.getString("recipeEnchantmentId"));
+        } else {
+            this.recipeEnchantmentId = null;
+        }
         if (tag.contains("recipeId")) {
             this.recipeId = ResourceLocation.tryParse(tag.getString("recipeId"));
         } else {
@@ -178,6 +189,11 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         saveStacks(tag, this.recipeIngredients, registries);
         tag.putString("recipePlayer", this.recipePlayer);
         tag.putInt("recipeInstability", this.recipeInstability);
+        tag.putInt("recipeType", this.recipeType);
+        tag.putInt("recipeXp", this.recipeXp);
+        if (this.recipeEnchantmentId != null) {
+            tag.putString("recipeEnchantmentId", this.recipeEnchantmentId.toString());
+        }
         if (this.recipeId != null) {
             tag.putString("recipeId", this.recipeId.toString());
         }
@@ -228,6 +244,11 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         return this.countDelay;
     }
 
+    public void setCountDelay(int countDelay) {
+        this.countDelay = Math.max(1, countDelay);
+        this.markChangedAndSync();
+    }
+
     public float getStartUp() {
         return this.startUp;
     }
@@ -262,6 +283,23 @@ public class RunicMatrixBlockEntity extends BlockEntity {
 
     public int getRecipeInstability() {
         return this.recipeInstability;
+    }
+
+    public int getRecipeType() {
+        return this.recipeType;
+    }
+
+    public int getRecipeXp() {
+        return this.recipeXp;
+    }
+
+    public ResourceLocation getRecipeEnchantmentId() {
+        return this.recipeEnchantmentId;
+    }
+
+    public void setRecipeXp(int recipeXp) {
+        this.recipeXp = Math.max(0, recipeXp);
+        this.markChangedAndSync();
     }
 
     public int getItemCount() {
@@ -306,6 +344,9 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         this.recipeId = null;
         this.recipePlayer = "";
         this.recipeInstability = 0;
+        this.recipeType = 0;
+        this.recipeXp = 0;
+        this.recipeEnchantmentId = null;
         this.itemCount = 0;
         this.markChangedAndSync();
     }
@@ -329,6 +370,7 @@ public class RunicMatrixBlockEntity extends BlockEntity {
 
     public void startCrafting(Player player, RecipeHolder<InfusionRecipe> recipeHolder, InfusionRecipe.Input input) {
         InfusionRecipe recipe = recipeHolder.value();
+        this.recipeType = 0;
         this.recipeInput = input.catalyst().copy();
         this.recipeIngredients = input.components().stream().map(ItemStack::copy).toList();
         this.recipeOutput = recipe.assemble(input, this.level.registryAccess()).copy();
@@ -345,11 +387,32 @@ public class RunicMatrixBlockEntity extends BlockEntity {
         this.markChangedAndSync();
     }
 
+    public void startEnchantmentCrafting(Player player, RecipeHolder<InfusionEnchantmentRecipe> recipeHolder,
+            InfusionEnchantmentRecipe.Input input) {
+        InfusionEnchantmentRecipe recipe = recipeHolder.value();
+        this.recipeType = 1;
+        this.recipeInput = input.catalyst().copy();
+        this.recipeIngredients = input.components().stream().map(ItemStack::copy).toList();
+        this.recipeOutput = recipe.assemble(input, this.level.registryAccess()).copy();
+        this.recipeEssentia = recipe.getScaledEssentia(this.recipeInput);
+        this.recipeEssentiaBase = this.recipeEssentia.copy();
+        this.recipeId = recipeHolder.id();
+        this.recipeEnchantmentId = recipe.getEnchantmentId();
+        this.recipePlayer = player != null ? player.getGameProfile().getName() : "";
+        this.recipeInstability = recipe.calcInstability(this.recipeInput);
+        this.recipeXp = recipe.calcXp(this.recipeInput);
+        this.instability = this.symmetry + this.recipeInstability;
+        this.craftCount = 0;
+        this.countDelay = 10;
+        this.itemCount = 0;
+        this.crafting = true;
+        this.markChangedAndSync();
+    }
+
     public void finishCrafting(Level level, ArcanePedestalBlockEntity centerPedestal) {
         centerPedestal.setStoredItem(this.recipeOutput.copy());
         this.instability = 0;
         this.clearCraftingState();
-        level.playSound(null, this.worldPosition, TCSoundEvents.CRAFTSTART.get(), SoundSource.BLOCKS, 0.5F, 1.25F);
     }
 
     public void failCrafting(Level level) {

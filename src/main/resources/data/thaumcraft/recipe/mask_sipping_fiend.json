@@ -1,0 +1,39 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "MASKSIPPINGFIEND",
+  "catalyst": {
+    "item": "thaumcraft:fortress_helmet"
+  },
+  "components": [
+    {
+      "item": "minecraft:red_dye"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "item": "minecraft:ghast_tear"
+    },
+    {
+      "item": "minecraft:milk_bucket"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "instability": 8,
+  "essentia": {
+    "exanimis": 64,
+    "victus": 64,
+    "tutamen": 16
+  },
+  "result": {
+    "id": "thaumcraft:fortress_helmet",
+    "components": {
+      "thaumcraft:fortress_mask": 2
+    }
+  }
+}

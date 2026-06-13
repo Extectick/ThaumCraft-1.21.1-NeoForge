@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "HELMGOGGLES",
+  "catalyst": {
+    "item": "thaumcraft:fortress_helmet"
+  },
+  "components": [
+    {
+      "item": "minecraft:slime_ball"
+    },
+    {
+      "item": "thaumcraft:goggles"
+    }
+  ],
+  "instability": 5,
+  "essentia": {
+    "sensus": 32,
+    "auram": 16,
+    "tutamen": 16
+  },
+  "result": {
+    "id": "thaumcraft:fortress_helmet",
+    "components": {
+      "thaumcraft:fortress_goggles": true
+    }
+  }
+}

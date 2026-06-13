@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.nodes.NodeType;
 import thaumcraft.client.fx.CrucibleClientFx;
 import thaumcraft.client.fx.InfusionMatrixClientFx;
 import thaumcraft.client.fx.InfusionBoreParticle;
@@ -117,6 +118,11 @@ public final class ThaumcraftClientServicesProvider implements ThaumcraftClientS
     @Override
     public void crucibleBlockEvent(CrucibleBlockEntity crucible, int eventId, int eventParam) {
         CrucibleClientFx.blockEvent(crucible, eventId, eventParam);
+    }
+
+    @Override
+    public void trackAuraNode(Level level, BlockPos pos, NodeType type) {
+        SinisterLodestoneClientTracker.track(level, pos, type);
     }
 
     @Override

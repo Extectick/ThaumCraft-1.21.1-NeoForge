@@ -1,20 +1,22 @@
 {
-  "type": "thaumcraft:arcane_worktable",
-  "pattern": [
-    " S ",
-    " C ",
-    " S "
-  ],
-  "key": {
-    "C": {
-      "item": "minecraft:obsidian"
+  "type": "thaumcraft:infusion",
+  "research": "ROD_obsidian",
+  "catalyst": {
+    "item": "minecraft:obsidian"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:balanced_shard"
     },
-    "S": {
+    {
       "item": "thaumcraft:earth_shard"
     }
-  },
-  "vis": {
-    "earth": 1200
+  ],
+  "instability": 3,
+  "essentia": {
+    "terra": 12,
+    "praecantatio": 6,
+    "tenebrae": 6
   },
   "result": {
     "id": "thaumcraft:obsidian_wand_rod"

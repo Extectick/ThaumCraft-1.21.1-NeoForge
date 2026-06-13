@@ -1,0 +1,37 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "VISAMULET",
+  "catalyst": {
+    "item": "thaumcraft:bauble_amulet"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:primal_charm"
+    },
+    {
+      "item": "thaumcraft:balanced_shard"
+    },
+    {
+      "item": "thaumcraft:balanced_shard"
+    },
+    {
+      "item": "thaumcraft:primal_charm"
+    },
+    {
+      "item": "thaumcraft:balanced_shard"
+    },
+    {
+      "item": "thaumcraft:balanced_shard"
+    }
+  ],
+  "instability": 6,
+  "essentia": {
+    "auram": 24,
+    "potentia": 64,
+    "praecantatio": 64,
+    "vacuos": 24
+  },
+  "result": {
+    "id": "thaumcraft:vis_amulet"
+  }
+}

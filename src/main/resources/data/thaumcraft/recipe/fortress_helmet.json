@@ -1,0 +1,33 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ARMORFORTRESS",
+  "catalyst": {
+    "item": "thaumcraft:thaumium_helmet"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:emerald"
+    }
+  ],
+  "instability": 3,
+  "essentia": {
+    "metallum": 24,
+    "tutamen": 16,
+    "praecantatio": 16
+  },
+  "result": {
+    "id": "thaumcraft:fortress_helmet"
+  }
+}

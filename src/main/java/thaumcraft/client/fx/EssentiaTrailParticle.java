@@ -56,7 +56,7 @@ public class EssentiaTrailParticle extends SingleQuadParticle {
         this.trailScale = (Mth.sin(count / 2.0F) * 0.1F + 1.0F) * scale;
         this.quadSize = 0.1F;
         this.gravity = 0.2F;
-        this.hasPhysics = false;
+        this.hasPhysics = true;
         this.alpha = 0.5F;
 
         double dx = targetX - this.x;

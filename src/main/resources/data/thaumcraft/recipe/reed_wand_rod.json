@@ -1,20 +1,22 @@
 {
-  "type": "thaumcraft:arcane_worktable",
-  "pattern": [
-    " S ",
-    " C ",
-    " S "
-  ],
-  "key": {
-    "C": {
-      "item": "minecraft:sugar_cane"
+  "type": "thaumcraft:infusion",
+  "research": "ROD_reed",
+  "catalyst": {
+    "item": "minecraft:sugar_cane"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:balanced_shard"
     },
-    "S": {
+    {
       "item": "thaumcraft:air_shard"
     }
-  },
-  "vis": {
-    "air": 1200
+  ],
+  "instability": 3,
+  "essentia": {
+    "aer": 12,
+    "praecantatio": 6,
+    "motus": 6
   },
   "result": {
     "id": "thaumcraft:reed_wand_rod"

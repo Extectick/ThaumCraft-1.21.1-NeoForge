@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "FOCUSFIRE",
+  "pattern": [
+    "CQC",
+    "Q#Q",
+    "CQC"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:fire_charge"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "C": {
+      "item": "thaumcraft:fire_shard"
+    }
+  },
+  "vis": {
+    "fire": 2000,
+    "entropy": 1000
+  },
+  "result": {
+    "id": "thaumcraft:focus_fire"
+  }
+}

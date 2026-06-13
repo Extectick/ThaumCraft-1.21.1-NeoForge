@@ -1,0 +1,45 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "RUNICEMERGENCY",
+  "catalyst": {
+    "item": "thaumcraft:runic_amulet"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:balanced_shard"
+    },
+    {
+      "item": "thaumcraft:earth_shard"
+    },
+    {
+      "item": "thaumcraft:earth_shard"
+    },
+    {
+      "type": "neoforge:components",
+      "items": [
+        "minecraft:potion"
+      ],
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "minecraft:strong_strength"
+        }
+      }
+    },
+    {
+      "item": "thaumcraft:earth_shard"
+    },
+    {
+      "item": "thaumcraft:earth_shard"
+    }
+  ],
+  "instability": 7,
+  "essentia": {
+    "tutamen": 20,
+    "praecantatio": 35,
+    "terra": 32,
+    "vacuos": 32
+  },
+  "result": {
+    "id": "thaumcraft:runic_amulet_emergency"
+  }
+}

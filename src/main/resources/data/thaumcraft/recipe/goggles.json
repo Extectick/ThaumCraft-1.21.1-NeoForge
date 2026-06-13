@@ -1,0 +1,31 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "GOGGLES",
+  "pattern": [
+    "LGL",
+    "L L",
+    "TGT"
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "T": {
+      "item": "thaumcraft:thaumometer"
+    }
+  },
+  "vis": {
+    "air": 500,
+    "fire": 500,
+    "water": 500,
+    "earth": 500,
+    "entropy": 300,
+    "order": 300
+  },
+  "result": {
+    "id": "thaumcraft:goggles"
+  }
+}

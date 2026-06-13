@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "SANITYCHECK",
+  "catalyst": {
+    "item": "thaumcraft:thaumometer"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:balanced_shard"
+    },
+    {
+      "item": "thaumcraft:zombie_brain"
+    },
+    {
+      "item": "minecraft:diamond"
+    }
+  ],
+  "instability": 4,
+  "essentia": {
+    "cognitio": 24,
+    "sensus": 24,
+    "alienis": 8
+  },
+  "result": {
+    "id": "thaumcraft:sanity_checker"
+  }
+}

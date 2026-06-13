@@ -1,3 +1,6 @@
 {
-  "parent": "thaumcraft:block/node_transducer"
+  "parent": "builtin/entity",
+  "textures": {
+    "particle": "thaumcraft:models/node_converter"
+  }
 }

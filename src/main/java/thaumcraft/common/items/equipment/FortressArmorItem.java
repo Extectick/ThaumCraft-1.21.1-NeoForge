@@ -1,11 +1,16 @@
 package thaumcraft.common.items.equipment;
 
+import java.util.List;
+
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 import thaumcraft.api.IRunicArmor;
 import thaumcraft.common.registry.TCDataComponents;
@@ -21,6 +26,15 @@ public class FortressArmorItem extends ArmorItem implements IRunicArmor {
         return 0;
     }
 
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context,
+            @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
+        int mask = getMask(stack);
+        if (mask >= 0) {
+            tooltip.add(Component.translatable("item.HelmetFortress.mask." + mask).withStyle(ChatFormatting.GOLD));
+        }
+        super.appendHoverText(stack, context, tooltip, flag);
+    }
 
     public static boolean hasGoggles(ItemStack stack) {
         return stack.has(TCDataComponents.FORTRESS_GOGGLES);

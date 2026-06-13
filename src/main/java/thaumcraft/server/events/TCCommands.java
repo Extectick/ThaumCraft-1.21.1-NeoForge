@@ -65,7 +65,11 @@ public final class TCCommands {
                                                                                 .toLowerCase(Locale.ROOT))),
                                                         builder))
                                                 .executes(context -> createNode(context,
-                                                        StringArgumentType.getString(context, "modifier")))))))
+                                                        StringArgumentType.getString(context, "modifier"))))))
+                        .then(Commands.literal("energize")
+                                .executes(TCCommands::energizeTargetNode))
+                        .then(Commands.literal("natural")
+                                .executes(TCCommands::naturalizeTargetNode)))
                 .then(Commands.literal("research")
                         .then(Commands.literal("list")
                                 .executes(TCCommands::listResearch))
@@ -86,6 +90,7 @@ public final class TCCommands {
         source.sendSuccess(() -> Component.literal("  /thaumcraft research <list|player> <all|reset|<research>>"), false);
         source.sendSuccess(() -> Component.literal("  /thaumcraft aspects hand"), false);
         source.sendSuccess(() -> Component.literal("  /thaumcraft node create <type> [modifier]"), false);
+        source.sendSuccess(() -> Component.literal("  /thaumcraft node <energize|natural>"), false);
         return 1;
     }
 
@@ -121,6 +126,44 @@ public final class TCCommands {
         source.sendSuccess(() -> Component.literal("Created " + type.name().toLowerCase(Locale.ROOT)
                 + " aura node at " + pos.toShortString() + "."), true);
         return 1;
+    }
+
+    private static int energizeTargetNode(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        BlockPos pos = targetNodePos(player);
+        if (!(player.level().getBlockEntity(pos) instanceof AuraNodeBlockEntity node)) {
+            context.getSource().sendFailure(Component.literal("No aura node found at target position."));
+            return 0;
+        }
+        if (node.isEnergized()) {
+            context.getSource().sendFailure(Component.literal("Target node is already energized."));
+            return 0;
+        }
+        node.convertToEnergizedFromNatural(player.level());
+        context.getSource().sendSuccess(() -> Component.literal("Energized aura node at " + pos.toShortString()
+                + "."), true);
+        return 1;
+    }
+
+    private static int naturalizeTargetNode(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        BlockPos pos = targetNodePos(player);
+        if (!(player.level().getBlockEntity(pos) instanceof AuraNodeBlockEntity node)) {
+            context.getSource().sendFailure(Component.literal("No aura node found at target position."));
+            return 0;
+        }
+        if (!node.isEnergized()) {
+            context.getSource().sendFailure(Component.literal("Target node is already natural."));
+            return 0;
+        }
+        node.convertToDrainedNaturalFromEnergized();
+        context.getSource().sendSuccess(() -> Component.literal("Converted energized node back to drained natural node at "
+                + pos.toShortString() + "."), true);
+        return 1;
+    }
+
+    private static BlockPos targetNodePos(ServerPlayer player) {
+        return BlockPos.containing(player.getEyePosition().add(player.getLookAngle().scale(3.0D)));
     }
 
     private static int showHeldItemAspects(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {

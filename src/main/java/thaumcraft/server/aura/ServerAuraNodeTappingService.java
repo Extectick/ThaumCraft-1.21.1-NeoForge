@@ -50,6 +50,10 @@ public final class ServerAuraNodeTappingService {
             stopUsing(player);
             return;
         }
+        if (node.isEnergized()) {
+            stopUsing(player);
+            return;
+        }
 
         if (remainingUseDuration % 5 != 0) {
             return;

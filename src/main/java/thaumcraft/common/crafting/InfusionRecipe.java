@@ -19,6 +19,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCRecipeSerializers;
 import thaumcraft.common.registry.TCRecipeTypes;
 
@@ -75,7 +76,20 @@ public class InfusionRecipe implements Recipe<InfusionRecipe.Input> {
 
     @Override
     public ItemStack assemble(Input input, HolderLookup.Provider registries) {
-        return this.getResultItem(registries).copy();
+        ItemStack output = this.getResultItem(registries).copy();
+        ItemStack catalyst = input.catalyst();
+        if (!catalyst.isEmpty() && ItemStack.isSameItem(catalyst, output)) {
+            ItemStack upgraded = catalyst.copy();
+            upgraded.setCount(output.getCount());
+            if (output.has(TCDataComponents.FORTRESS_GOGGLES)) {
+                upgraded.set(TCDataComponents.FORTRESS_GOGGLES, output.get(TCDataComponents.FORTRESS_GOGGLES));
+            }
+            if (output.has(TCDataComponents.FORTRESS_MASK)) {
+                upgraded.set(TCDataComponents.FORTRESS_MASK, output.get(TCDataComponents.FORTRESS_MASK));
+            }
+            return upgraded;
+        }
+        return output;
     }
 
     @Override

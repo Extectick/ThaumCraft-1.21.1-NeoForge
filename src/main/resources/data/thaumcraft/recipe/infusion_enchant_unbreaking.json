@@ -1,0 +1,16 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "minecraft:unbreaking",
+  "components": [
+    { "item": "minecraft:iron_pickaxe" },
+    { "item": "minecraft:obsidian" },
+    { "item": "thaumcraft:salis_mundus" }
+  ],
+  "instability": 2,
+  "essentia": {
+    "praecantatio": 4,
+    "instrumentum": 4,
+    "ordo": 8
+  }
+}

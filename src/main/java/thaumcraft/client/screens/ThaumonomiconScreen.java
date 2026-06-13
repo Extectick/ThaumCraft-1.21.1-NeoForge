@@ -25,6 +25,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -37,6 +38,8 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.PrimalVisStorage;
 import thaumcraft.common.crafting.ArcaneWorktableRecipe;
+import thaumcraft.common.crafting.InfusionEnchantmentRecipe;
+import thaumcraft.common.crafting.InfusionRecipe;
 import thaumcraft.common.network.ThaumonomiconCreateNotePayload;
 import thaumcraft.common.registry.TCDataAttachments;
 import thaumcraft.common.registry.TCSoundEvents;
@@ -376,9 +379,9 @@ public class ThaumonomiconScreen extends Screen {
 
     private void renderAvailableEntryTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, ResearchEntry entry,
             boolean complete, boolean available) {
-        Component title = Component.translatable(entry.nameTranslationKey())
+        Component title = localizedResearchName(entry)
                 .withColor(researchTooltipTitleColor(entry, complete, available));
-        Component subtitle = Component.translatable(entry.textTranslationKey()).withStyle(ChatFormatting.ITALIC)
+        Component subtitle = localizedResearchText(entry).withStyle(ChatFormatting.ITALIC)
                 .withColor(0x9696FF);
         Component action = available && !complete
                 ? researchNoteHint(entry)
@@ -412,7 +415,7 @@ public class ThaumonomiconScreen extends Screen {
     }
 
     private void renderLockedEntryTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY, ResearchEntry entry) {
-        Component title = Component.translatable(entry.nameTranslationKey())
+        Component title = localizedResearchName(entry)
                 .withColor(researchTooltipTitleColor(entry, false, false))
                 .copy()
                 .withStyle(style -> style.withFont(ResourceLocation.withDefaultNamespace("alt")));
@@ -450,7 +453,7 @@ public class ThaumonomiconScreen extends Screen {
 
         List<BookPageView> pages = visibleBookPages(entry, knowledge);
         if (pages.isEmpty()) {
-            pages = visibleBookPages(entry, knowledge, List.of(ResearchPage.text(entry.textTranslationKey())));
+            pages = visibleBookPages(entry, knowledge, List.of(ResearchPage.text(localizedResearchTextKey(entry))));
         }
         this.openedPage = Mth.clamp(this.openedPage - this.openedPage % 2, 0, Math.max(0, pages.size() - 1));
         renderResearchPage(guiGraphics, entry, pages.get(this.openedPage), 0);
@@ -479,7 +482,7 @@ public class ThaumonomiconScreen extends Screen {
         int y = bookContentTop();
         int width = PAGE_TEXT_WIDTH;
         if (view.drawTitle()) {
-            Component title = Component.translatable(entry.nameTranslationKey());
+            Component title = localizedResearchName(entry);
             blitBook(guiGraphics, baseX + 4, y - 12, 24, 184, 96, 4, 96, TITLE_RULE_HEIGHT);
             blitBook(guiGraphics, baseX + 4, y + 5, 24, 184, 96, 4, 96, TITLE_RULE_HEIGHT);
             drawCenteredFittedString(guiGraphics, title, baseX + 52, y - 6, 130, 0xFF302130, PAGE_TEXT_SCALE);
@@ -515,7 +518,7 @@ public class ThaumonomiconScreen extends Screen {
         if (page.textKey().isBlank()) {
             return researchText(Component.translatable("tc.thaumonomicon.page.missing"));
         }
-        return researchText(Component.translatable(page.textKey()));
+        return researchText(Component.literal(normalizeLegacyResearchText(I18n.get(page.textKey()))));
     }
 
     private static MutableComponent researchText(MutableComponent text) {
@@ -526,7 +529,34 @@ public class ThaumonomiconScreen extends Screen {
         if (page.textKey().isBlank()) {
             return "";
         }
-        return I18n.get(page.textKey());
+        return normalizeLegacyResearchText(I18n.get(page.textKey()));
+    }
+
+    private static MutableComponent localizedResearchName(ResearchEntry entry) {
+        return Component.literal(I18n.get(localizedResearchNameKey(entry)));
+    }
+
+    private static MutableComponent localizedResearchText(ResearchEntry entry) {
+        return Component.literal(I18n.get(localizedResearchTextKey(entry)));
+    }
+
+    private static String localizedResearchNameKey(ResearchEntry entry) {
+        return localizedResearchKey(entry.nameTranslationKey(), entry.legacyNameTranslationKey());
+    }
+
+    private static String localizedResearchTextKey(ResearchEntry entry) {
+        return localizedResearchKey(entry.textTranslationKey(), entry.legacyTextTranslationKey());
+    }
+
+    private static String localizedResearchKey(String primary, String legacy) {
+        String value = I18n.get(primary);
+        return value.equals(primary) ? legacy : primary;
+    }
+
+    private static String normalizeLegacyResearchText(String rawText) {
+        return rawText.replaceAll("(?i)<BR>", "\n")
+                .replaceAll("(?i)<LINE>", "\n\n")
+                .replaceAll("(?i)<IMG>.*?</IMG>", "");
     }
 
     private static boolean isCenteredLegacyHeading(String line) {
@@ -607,6 +637,14 @@ public class ThaumonomiconScreen extends Screen {
             }
         } else if (page.type() == ResearchPage.PageType.ARCANE_CRAFTING) {
             if (renderArcaneCraftingPage(guiGraphics, page, x, y, width)) {
+                return;
+            }
+        } else if (page.type() == ResearchPage.PageType.INFUSION_CRAFTING) {
+            if (renderInfusionCraftingPage(guiGraphics, page, x, y, width)) {
+                return;
+            }
+        } else if (page.type() == ResearchPage.PageType.INFUSION_ENCHANTMENT) {
+            if (renderInfusionEnchantmentPage(guiGraphics, page, x, y, width)) {
                 return;
             }
         } else if (page.type() == ResearchPage.PageType.SMELTING) {
@@ -720,6 +758,151 @@ public class ThaumonomiconScreen extends Screen {
 
         renderPrimalVisCost(guiGraphics, arcaneRecipe.getVisCost(), recipeLeft, recipeTop + 172);
         return true;
+    }
+
+    private boolean renderInfusionCraftingPage(GuiGraphics guiGraphics, ResearchPage page, int x, int y, int width) {
+        Optional<RecipeHolder<?>> holder = resolveRecipe(page);
+        if (holder.isEmpty()) {
+            return false;
+        }
+        Recipe<?> recipe = holder.get().value();
+        if (!(recipe instanceof InfusionRecipe infusionRecipe)) {
+            return false;
+        }
+
+        int recipeLeft = x + width / 2 - 56;
+        int recipeTop = y - RECIPE_HEADER_HEIGHT;
+        renderRecipeTitle(guiGraphics, recipeTitle(page), x, recipeTop, width);
+
+        int centerX = recipeLeft + 56;
+        int centerY = recipeTop + 101;
+        int outputX = recipeLeft + 48;
+        int outputY = recipeTop + 30;
+        int catalystX = centerX - 8;
+        int catalystY = centerY - 8;
+
+        drawResearchSlot(guiGraphics, outputX - 4, outputY - 4, 24, 0x55302030, 0xFF8A6A8F);
+        drawResearchSlot(guiGraphics, catalystX - 4, catalystY - 4, 24, 0x55302030, 0xFF8A6A8F);
+        guiGraphics.hLine(centerX, centerX, outputY + 24, 0xAA8A6A8F);
+        guiGraphics.vLine(centerX, outputY + 24, catalystY - 6, 0xAA8A6A8F);
+
+        ItemStack result = infusionRecipe.getResultItem(this.minecraft.level.registryAccess()).copy();
+        renderRecipeStack(guiGraphics, result, outputX, outputY);
+        renderRecipeIngredient(guiGraphics, infusionRecipe.getCatalyst(), catalystX, catalystY);
+
+        List<Ingredient> components = infusionRecipe.getComponents();
+        int componentCount = components.size();
+        if (componentCount > 0) {
+            float slice = 360.0F / componentCount;
+            float rotation = -90.0F;
+            for (Ingredient component : components) {
+                int slotX = centerX + Math.round(Mth.cos(rotation * Mth.DEG_TO_RAD) * 40.0F) - 8;
+                int slotY = centerY + Math.round(Mth.sin(rotation * Mth.DEG_TO_RAD) * 40.0F) - 8;
+                drawResearchSlot(guiGraphics, slotX - 4, slotY - 4, 24, 0x44201020, 0xFF7C5E84);
+                guiGraphics.hLine(Math.min(centerX, slotX + 8), Math.max(centerX, slotX + 8), slotY + 8,
+                        0x778A6A8F);
+                guiGraphics.vLine(slotX + 8, Math.min(centerY, slotY + 8), Math.max(centerY, slotY + 8),
+                        0x778A6A8F);
+                renderRecipeIngredient(guiGraphics, component, slotX, slotY);
+                rotation += slice;
+            }
+        }
+
+        int inst = Math.min(5, infusionRecipe.getInstability() / 2);
+        Component instability = Component.translatable("tc.inst")
+                .append(Component.translatable("tc.inst." + inst));
+        drawCenteredFittedString(guiGraphics, instability, x + width / 2, recipeTop + 155, width, 0xFF4F3922,
+                PAGE_TEXT_SCALE);
+        renderInfusionEssentia(guiGraphics, infusionRecipe, x, recipeTop + 171, width);
+        return true;
+    }
+
+    private void renderInfusionEssentia(GuiGraphics guiGraphics, InfusionRecipe recipe, int x, int y, int width) {
+        renderInfusionEssentia(guiGraphics, recipe.getEssentia(), x, y, width);
+    }
+
+    private void renderInfusionEssentia(GuiGraphics guiGraphics, thaumcraft.api.aspects.AspectList essentia, int x,
+            int y, int width) {
+        List<Aspect> aspects = essentia.getAspectsSorted();
+        if (aspects.isEmpty()) {
+            return;
+        }
+        int columns = Math.min(5, aspects.size());
+        int rows = Mth.ceil(aspects.size() / 5.0F);
+        int startX = x + width / 2 - columns * 10;
+        int startY = y - Math.max(0, rows - 1) * 10;
+        for (int index = 0; index < aspects.size(); index++) {
+            Aspect aspect = aspects.get(index);
+            int amount = essentia.getAmount(aspect);
+            int iconX = startX + index % 5 * 20;
+            int iconY = startY + index / 5 * 20;
+            renderAspectIcon(guiGraphics, aspect, iconX, iconY, 16, 1.0F);
+            drawScaledString(guiGraphics, Component.literal(String.valueOf(amount)), iconX + 10, iconY + 10,
+                    0xFFFFFFFF, 0.5F, true);
+        }
+    }
+
+    private boolean renderInfusionEnchantmentPage(GuiGraphics guiGraphics, ResearchPage page, int x, int y,
+            int width) {
+        Optional<RecipeHolder<?>> holder = resolveRecipe(page);
+        if (holder.isEmpty()) {
+            return false;
+        }
+        Recipe<?> recipe = holder.get().value();
+        if (!(recipe instanceof InfusionEnchantmentRecipe enchantmentRecipe)) {
+            return false;
+        }
+
+        int recipeLeft = x + width / 2 - 56;
+        int recipeTop = y - RECIPE_HEADER_HEIGHT;
+        renderRecipeTitle(guiGraphics, recipeTitle(page), x, recipeTop, width);
+
+        int centerX = recipeLeft + 56;
+        int centerY = recipeTop + 101;
+        int outputX = recipeLeft + 48;
+        int outputY = recipeTop + 30;
+
+        drawResearchSlot(guiGraphics, outputX - 4, outputY - 4, 24, 0x55302030, 0xFF8A6A8F);
+        renderRecipeStack(guiGraphics, new ItemStack(Items.ENCHANTED_BOOK), outputX, outputY);
+        drawCenteredFittedString(guiGraphics, Component.empty().append(enchantmentRecipe.getEnchantment().value()
+                        .description()),
+                x + width / 2, outputY + 26, width, 0xFF4F3922, 0.7F);
+
+        List<Ingredient> components = enchantmentRecipe.getComponents();
+        int componentCount = components.size();
+        if (componentCount > 0) {
+            float slice = 360.0F / componentCount;
+            float rotation = -90.0F;
+            for (Ingredient component : components) {
+                int slotX = centerX + Math.round(Mth.cos(rotation * Mth.DEG_TO_RAD) * 40.0F) - 8;
+                int slotY = centerY + Math.round(Mth.sin(rotation * Mth.DEG_TO_RAD) * 40.0F) - 8;
+                drawResearchSlot(guiGraphics, slotX - 4, slotY - 4, 24, 0x44201020, 0xFF7C5E84);
+                guiGraphics.hLine(Math.min(centerX, slotX + 8), Math.max(centerX, slotX + 8), slotY + 8,
+                        0x778A6A8F);
+                guiGraphics.vLine(slotX + 8, Math.min(centerY, slotY + 8), Math.max(centerY, slotY + 8),
+                        0x778A6A8F);
+                renderRecipeIngredient(guiGraphics, component, slotX, slotY);
+                rotation += slice;
+            }
+        }
+
+        int inst = Math.min(5, enchantmentRecipe.getInstability() / 2);
+        Component instability = Component.translatable("tc.inst")
+                .append(Component.translatable("tc.inst." + inst))
+                .append(Component.literal("  XP: " + enchantmentRecipe.getRecipeXp()));
+        drawCenteredFittedString(guiGraphics, instability, x + width / 2, recipeTop + 155, width, 0xFF4F3922,
+                PAGE_TEXT_SCALE);
+        renderInfusionEssentia(guiGraphics, enchantmentRecipe.getEssentia(), x, recipeTop + 171, width);
+        return true;
+    }
+
+    private static void drawResearchSlot(GuiGraphics guiGraphics, int x, int y, int size, int fillColor,
+            int borderColor) {
+        guiGraphics.fill(x, y, x + size, y + size, fillColor);
+        guiGraphics.hLine(x, x + size - 1, y, borderColor);
+        guiGraphics.hLine(x, x + size - 1, y + size - 1, borderColor);
+        guiGraphics.vLine(x, y, y + size - 1, borderColor);
+        guiGraphics.vLine(x + size - 1, y, y + size - 1, borderColor);
     }
 
     private boolean renderSmeltingPage(GuiGraphics guiGraphics, ResearchPage page, int x, int y, int width) {

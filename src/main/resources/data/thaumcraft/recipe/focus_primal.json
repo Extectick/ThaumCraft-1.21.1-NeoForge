@@ -1,0 +1,31 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "FOCUSPRIMAL",
+  "pattern": [
+    "DQD",
+    "Q#Q",
+    "DQD"
+  ],
+  "key": {
+    "#": {
+      "item": "thaumcraft:primal_charm"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "vis": {
+    "air": 2500,
+    "fire": 2500,
+    "water": 2500,
+    "earth": 2500,
+    "order": 2500,
+    "entropy": 2500
+  },
+  "result": {
+    "id": "thaumcraft:focus_primal"
+  }
+}

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.damagesource.DamageSource;
@@ -77,6 +79,15 @@ public final class ServerInfusionRuntime {
 
         ensureRecipeEssentiaBase(matrix, level);
 
+        if (matrix.getRecipeType() == 1 && matrix.getRecipeXp() > 0) {
+            drainNextExperience(matrix, level);
+            return;
+        }
+
+        if (matrix.getRecipeType() == 1 && matrix.getRecipeXp() == 0) {
+            matrix.setCountDelay(10);
+        }
+
         if (matrix.getRecipeEssentia().visSize() > 0) {
             drainNextEssentia(matrix, level);
             return;
@@ -111,12 +122,54 @@ public final class ServerInfusionRuntime {
         if (!matrix.getRecipeEssentiaBase().isEmpty() || matrix.getRecipeId() == null) {
             return;
         }
-        level.getRecipeManager()
-                .getAllRecipesFor(TCRecipeTypes.INFUSION.get())
-                .stream()
-                .filter(holder -> holder.id().equals(matrix.getRecipeId()))
-                .findFirst()
-                .ifPresent(holder -> matrix.setRecipeEssentiaBase(holder.value().getEssentia()));
+        if (matrix.getRecipeType() == 1) {
+            level.getRecipeManager()
+                    .getAllRecipesFor(TCRecipeTypes.INFUSION_ENCHANTMENT.get())
+                    .stream()
+                    .filter(holder -> holder.id().equals(matrix.getRecipeId()))
+                    .findFirst()
+                    .ifPresent(holder -> matrix.setRecipeEssentiaBase(
+                            holder.value().getScaledEssentia(matrix.getRecipeInput())));
+        } else {
+            level.getRecipeManager()
+                    .getAllRecipesFor(TCRecipeTypes.INFUSION.get())
+                    .stream()
+                    .filter(holder -> holder.id().equals(matrix.getRecipeId()))
+                    .findFirst()
+                    .ifPresent(holder -> matrix.setRecipeEssentiaBase(holder.value().getEssentia()));
+        }
+    }
+
+    private static void drainNextExperience(RunicMatrixBlockEntity matrix, Level level) {
+        List<Player> targets = level.getEntitiesOfClass(Player.class, effectBounds(matrix));
+        if (targets.isEmpty()) {
+            return;
+        }
+
+        for (Player target : targets) {
+            if (target.experienceLevel > 0) {
+                target.giveExperienceLevels(-1);
+                matrix.setRecipeXp(matrix.getRecipeXp() - 1);
+                target.hurt(level.damageSources().magic(), level.random.nextInt(2));
+                sendInfusionEntitySourceFx(matrix, level, target.getId(), 15);
+                level.playSound(null, target.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS,
+                        1.0F, 2.0F + level.random.nextFloat() * 0.4F);
+                matrix.setCountDelay(20);
+                return;
+            }
+        }
+
+        AspectList recipeEssentia = matrix.getRecipeEssentia();
+        List<Aspect> aspects = recipeEssentia.getAspects();
+        if (!aspects.isEmpty() && level.random.nextInt(3) == 0) {
+            Aspect aspect = aspects.get(level.random.nextInt(aspects.size()));
+            recipeEssentia.add(aspect, 1);
+            int instabilityBound = Math.max(1, 50 - matrix.getRecipeInstability() * 2);
+            if (level.random.nextInt(instabilityBound) == 0) {
+                matrix.setInstability(Math.min(25, matrix.getInstability() + 1));
+            }
+            matrix.setRecipeEssentia(recipeEssentia);
+        }
     }
 
     private static void drainNextEssentia(RunicMatrixBlockEntity matrix, Level level) {
@@ -127,7 +180,8 @@ public final class ServerInfusionRuntime {
                 continue;
             }
             if (EssentiaHandler.drainEssentia(level, matrix.getBlockPos(), aspect, 12)) {
-                matrix.setRecipeEssentia(recipeEssentia.remove(aspect, 1));
+                recipeEssentia.reduce(aspect, 1);
+                matrix.setRecipeEssentia(recipeEssentia);
                 matrix.requestSurroundingsCheck();
                 return;
             } else {
@@ -174,8 +228,11 @@ public final class ServerInfusionRuntime {
     }
 
     private static void addMissingIngredientInstability(RunicMatrixBlockEntity matrix, Level level) {
-        AspectList baseEssentia = matrix.getRecipeEssentiaBase();
-        List<Aspect> aspects = baseEssentia.getAspects();
+        List<Aspect> aspects = matrix.getRecipeEssentia().getAspects();
+        if (aspects.isEmpty()) {
+            AspectList baseEssentia = matrix.getRecipeEssentiaBase();
+            aspects = baseEssentia.getAspects();
+        }
         if (aspects.isEmpty()) {
             return;
         }
@@ -309,7 +366,16 @@ public final class ServerInfusionRuntime {
         if (level instanceof ServerLevel serverLevel) {
             PacketDistributor.sendToPlayersNear(serverLevel, null, matrix.getBlockPos().getX(),
                     matrix.getBlockPos().getY(), matrix.getBlockPos().getZ(), 32.0D,
-                    new InfusionSourceFxPayload(matrix.getBlockPos(), source, color, ticks));
+                    new InfusionSourceFxPayload(matrix.getBlockPos(), source, color, ticks, -1));
+        }
+    }
+
+    private static void sendInfusionEntitySourceFx(RunicMatrixBlockEntity matrix, Level level, int entityId,
+            int ticks) {
+        if (level instanceof ServerLevel serverLevel) {
+            PacketDistributor.sendToPlayersNear(serverLevel, null, matrix.getBlockPos().getX(),
+                    matrix.getBlockPos().getY(), matrix.getBlockPos().getZ(), 32.0D,
+                    new InfusionSourceFxPayload(matrix.getBlockPos(), matrix.getBlockPos(), 0, ticks, entityId));
         }
     }
 

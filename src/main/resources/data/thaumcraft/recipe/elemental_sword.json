@@ -1,0 +1,30 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ELEMENTALSWORD",
+  "catalyst": {
+    "item": "thaumcraft:thaumium_sword"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:air_shard"
+    },
+    {
+      "item": "thaumcraft:air_shard"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "thaumcraft:greatwood_log"
+    }
+  ],
+  "instability": 1,
+  "essentia": {
+    "aer": 8,
+    "motus": 8,
+    "potentia": 8
+  },
+  "result": {
+    "id": "thaumcraft:elemental_sword"
+  }
+}

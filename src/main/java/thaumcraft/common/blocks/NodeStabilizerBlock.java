@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.common.blockentities.NodeStabilizerBlockEntity;
+import thaumcraft.common.blockentities.NodeTransducerBlockEntity;
 import thaumcraft.common.registry.TCBlockEntities;
 
 public class NodeStabilizerBlock extends Block implements EntityBlock {
@@ -55,5 +56,26 @@ public class NodeStabilizerBlock extends Block implements EntityBlock {
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.INVISIBLE;
+    }
+
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos,
+            boolean isMoving) {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+        notifyTransducer(level, pos);
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            notifyTransducer(level, pos);
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    private static void notifyTransducer(Level level, BlockPos stabilizerPos) {
+        if (!level.isClientSide && level.getBlockEntity(stabilizerPos.above(2)) instanceof NodeTransducerBlockEntity transducer) {
+            transducer.requestStatusCheck();
+        }
     }
 }

@@ -20,8 +20,11 @@ import thaumcraft.common.items.JarBlockItem;
 import thaumcraft.common.items.NodeJarBlockItem;
 import thaumcraft.common.items.AuraNodeItem;
 import thaumcraft.common.items.EssenceItem;
+import thaumcraft.common.items.HandMirrorItem;
 import thaumcraft.common.items.ScribingToolsItem;
 import thaumcraft.common.items.ResearchNotesItem;
+import thaumcraft.common.items.SanityCheckerItem;
+import thaumcraft.common.items.SinisterLodestoneItem;
 import thaumcraft.common.items.CrimsonRitesItem;
 import thaumcraft.common.items.PrimordialPearlItem;
 import thaumcraft.common.items.ThaumometerItem;
@@ -121,6 +124,7 @@ public final class TCItems {
             properties -> new JarBlockItem(TCBlocks.VOID_JAR.get(), properties));
     public static final DeferredItem<BlockItem> MAGIC_MIRROR = REGISTRY.registerSimpleBlockItem(TCBlocks.MAGIC_MIRROR);
     public static final DeferredItem<BlockItem> ESSENTIA_MIRROR = REGISTRY.registerSimpleBlockItem(TCBlocks.ESSENTIA_MIRROR);
+    public static final DeferredItem<HandMirrorItem> HAND_MIRROR = REGISTRY.register("hand_mirror", HandMirrorItem::new);
     public static final DeferredItem<BlockItem> ARCANE_STONE_STAIRS = REGISTRY.registerSimpleBlockItem(TCBlocks.ARCANE_STONE_STAIRS);
     public static final DeferredItem<BlockItem> GREATWOOD_STAIRS = REGISTRY.registerSimpleBlockItem(TCBlocks.GREATWOOD_STAIRS);
     public static final DeferredItem<BlockItem> SILVERWOOD_STAIRS = REGISTRY.registerSimpleBlockItem(TCBlocks.SILVERWOOD_STAIRS);
@@ -316,9 +320,12 @@ public final class TCItems {
     public static final DeferredItem<ElementalPickaxeItem> ELEMENTAL_PICKAXE = REGISTRY.register("elemental_pickaxe", ElementalPickaxeItem::new);
     public static final DeferredItem<ElementalAxeItem> ELEMENTAL_AXE = REGISTRY.register("elemental_axe", ElementalAxeItem::new);
     public static final DeferredItem<ElementalHoeItem> ELEMENTAL_HOE = REGISTRY.register("elemental_hoe", ElementalHoeItem::new);
+    public static final DeferredItem<ElementalSwordItem> ELEMENTAL_SWORD = REGISTRY.register("elemental_sword", ElementalSwordItem::new);
 
     public static final DeferredItem<CrimsonBladeItem> CRIMSON_BLADE = REGISTRY.register("crimson_blade", CrimsonBladeItem::new);
     public static final DeferredItem<PrimalCrusherItem> PRIMAL_CRUSHER = REGISTRY.register("primal_crusher", PrimalCrusherItem::new);
+    public static final DeferredItem<SanityCheckerItem> SANITY_CHECKER = REGISTRY.register("sanity_checker", SanityCheckerItem::new);
+    public static final DeferredItem<SinisterLodestoneItem> SINISTER_LODESTONE = REGISTRY.register("sinister_lodestone", SinisterLodestoneItem::new);
 
     public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_HELMET = REGISTRY.register("thaumium_helmet", () -> new ThaumiumArmorItem(ArmorItem.Type.HELMET, TCArmorMaterials.THAUMIUM));
     public static final DeferredItem<ThaumiumArmorItem> THAUMIUM_CHESTPLATE = REGISTRY.register("thaumium_chestplate", () -> new ThaumiumArmorItem(ArmorItem.Type.CHESTPLATE, TCArmorMaterials.THAUMIUM));
@@ -431,6 +438,7 @@ public final class TCItems {
             VOID_JAR,
             MAGIC_MIRROR,
             ESSENTIA_MIRROR,
+            HAND_MIRROR,
             ARCANE_STONE_STAIRS,
             GREATWOOD_STAIRS,
             SILVERWOOD_STAIRS,
@@ -544,8 +552,8 @@ public final class TCItems {
             MANA_BEAN,
             THAUMIUM_SWORD, THAUMIUM_SHOVEL, THAUMIUM_PICKAXE, THAUMIUM_AXE, THAUMIUM_HOE,
             VOID_SWORD, VOID_SHOVEL, VOID_PICKAXE, VOID_AXE, VOID_HOE,
-            ELEMENTAL_SHOVEL, ELEMENTAL_PICKAXE, ELEMENTAL_AXE, ELEMENTAL_HOE,
-            CRIMSON_BLADE, PRIMAL_CRUSHER,
+            ELEMENTAL_SHOVEL, ELEMENTAL_PICKAXE, ELEMENTAL_AXE, ELEMENTAL_HOE, ELEMENTAL_SWORD,
+            CRIMSON_BLADE, PRIMAL_CRUSHER, SANITY_CHECKER, SINISTER_LODESTONE,
             THAUMIUM_HELMET, THAUMIUM_CHESTPLATE, THAUMIUM_LEGGINGS, THAUMIUM_BOOTS,
             VOID_HELMET, VOID_CHESTPLATE, VOID_LEGGINGS, VOID_BOOTS,
             VOID_ROBE_HELMET, VOID_ROBE_CHESTPLATE, VOID_ROBE_LEGGINGS,

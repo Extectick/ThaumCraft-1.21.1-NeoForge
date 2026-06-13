@@ -285,10 +285,15 @@ Completion criteria:
 
 ### Phase 6 - Node machines and energized aura
 
+Detailed route: `docs/node_machines_energized_plan.md`.
+
 - [x] Node stabilizer and advanced stabilizer.
-- [ ] Node transducer and energized-node conversion.
+- [x] Node transducer and full energized-node conversion.
+- [x] Energized-node persistent state and conversion helpers.
 - [ ] Vis relays and energized vis network.
-- [ ] Node bullying, lock state, and machine-specific rendering.
+- [x] Node bullying and stabilizer lock state.
+- [x] Machine-specific rendering for transducer and energized node.
+- [ ] Machine-specific rendering for relays.
 
 #### Completed implementation stage: node stabilizers
 

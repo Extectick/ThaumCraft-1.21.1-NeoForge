@@ -1,0 +1,28 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "ENCHFABRIC",
+  "pattern": [
+    " S ",
+    "SCS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:string"
+    },
+    "C": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "vis": {
+    "air": 100,
+    "earth": 100,
+    "fire": 100,
+    "water": 100,
+    "order": 100,
+    "entropy": 100
+  },
+  "result": {
+    "id": "thaumcraft:enchanted_fabric"
+  }
+}

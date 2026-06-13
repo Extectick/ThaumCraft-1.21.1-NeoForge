@@ -44,10 +44,14 @@ import thaumcraft.common.services.ServerServices;
 public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable {
     private AspectList aspects = defaultAspects();
     private AspectList aspectsBase = this.aspects.copy();
+    private AspectList auraBase = this.aspectsBase.copy();
+    private AspectList cvBase = new AspectList();
+    private AspectList cv = new AspectList();
     private NodeType nodeType = NodeType.NORMAL;
     @Nullable
     private NodeModifier nodeModifier;
     private UUID nodeId = UUID.randomUUID();
+    private boolean energized;
     private int tickCount;
     private int rechargeWait;
     private int stabilizerLock;
@@ -66,19 +70,40 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
             node.updateStabilizerLock(level, pos, state);
         }
         if (level.isClientSide) {
-            node.handleHungryBlockFx(level, pos);
+            thaumcraft.common.services.ClientServices.get().trackAuraNode(level, pos, node.nodeType);
+            if (!node.energized) {
+                node.handleHungryBlockFx(level, pos);
+            }
             return;
         }
 
-        boolean changed = node.handleHungryPull(level, pos);
-        changed |= node.handleRecharge(level);
-        changed |= node.handleUnstable(level);
-        changed |= node.handleNodeDrain(level, pos);
-        changed |= node.handleHungryDestruction(level, pos);
-        changed |= node.handleDegradation(level);
+        boolean changed = node.energized
+                ? node.handleEnergizedTick(level)
+                : node.handleNaturalTick(level, pos);
         if (changed && level.getBlockEntity(pos) == node) {
             node.markChangedAndSync();
         }
+    }
+
+    private boolean handleNaturalTick(Level level, BlockPos pos) {
+        boolean changed = this.handleHungryPull(level, pos);
+        changed |= this.handleRecharge(level);
+        changed |= this.handleUnstable(level);
+        changed |= this.handleNodeDrain(level, pos);
+        changed |= this.handleHungryDestruction(level, pos);
+        changed |= this.handleDegradation(level);
+        return changed;
+    }
+
+    private boolean handleEnergizedTick(Level level) {
+        if (this.nodeType == NodeType.UNSTABLE && level.random.nextInt(500) == 1) {
+            this.cvBase = new AspectList();
+        }
+        if (this.cvBase.isEmpty() && !this.auraBase.isEmpty()) {
+            this.setupEnergizedNode(level);
+        }
+        this.cv = this.cvBase.copy();
+        return false;
     }
 
     private boolean handleRecharge(Level level) {
@@ -413,6 +438,16 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
         if (this.aspectsBase.isEmpty()) {
             this.aspectsBase = this.aspects.copy();
         }
+        this.energized = tag.getBoolean("Energized");
+        this.auraBase = AspectList.load(tag, "AuraBase");
+        if (this.auraBase.isEmpty()) {
+            this.auraBase = this.aspectsBase.copy();
+        }
+        this.cvBase = AspectList.load(tag, "CvBase");
+        this.cv = AspectList.load(tag, "Cv");
+        if (this.energized && this.cv.isEmpty()) {
+            this.cv = this.cvBase.copy();
+        }
         this.nodeType = safeNodeType(tag.getInt("type"));
         this.nodeModifier = NodeModifier.byOrdinal(tag.getInt("modifier"));
         if (tag.hasUUID("nodeId")) {
@@ -434,6 +469,10 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
         super.saveAdditional(tag, registries);
         this.aspects.writeToNBT(tag, "Aspects");
         this.aspectsBase.writeToNBT(tag, "AspectsBase");
+        tag.putBoolean("Energized", this.energized);
+        this.auraBase.writeToNBT(tag, "AuraBase");
+        this.cvBase.writeToNBT(tag, "CvBase");
+        this.cv.writeToNBT(tag, "Cv");
         tag.putInt("type", this.nodeType.ordinal());
         tag.putInt("modifier", this.nodeModifier == null ? -1 : this.nodeModifier.ordinal());
         tag.putUUID("nodeId", this.nodeId);
@@ -465,6 +504,10 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
         this.nodeModifier = modifier;
         this.aspects = aspects.copy();
         this.aspectsBase = baseAspects == null || baseAspects.isEmpty() ? aspects.copy() : baseAspects.copy();
+        this.auraBase = this.aspectsBase.copy();
+        this.cvBase = new AspectList();
+        this.cv = new AspectList();
+        this.energized = false;
         this.nodeId = nodeId == null ? UUID.randomUUID() : nodeId;
         this.markChangedAndSync();
     }
@@ -473,7 +516,7 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
         return this.tickCount;
     }
 
-    private void markChangedAndSync() {
+    public void markChangedAndSync() {
         this.setChanged();
         if (this.level != null) {
             BlockState state = this.getBlockState();
@@ -484,6 +527,9 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
     @Override
     public InteractionResult onWandRightClick(Level level, BlockPos pos, Player player, ItemStack wand,
             BlockHitResult hitResult) {
+        if (this.energized) {
+            return InteractionResult.PASS;
+        }
         InteractionHand hand = player.getMainHandItem() == wand ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
         player.startUsingItem(hand);
         if (player instanceof ServerPlayer serverPlayer) {
@@ -524,12 +570,12 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
 
     @Override
     public AspectList getAspects() {
-        return this.aspects;
+        return this.energized ? this.cvBase : this.aspects;
     }
 
     @Override
     public AspectList getAspectsBase() {
-        return this.aspectsBase;
+        return this.energized ? this.auraBase : this.aspectsBase;
     }
 
     @Override
@@ -557,11 +603,20 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
 
     @Override
     public int getNodeVisBase(Aspect aspect) {
-        return this.aspectsBase.getAmount(aspect);
+        return this.getAspectsBase().getAmount(aspect);
     }
 
     @Override
     public void setNodeVisBase(Aspect aspect, int amount) {
+        if (this.energized) {
+            int current = this.auraBase.getAmount(aspect);
+            if (amount > current) {
+                this.auraBase.add(aspect, amount - current);
+            } else {
+                this.auraBase.remove(aspect, current - Math.max(0, amount));
+            }
+            return;
+        }
         int current = this.aspectsBase.getAmount(aspect);
         if (amount > current) {
             this.aspectsBase.add(aspect, amount - current);
@@ -572,6 +627,9 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
 
     @Override
     public int addToContainer(Aspect aspect, int amount) {
+        if (this.energized) {
+            return amount;
+        }
         int accepted = Math.min(amount, Math.max(0, this.aspectsBase.getAmount(aspect) - this.aspects.getAmount(aspect)));
         this.aspects.add(aspect, accepted);
         return amount - accepted;
@@ -579,7 +637,109 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
 
     @Override
     public boolean takeFromContainer(Aspect aspect, int amount) {
+        if (this.energized) {
+            return false;
+        }
         return this.reduceCurrentAspect(aspect, amount);
+    }
+
+    public boolean isEnergized() {
+        return this.energized;
+    }
+
+    public AspectList getAuraBase() {
+        return this.auraBase;
+    }
+
+    public AspectList getCvBase() {
+        return this.cvBase;
+    }
+
+    public AspectList getCv() {
+        return this.cv;
+    }
+
+    public void convertToEnergizedFromNatural(Level level) {
+        if (this.energized) {
+            return;
+        }
+        this.auraBase = this.aspectsBase.copy();
+        this.energized = true;
+        this.aspects = new AspectList();
+        this.aspectsBase = new AspectList();
+        this.rechargeWait = 0;
+        this.catchUp = false;
+        this.drainPlayerId = -1;
+        this.setupEnergizedNode(level);
+        this.cv = this.cvBase.copy();
+        this.markChangedAndSync();
+    }
+
+    public void convertToDrainedNaturalFromEnergized() {
+        if (!this.energized) {
+            return;
+        }
+        this.aspectsBase = this.auraBase.copy();
+        this.aspects = drainedCopy(this.aspectsBase);
+        this.auraBase = this.aspectsBase.copy();
+        this.cvBase = new AspectList();
+        this.cv = new AspectList();
+        this.energized = false;
+        this.tickCount = 0;
+        this.rechargeWait = 0;
+        this.catchUp = false;
+        this.drainPlayerId = -1;
+        this.markChangedAndSync();
+    }
+
+    public void setupEnergizedNode(Level level) {
+        AspectList base = new AspectList();
+        AspectList primals = reduceToPrimals(this.auraBase);
+        for (Aspect aspect : primals.getAspects()) {
+            int amount = primals.getAmount(aspect);
+            if (this.nodeModifier == NodeModifier.BRIGHT) {
+                amount = (int) (amount * 1.2F);
+            } else if (this.nodeModifier == NodeModifier.PALE) {
+                amount = (int) (amount * 0.8F);
+            } else if (this.nodeModifier == NodeModifier.FADING) {
+                amount = (int) (amount * 0.5F);
+            }
+
+            amount = (int) Math.floor(Math.sqrt(amount));
+            if (this.nodeType == NodeType.UNSTABLE) {
+                amount += level.random.nextInt(5) - 2;
+            }
+            if (amount >= 1) {
+                base.merge(aspect, amount);
+            }
+        }
+        this.cvBase = base;
+        this.cv = base.copy();
+        this.setChanged();
+    }
+
+    public int consumeEnergizedVis(Aspect aspect, int amount) {
+        if (!this.energized || amount <= 0) {
+            return 0;
+        }
+        int drained = Math.min(this.cv.getAmount(aspect), amount);
+        if (drained > 0) {
+            this.cv.remove(aspect, drained);
+        }
+        return drained;
+    }
+
+    public boolean drainRandomCurrentAspect(Level level, int amount) {
+        if (this.energized || amount <= 0 || this.aspects.isEmpty()) {
+            return false;
+        }
+        List<Aspect> available = this.aspects.getAspects();
+        Aspect aspect = available.get(level.random.nextInt(available.size()));
+        boolean drained = this.reduceCurrentAspect(aspect, amount);
+        if (drained) {
+            this.setChanged();
+        }
+        return drained;
     }
 
     private boolean reduceCurrentAspect(Aspect aspect, int amount) {
@@ -599,5 +759,13 @@ public class AuraNodeBlockEntity extends BlockEntity implements INode, IWandable
         AspectList aspects = new AspectList();
         Aspect.getPrimalAspects().forEach(aspect -> aspects.add(aspect, 25));
         return aspects;
+    }
+
+    private static AspectList drainedCopy(AspectList base) {
+        AspectList drained = new AspectList();
+        for (Aspect aspect : base.getAspects()) {
+            drained.setAmount(aspect, 0);
+        }
+        return drained;
     }
 }

@@ -1,0 +1,28 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "FOCUSSHOCK",
+  "pattern": [
+    "CQC",
+    "Q#Q",
+    "CQC"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:potato"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "C": {
+      "item": "thaumcraft:air_shard"
+    }
+  },
+  "vis": {
+    "air": 1000,
+    "order": 1000,
+    "entropy": 1000
+  },
+  "result": {
+    "id": "thaumcraft:focus_shock"
+  }
+}

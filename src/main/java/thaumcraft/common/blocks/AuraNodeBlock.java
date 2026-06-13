@@ -21,7 +21,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thaumcraft.common.blockentities.AuraNodeBlockEntity;
+import thaumcraft.common.blockentities.NodeTransducerBlockEntity;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.world.AuraNodeGenerator;
 import net.minecraft.world.entity.player.Player;
@@ -82,6 +84,30 @@ public class AuraNodeBlock extends Block implements EntityBlock {
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
             CollisionContext context) {
         return Shapes.empty();
+    }
+
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos,
+            boolean isMoving) {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+        if (level.isClientSide || !(level.getBlockEntity(pos) instanceof AuraNodeBlockEntity node)
+                || !node.isEnergized()) {
+            return;
+        }
+
+        if (!hasActiveStabilizer(level, pos) || !(level.getBlockEntity(pos.above()) instanceof NodeTransducerBlockEntity)) {
+            NodeTransducerBlockEntity.explodifyEnergizedNode(level, pos);
+        }
+    }
+
+    private static boolean hasActiveStabilizer(Level level, BlockPos nodePos) {
+        BlockPos stabilizerPos = nodePos.below();
+        if (level.hasNeighborSignal(stabilizerPos)) {
+            return false;
+        }
+        BlockState stabilizer = level.getBlockState(stabilizerPos);
+        return stabilizer.is(TCBlocks.NODE_STABILIZER.get())
+                || stabilizer.is(TCBlocks.ADVANCED_NODE_STABILIZER.get());
     }
 
     @Override

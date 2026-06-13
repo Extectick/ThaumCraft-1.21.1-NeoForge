@@ -1,20 +1,22 @@
 {
-  "type": "thaumcraft:arcane_worktable",
-  "pattern": [
-    " S ",
-    " C ",
-    " S "
-  ],
-  "key": {
-    "C": {
-      "item": "minecraft:quartz_block"
+  "type": "thaumcraft:infusion",
+  "research": "ROD_quartz",
+  "catalyst": {
+    "item": "minecraft:quartz_block"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:balanced_shard"
     },
-    "S": {
+    {
       "item": "thaumcraft:order_shard"
     }
-  },
-  "vis": {
-    "order": 1200
+  ],
+  "instability": 3,
+  "essentia": {
+    "ordo": 12,
+    "praecantatio": 6,
+    "vitreus": 6
   },
   "result": {
     "id": "thaumcraft:quartz_wand_rod"

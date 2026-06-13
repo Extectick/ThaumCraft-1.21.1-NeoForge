@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.crafting.ArcaneWorktableRecipe;
 import thaumcraft.common.crafting.CrucibleRecipe;
+import thaumcraft.common.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.crafting.InfusionRecipe;
 import thaumcraft.common.crafting.WandAssemblyRecipe;
 
@@ -20,6 +21,8 @@ public final class TCRecipeSerializers {
             REGISTRY.register("wand_assembly", WandAssemblyRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<InfusionRecipe>> INFUSION =
             REGISTRY.register("infusion", InfusionRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<InfusionEnchantmentRecipe>> INFUSION_ENCHANTMENT =
+            REGISTRY.register("infusion_enchantment", InfusionEnchantmentRecipe.Serializer::new);
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CrucibleRecipe>> CRUCIBLE =
             REGISTRY.register("crucible", CrucibleRecipe.Serializer::new);
 

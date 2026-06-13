@@ -1,0 +1,23 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "CAP_silver",
+  "catalyst": {
+    "item": "thaumcraft:silver_wand_cap_inert"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:salis_mundus"
+    },
+    {
+      "item": "thaumcraft:salis_mundus"
+    }
+  ],
+  "instability": 4,
+  "essentia": {
+    "potentia": 8,
+    "auram": 4
+  },
+  "result": {
+    "id": "thaumcraft:silver_wand_cap"
+  }
+}

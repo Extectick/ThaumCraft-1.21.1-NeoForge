@@ -1,0 +1,44 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "RUNICKINETIC",
+  "catalyst": {
+    "item": "thaumcraft:runic_girdle"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:balanced_shard"
+    },
+    {
+      "item": "thaumcraft:air_shard"
+    },
+    {
+      "item": "thaumcraft:air_shard"
+    },
+    {
+      "type": "neoforge:components",
+      "items": [
+        "minecraft:splash_potion"
+      ],
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "minecraft:strong_harming"
+        }
+      }
+    },
+    {
+      "item": "thaumcraft:air_shard"
+    },
+    {
+      "item": "thaumcraft:air_shard"
+    }
+  ],
+  "instability": 7,
+  "essentia": {
+    "tutamen": 33,
+    "praecantatio": 55,
+    "aer": 64
+  },
+  "result": {
+    "id": "thaumcraft:runic_girdle_kinetic"
+  }
+}

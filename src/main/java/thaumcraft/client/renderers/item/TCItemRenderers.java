@@ -59,6 +59,14 @@ public final class TCItemRenderers {
             }
         }, TCItems.NODE_STABILIZER.get(), TCItems.ADVANCED_NODE_STABILIZER.get());
         event.registerItem(new IClientItemExtensions() {
+            private final NodeTransducerItemRenderer renderer = NodeTransducerItemRenderer.create();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return this.renderer;
+            }
+        }, TCItems.NODE_TRANSDUCER.get());
+        event.registerItem(new IClientItemExtensions() {
             private final HungryChestItemRenderer renderer = new HungryChestItemRenderer();
 
             @Override

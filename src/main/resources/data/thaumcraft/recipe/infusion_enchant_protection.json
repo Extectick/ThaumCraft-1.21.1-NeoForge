@@ -1,0 +1,14 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "minecraft:protection",
+  "components": [
+    { "item": "minecraft:iron_ingot" },
+    { "item": "thaumcraft:salis_mundus" }
+  ],
+  "instability": 1,
+  "essentia": {
+    "praecantatio": 4,
+    "tutamen": 8
+  }
+}

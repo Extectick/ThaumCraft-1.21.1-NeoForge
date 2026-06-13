@@ -1,31 +1,44 @@
 {
-  "type": "thaumcraft:arcane_worktable",
-  "pattern": [
-    "SBS",
-    "GPG",
-    "SBS"
-  ],
-  "key": {
-    "S": {
-      "item": "thaumcraft:silverwood_wand_rod"
-    },
-    "B": {
-      "item": "thaumcraft:balanced_shard"
-    },
-    "G": {
-      "item": "thaumcraft:greatwood_staff_core"
-    },
-    "P": {
-      "item": "thaumcraft:primal_charm"
-    }
+  "type": "thaumcraft:infusion",
+  "research": "ROD_primal_staff",
+  "catalyst": {
+    "item": "thaumcraft:silverwood_wand_rod"
   },
-  "vis": {
-    "air": 3200,
-    "fire": 3200,
-    "water": 3200,
-    "earth": 3200,
-    "order": 3200,
-    "entropy": 3200
+  "components": [
+    {
+      "item": "thaumcraft:primal_charm"
+    },
+    {
+      "item": "thaumcraft:obsidian_wand_rod"
+    },
+    {
+      "item": "thaumcraft:ice_wand_rod"
+    },
+    {
+      "item": "thaumcraft:quartz_wand_rod"
+    },
+    {
+      "item": "thaumcraft:primal_charm"
+    },
+    {
+      "item": "thaumcraft:reed_wand_rod"
+    },
+    {
+      "item": "thaumcraft:blaze_wand_rod"
+    },
+    {
+      "item": "thaumcraft:bone_wand_rod"
+    }
+  ],
+  "instability": 8,
+  "essentia": {
+    "aer": 32,
+    "ignis": 32,
+    "aqua": 32,
+    "terra": 32,
+    "ordo": 32,
+    "perditio": 32,
+    "praecantatio": 64
   },
   "result": {
     "id": "thaumcraft:primal_staff_core"

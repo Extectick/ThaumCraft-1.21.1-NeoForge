@@ -1,0 +1,20 @@
+{
+  "type": "thaumcraft:arcane_worktable",
+  "research": "ENCHFABRIC",
+  "pattern": [
+    "III",
+    "I I",
+    "I I"
+  ],
+  "key": {
+    "I": {
+      "item": "thaumcraft:enchanted_fabric"
+    }
+  },
+  "vis": {
+    "water": 500
+  },
+  "result": {
+    "id": "thaumcraft:robe_leggings"
+  }
+}

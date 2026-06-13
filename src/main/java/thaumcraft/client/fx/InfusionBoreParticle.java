@@ -29,6 +29,7 @@ public class InfusionBoreParticle extends TextureSheetParticle {
         this.targetZ = targetZ;
         this.setSprite(sprite);
         this.rCol = this.gCol = this.bCol = 0.6F;
+        this.alpha = 0.3F;
         this.quadSize = 0.1F * (this.random.nextFloat() * 0.3F + 0.4F);
         this.gravity = 0.2F;
         this.hasPhysics = true;

@@ -1,0 +1,18 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "minecraft:silk_touch",
+  "components": [
+    { "item": "minecraft:iron_pickaxe" },
+    { "item": "minecraft:cobweb" },
+    { "item": "thaumcraft:salis_mundus" }
+  ],
+  "instability": 5,
+  "essentia": {
+    "praecantatio": 16,
+    "instrumentum": 16,
+    "ordo": 16,
+    "meto": 16,
+    "perfodio": 16
+  }
+}

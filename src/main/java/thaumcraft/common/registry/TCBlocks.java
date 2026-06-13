@@ -33,6 +33,7 @@ import thaumcraft.common.blocks.MagicSaplingBlock;
 import thaumcraft.common.blocks.MagicSaplingBlock.TreeKind;
 import thaumcraft.common.blocks.NodeJarBlock;
 import thaumcraft.common.blocks.NodeStabilizerBlock;
+import thaumcraft.common.blocks.NodeTransducerBlock;
 import thaumcraft.common.blocks.ResearchTableBlock;
 import thaumcraft.common.blocks.RunicMatrixBlock;
 import thaumcraft.common.blocks.SimpleDirectionalBlock;
@@ -141,7 +142,8 @@ public final class TCBlocks {
     public static final DeferredBlock<NodeStabilizerBlock> ADVANCED_NODE_STABILIZER =
             REGISTRY.register("advanced_node_stabilizer",
                     () -> new NodeStabilizerBlock(stoneDeviceProperties(), true));
-    public static final DeferredBlock<Block> NODE_TRANSDUCER = stoneDevice("node_transducer");
+    public static final DeferredBlock<NodeTransducerBlock> NODE_TRANSDUCER = REGISTRY.register("node_transducer",
+            () -> new NodeTransducerBlock(stoneDeviceProperties()));
     public static final DeferredBlock<Block> FOCAL_MANIPULATOR = stoneDevice("focal_manipulator");
     public static final DeferredBlock<Block> FLUX_SCRUBBER = stoneDevice("flux_scrubber");
     public static final DeferredBlock<FluxBlock> FLUX_GOO = REGISTRY.register("flux_goo",

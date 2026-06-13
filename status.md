@@ -236,6 +236,23 @@ Build a first playable Curios accessory slice on NeoForge 1.21.1, replacing the 
   - commit `9628504` fixed the armor model generic copy compile error
   - successful run: `https://github.com/Extectick/ThaumCraft-1.21.1-NeoForge/actions/runs/27425784629`
 - Local Windows Gradle verification was blocked before compilation by repeated `Read timed out` downloads from `maven.neoforged.net` for `net.neoforged.gradle:*:7.1.36`; CI verified the actual build path successfully.
+- Added the first energized-node implementation slice:
+  - `AuraNodeBlockEntity` now supports persistent natural/energized state.
+  - Energized nodes store original `auraBase`, computed `cvBase`, and current per-tick `cv`.
+  - Energized nodes skip natural recharge, degradation, hungry behavior, node bullying, and wand tapping.
+  - Added conversion helpers matching old `TileNodeEnergized` setup rules and debug commands `/tc node energize` and `/tc node natural`.
+  - Verified existing stabilizer lock logic as the dependency for the transducer slice.
+- `gradlew.bat compileJava` completed successfully after the energized-node state slice.
+- Added the first Node Transducer behavior slice:
+  - `node_transducer` now uses a dedicated `NodeTransducerBlock` and `NodeTransducerBlockEntity`.
+  - The transducer tracks old-style progress `0..1000`, forward/reverse status, redstone control, and save/sync state.
+  - Powered transducer above a natural node with an active stabilizer below it drains one random current aspect per tick and converts at `1000`.
+  - Energized nodes reverse when transducer power is cut and convert back to drained natural nodes at progress `50`.
+  - Invalid energized stacks without an active stabilizer now use the old destructive failure path: remove the node, explode, and spread flux goo/gas around the position.
+  - Added `NodeTransducerRenderer`, copied old converter textures, generated status-tinted overlay assets, and switched the block/item model from placeholder cube to converter OBJ geometry.
+  - Energized node rendering now uses `auraBase` and the old `lightningringv.png` overlay instead of rendering the reduced `cvBase`.
+- `gradlew.bat compileJava` completed successfully after the Node Transducer behavior slice.
+- `gradlew.bat build` completed successfully after closing the full Node Transducer transfer.
 
 ## Next checks
 

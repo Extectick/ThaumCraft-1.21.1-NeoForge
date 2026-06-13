@@ -15,6 +15,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.crafting.ArcaneWorktableRecipe;
+import thaumcraft.common.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.crafting.InfusionRecipe;
 import thaumcraft.common.menus.ArcaneWorktableMenu;
 import thaumcraft.common.registry.TCBlocks;
@@ -27,6 +28,8 @@ public class ThaumcraftJeiPlugin implements IModPlugin {
             RecipeType.createRecipeHolderType(Thaumcraft.id("arcane_worktable"));
     public static final RecipeType<RecipeHolder<InfusionRecipe>> INFUSION =
             RecipeType.createRecipeHolderType(Thaumcraft.id("infusion"));
+    public static final RecipeType<RecipeHolder<InfusionEnchantmentRecipe>> INFUSION_ENCHANTMENT =
+            RecipeType.createRecipeHolderType(Thaumcraft.id("infusion_enchantment"));
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -37,7 +40,8 @@ public class ThaumcraftJeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(
                 new ArcaneWorktableRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
-                new InfusionRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
+                new InfusionRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
+                new InfusionEnchantmentRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -51,14 +55,18 @@ public class ThaumcraftJeiPlugin implements IModPlugin {
                 recipeManager.getAllRecipesFor(TCRecipeTypes.ARCANE_WORKTABLE.get());
         List<RecipeHolder<InfusionRecipe>> infusionRecipes =
                 recipeManager.getAllRecipesFor(TCRecipeTypes.INFUSION.get());
+        List<RecipeHolder<InfusionEnchantmentRecipe>> infusionEnchantmentRecipes =
+                recipeManager.getAllRecipesFor(TCRecipeTypes.INFUSION_ENCHANTMENT.get());
         registration.addRecipes(ARCANE_WORKTABLE, arcaneRecipes);
         registration.addRecipes(INFUSION, infusionRecipes);
+        registration.addRecipes(INFUSION_ENCHANTMENT, infusionEnchantmentRecipes);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalysts(ARCANE_WORKTABLE, TCBlocks.ARCANE_WORKTABLE.get());
         registration.addRecipeCatalysts(INFUSION, TCBlocks.RUNIC_MATRIX.get(), TCBlocks.ARCANE_PEDESTAL.get());
+        registration.addRecipeCatalysts(INFUSION_ENCHANTMENT, TCBlocks.RUNIC_MATRIX.get(), TCBlocks.ARCANE_PEDESTAL.get());
     }
 
     @Override
